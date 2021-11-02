@@ -19,7 +19,7 @@ import static com.github.adminfaces.starter.util.Utils.addDetailMessage;
 import static com.github.adminfaces.template.util.Assert.has;
 
 /**
- * @author rmpestano
+ * @author MoiseGui
  */
 @Named
 @ViewScoped
@@ -30,14 +30,14 @@ public class UserFormMB implements Serializable {
     private User user;
 
     @Inject
-    UserService UserService;
+    UserService userService;
 
     public void init() {
         if(Faces.isAjaxRequest()){
            return;
         }
         if (has(id)) {
-            user = UserService.findById(id);
+            user = userService.findById(id);
         } else {
             user = new User();
         }
@@ -62,7 +62,7 @@ public class UserFormMB implements Serializable {
 
     public void remove() throws IOException {
         if (has(user) && has(user.getId())) {
-            UserService.remove(user);
+            userService.remove(user);
             addDetailMessage("Utilisateur " + user.getEmail()
                     + " supprimé avec succès.");
             Faces.getFlash().setKeepMessages(true);
@@ -73,10 +73,10 @@ public class UserFormMB implements Serializable {
     public void save() {
         String msg;
         if (user.getId() == null) {
-            UserService.insert(user);
+            userService.insert(user);
             msg = "Utilisateur " + user.getEmail() + " créé avec succès";
         } else {
-            UserService.update(user);
+            userService.update(user);
             msg = "User " + user.getEmail() + " modifié avec succès";
         }
         addDetailMessage(msg);
