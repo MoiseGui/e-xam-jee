@@ -1,22 +1,16 @@
 package com.github.adminfaces.starter.model;
 
-import org.bson.types.ObjectId;
 
-public class User {
-    private ObjectId id;
+import com.github.adminfaces.starter.util.PersistentEntity;
+import org.mongodb.morphia.annotations.Entity;
+
+@Entity(value = "users", noClassnameStored = true)
+public class User extends PersistentEntity {
     private String nom;
     private String prenom;
     private String login;
     private String password;
     private String cne;
-
-    public ObjectId getId() {
-        return id;
-    }
-
-    public void setId(ObjectId id) {
-        this.id = id;
-    }
 
     public String getNom() {
         return nom;

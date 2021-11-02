@@ -1,42 +1,52 @@
 package com.github.adminfaces.starter.util;
 
-import com.github.adminfaces.starter.model.Car;
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
-import org.bson.Document;
+import com.mongodb.MongoClient;
+import org.mongodb.morphia.Datastore;
+import org.mongodb.morphia.Morphia;
 
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
+import javax.ejb.Singleton;
+import javax.ejb.Startup;
+import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Produces;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.Serializable;
 
-@ApplicationScoped
-public class MongoConnexion {
+@Singleton
+@Startup
+public class MongoConnexion implements Serializable {
+
+    private static final long serialVersionUID = 4575125557867859065L;
+
     private final String connectionString = "mongodb+srv://e-xam:GFor1FraPS9OGHhw@cluster0.paraj.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
-    private MongoDatabase database;
-    private MongoCollection<Document> collection;
+    private static MongoClient mongo;
+    private static Datastore datastore;
+
 
     @PostConstruct
     public void init() {
-        try (MongoClient mongoClient = MongoClients.create(connectionString)) {
-            database = mongoClient.getDatabase("e-xam");
-            collection = database.getCollection("users");
-            System.out.println("collection.toString() = " + collection.toString());
-            System.out.println("**************************************************");
-            System.out.println("Connected to Database : "+database.getName());
-            System.out.println("**************************************************");
+        if ((mongo == null) && (datastore == null)) {
+            mongo = new MongoClient("localhost:27017");
+            Morphia morphia = new Morphia();
+            datastore = morphia.createDatastore(mongo, "mycustomer");
+            morphia.getMapper().getConverters().addConverter(BigDecimalConverter.class);
         }
-    }
-    @Produces
-    public MongoCollection<Document> getCollection() {
-        return collection;
     }
 
     @Produces
-    public MongoDatabase getDatabase() {
-        return database;
+    @RequestScoped
+    public Datastore getDatastore() {
+        return datastore;
+    }
+
+    public MongoClient getMongoClient() {
+        return mongo;
+    }
+
+    public void closeConnection() {
+        if (mongo != null) {
+            mongo.close();
+            mongo = null;
+        }
+        datastore = null;
     }
 }
