@@ -53,6 +53,7 @@ public class UserListMB implements Serializable {
                         .setParams(filters);
                 List<User> list = userService.paginate(filter);
                 setRowCount((int) userService.count(filter));
+                addDetailMessage("Hello");
                 return list;
 
             }

@@ -102,9 +102,9 @@
                             <p:link value="#{c.nom}" outcome="/car-form">
                                 <f:param name="id" value="#{c.id}"/>
                             </p:link>
-
                         </p:column>
-                        <p:column headerText="Name" sortBy="#{c.prenom}" filterBy="#{c.prenom}">
+
+                        <p:column headerText="Prénom" sortBy="#{c.prenom}" filterBy="#{c.prenom}">
                             <f:facet name="filter">
                                 <p:inputText value="#{userListMB.filter.entity.prenom}">
                                     <p:ajax process="@this" update="@none" oncomplete="PF('usersTable').filter()"/>
@@ -112,15 +112,14 @@
                             </f:facet>
                             #{c.prenom}
                         </p:column>
-<!--                        <p:column headerText="Price" sortBy="#{c.price}" filterBy="#{c.price}">-->
-<!--                            <f:facet name="filter">-->
-<!--                                <p:spinner value="#{userListMB.filter.entity.price}">-->
-<!--                                    <f:converter converterId="javax.faces.Double"/>-->
-<!--                                    <p:ajax process="@this" update="@none" oncomplete="PF('usersTable').filter()"/>-->
-<!--                                </p:spinner>-->
-<!--                            </f:facet>-->
-<!--                            #{c.price}-->
-<!--                        </p:column>-->
+                        <p:column headerText="Login" sortBy="#{c.login}" filterBy="#{c.login}">
+                            <f:facet name="filter">
+                                <p:inputText value="#{userListMB.filter.entity.login}">
+                                    <p:ajax process="@this" update="@none" oncomplete="PF('usersTable').filter()"/>
+                                </p:inputText>
+                            </f:facet>
+                            #{c.login}
+                        </p:column>
                     </p:dataTable>
                 </div>
             </div>
@@ -137,7 +136,7 @@
                   width="400" responsive="true" styleClass="box-success">
             <p:dataList id="selectedUsersList" value="#{userListMB.selectedUsers}" var="user"
                         type="definition">
-                ID: #{user.id} - Nom: #{user.nom} - Prénom: #{user.prenom}
+                ID: #{user.id} - Nom: #{user.nom} - Prénom: #{user.prenom} - Login: #{user.login}
             </p:dataList>
         </p:dialog>
 

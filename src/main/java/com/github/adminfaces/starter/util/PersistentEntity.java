@@ -42,8 +42,8 @@ public abstract class PersistentEntity implements Serializable {
 //    protected void validate() {}
 
 
-    public ObjectId getId() {
-        return id;
+    public String getId() {
+        return id.toString();
     }
 
     public Long getVersion() {
