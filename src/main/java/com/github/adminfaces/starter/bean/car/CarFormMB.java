@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.github.adminfaces.starter.bean;
+package com.github.adminfaces.starter.bean.car;
 
 import com.github.adminfaces.starter.model.Car;
 import com.github.adminfaces.starter.service.CarService;

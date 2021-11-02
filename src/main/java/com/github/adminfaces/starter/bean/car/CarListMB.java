@@ -1,4 +1,4 @@
-package com.github.adminfaces.starter.bean;
+package com.github.adminfaces.starter.bean.car;
 
 import com.github.adminfaces.starter.infra.model.Filter;
 import com.github.adminfaces.starter.model.Car;
@@ -82,12 +82,11 @@ public class CarListMB implements Serializable {
         List<String> result = carService.getModels(query);
         return result;
     }
+
     public String getDatabaseName(){
         return this.carService.getDatabaseName();
     }
-    public int usersCount(){
-        return this.userService.count();
-    }
+
     public void findCarById(Integer id) {
         if (id == null) {
             throw new BusinessException("Provide Car ID to load");

@@ -31,8 +31,6 @@ public class CarService implements Serializable {
 
     @Inject
     List<Car> allCars;
-    @Inject
-    private MongoDatabase database;
 
     public List<Car> listByModel(String model) {
         return allCars.stream()
@@ -42,7 +40,7 @@ public class CarService implements Serializable {
     }
 
     public String getDatabaseName() {
-        return this.database.getName();
+        return "this.database.getName()";
     }
 
 
