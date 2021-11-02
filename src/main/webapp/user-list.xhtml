@@ -26,7 +26,7 @@
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <div id="main-buttons" class="hidden-sm hidden-xs">
-                        <p:commandButton action="/user-form?faces-redirect=true" icon="fa fa-plus"
+                        <p:commandButton action="/car-form?faces-redirect=true" icon="fa fa-plus"
                                          value="Nouveau" styleClass="btn-primary"/>
                         <p:spacer width="5"/>
                         <p:commandButton value="Supprimer" icon="fa fa-trash" styleClass="btn-danger"
@@ -42,7 +42,7 @@
                                          oncomplete="PF('selectedUsers').show()" icon="fa fa-search"/>
                     </div>
 
-                    <p:splitButton value="New" action="/user-form?faces-redirect=true"
+                    <p:splitButton value="New" action="/car-form?faces-redirect=true"
                                    icon="fa fa-plus"
                                    styleClass="hidden-md hidden-lg btn-primary">
                         <p:menuitem value="Delete Selected" action="#{userListMB.delete}"
@@ -99,7 +99,7 @@
                                             oncomplete="PF('usersTable').filter()"/>
                                 </p:autoComplete>
                             </f:facet>
-                            <p:link value="#{c.nom}" outcome="/user-form">
+                            <p:link value="#{c.nom}" outcome="/car-form">
                                 <f:param name="id" value="#{c.id}"/>
                             </p:link>
 

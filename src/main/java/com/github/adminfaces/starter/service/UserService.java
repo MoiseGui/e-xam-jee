@@ -2,6 +2,7 @@ package com.github.adminfaces.starter.service;
 
 import com.github.adminfaces.starter.infra.model.Filter;
 import com.github.adminfaces.starter.infra.model.SortOrder;
+import com.github.adminfaces.starter.model.Car;
 import com.github.adminfaces.starter.model.User;
 import com.github.adminfaces.starter.model.User;
 import com.github.adminfaces.starter.model.User;
@@ -24,20 +25,17 @@ import java.util.stream.Collectors;
 import static com.github.adminfaces.template.util.Assert.has;
 
 @Stateless
-public class UserService   implements Serializable {
+public class UserService implements Serializable {
 
     @Inject
     @RequestScoped
     private Datastore datastore;
 
+    @Inject
     List<User> allUsers;
 
-    @PostConstruct
-    private void init(){
-        allUsers = datastore.createQuery(User.class).asList();
-        System.out.println("********************************");
-        allUsers.forEach(System.out::println);
-        System.out.println("********************************");
+    public String showUsersSize(){
+        return "Nombre d'utilisateurs : " + allUsers.size();
     }
 
     public User findBylogin(String login) {
@@ -115,5 +113,12 @@ public class UserService   implements Serializable {
                     .collect(Collectors.toList());
         }
         return pagedList;
+    }
+
+    public List<String> getByNom(String query) {
+        return allUsers.stream().filter(c -> c.getNom()
+                        .toLowerCase().contains(query.toLowerCase()))
+                .map(User::getNom)
+                .collect(Collectors.toList());
     }
 }
