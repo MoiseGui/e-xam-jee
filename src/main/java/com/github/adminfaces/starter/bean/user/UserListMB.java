@@ -34,6 +34,7 @@ public class UserListMB implements Serializable {
     List<User> filteredValue;
 
     Integer id;
+    String email;
 
     @PostConstruct
     public void initDataModel(){
@@ -65,16 +66,23 @@ public class UserListMB implements Serializable {
 
             @Override
             public User getRowData(String key) {
-                return userService.findById(new Integer(key));
+                return userService.findById(key);
             }
         };
     }
 
-    public void findUserById(Integer id) {
+    public void findUserById(String id) {
         if (id == null) {
             throw new BusinessException("Provide User ID to load");
         }
         selectedUsers.add(userService.findById(id));
+    }
+
+    public void findUserByEmail(String email) {
+        if (email == null) {
+            throw new BusinessException("Provide User ID to load");
+        }
+        selectedUsers.add(userService.findByEmail(email));
     }
 
     public List<String> completeNom(String query) {
@@ -86,7 +94,7 @@ public class UserListMB implements Serializable {
         int numUsers = 0;
         for (User selectedUser : selectedUsers) {
             numUsers++;
-//            UserService.remove(selectedUser);
+            userService.remove(selectedUser);
         }
         selectedUsers.clear();
         addDetailMessage(numUsers + " Users deleted successfully!");
@@ -138,5 +146,13 @@ public class UserListMB implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

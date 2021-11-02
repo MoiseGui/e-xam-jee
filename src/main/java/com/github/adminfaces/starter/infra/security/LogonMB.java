@@ -1,10 +1,14 @@
 package com.github.adminfaces.starter.infra.security;
 
+import com.github.adminfaces.starter.model.User;
+import com.github.adminfaces.starter.service.UserService;
 import com.github.adminfaces.template.session.AdminSession;
 import org.omnifaces.util.Faces;
 
 import javax.enterprise.context.SessionScoped;
 import javax.enterprise.inject.Specializes;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import java.io.IOException;
 import java.io.Serializable;
@@ -14,7 +18,7 @@ import com.github.adminfaces.template.config.AdminConfig;
 import javax.inject.Inject;
 
 /**
- * Created by rmpestano on 12/20/14.
+ * Created by MoiseGui
  *
  * This is just a login example.
  *
@@ -29,19 +33,33 @@ import javax.inject.Inject;
 @Specializes
 public class LogonMB extends AdminSession implements Serializable {
 
-    private String currentUser;
+    private User currentUser;
     private String email;
     private String password;
     private boolean remember;
     @Inject
     private AdminConfig adminConfig;
 
+    @Inject
+    UserService userService;
+
 
     public void login() throws IOException {
-        currentUser = email;
-        addDetailMessage("Logged in successfully as <b>" + email + "</b>");
-        Faces.getExternalContext().getFlash().setKeepMessages(true);
-        Faces.redirect(adminConfig.getIndexPage());
+        currentUser = userService.login(email, password);
+        if(currentUser != null){
+            addDetailMessage("Vous êtes connecté en tant que <b>" + currentUser.getPrenom() + " " + currentUser.getNom() + "</b>");
+            Faces.getExternalContext().getFlash().setKeepMessages(true);
+            Faces.redirect(adminConfig.getIndexPage());
+        }
+        else {
+            Faces.getExternalContext().getFlash().setKeepMessages(true);
+            FacesMessage facesMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Login ou Mot de passe incorrect", "Login ou Mot de passe incorrect");
+            FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+        }
+    }
+
+    public boolean loginFailed(){
+        return currentUser == null;
     }
 
     @Override
@@ -74,11 +92,11 @@ public class LogonMB extends AdminSession implements Serializable {
         this.remember = remember;
     }
 
-    public String getCurrentUser() {
+    public User getCurrentUser() {
         return currentUser;
     }
 
-    public void setCurrentUser(String currentUser) {
+    public void setCurrentUser(User currentUser) {
         this.currentUser = currentUser;
     }
 }

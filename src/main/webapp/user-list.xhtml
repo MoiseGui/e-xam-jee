@@ -10,8 +10,11 @@
                   value="Liste des utilisateurs"/> <!-- Automatic create breadCrumb and page title when param 'title' is provided. -->
 
         <style type="text/css">
-            .ui-datatable .ui-datatable-header {
+            .ui-datatable-header {
                 text-align: right !important;
+            }
+            .ui-datatable {
+                text-align: center !important;
             }
         </style>
     </ui:define>
@@ -26,7 +29,7 @@
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <div id="main-buttons" class="hidden-sm hidden-xs">
-                        <p:commandButton action="/car-form?faces-redirect=true" icon="fa fa-plus"
+                        <p:commandButton action="/user-form?faces-redirect=true" icon="fa fa-plus"
                                          value="Nouveau" styleClass="btn-primary"/>
                         <p:spacer width="5"/>
                         <p:commandButton value="Supprimer" icon="fa fa-trash" styleClass="btn-danger"
@@ -42,10 +45,10 @@
                                          oncomplete="PF('selectedUsers').show()" icon="fa fa-search"/>
                     </div>
 
-                    <p:splitButton value="New" action="/car-form?faces-redirect=true"
+                    <p:splitButton value="Nouveau" action="/user-form?faces-redirect=true"
                                    icon="fa fa-plus"
                                    styleClass="hidden-md hidden-lg btn-primary">
-                        <p:menuitem value="Delete Selected" action="#{userListMB.delete}"
+                        <p:menuitem value="Supprimer" action="#{userListMB.delete}"
                                     process="@this" update="@form"
                                     disabled="#{empty userListMB.selectedUsers or userListMB.selectedUsers.size() == 0}"
                                     icon="fa fa-trash">
@@ -65,7 +68,7 @@
                                  filteredValue="#{userListMB.filteredValue}"
                                  paginatorPosition="bottom" selection="#{userListMB.selectedUsers}"
                                  paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {JumpToPageDropdown}"
-                                 currentPageReportTemplate="[ {startRecord} to {endRecord} of {totalRecords} ]"
+                                 currentPageReportTemplate="[ de {startRecord} à {endRecord}, total:  {totalRecords} ]"
                                  rowsPerPageTemplate="5,10,15,20,30"
                     >
 
@@ -76,11 +79,13 @@
                         <p:ajax event="toggleSelect" update="@(.ui-button, .ui-confirm-dialog)"/>
 
                         <f:facet name="header">
-                            Trouver un utilisateur: <p:inputNumber id="inptId" decimalPlaces="0" value="#{userListMB.id}"/>
+                            Trouver un utilisateur: <p:inputText
+                                                        type="email" id="inptId" placeholder="Email"
+                                                        value="#{userListMB.email}" style="margin-left: 10px"/>
                             <p:spacer height="5"/>
                             <p:commandButton id="brFind"
-                                             value="Find"
-                                             action="#{userListMB.findUserById(userListMB.id)}"
+                                             value="Recherche"
+                                             action="#{userListMB.findUserByEmail(userListMB.email)}"
                                              process="@form"
                                              update="@form"
                                              styleClass="btn-flat bg-black btn-states"
@@ -89,7 +94,7 @@
 
                         <p:column selectionMode="multiple" width="5%" styleClass="align-center"/>
 
-                        <p:column headerText="Nom" filterBy="#{c.nom}" sortBy="#{c.nom}"
+                        <p:column headerText="Email" filterBy="#{c.email}" sortBy="#{c.email}"
                                   filterMatchMode="contains">
                             <f:facet name="filter">
                                 <p:autoComplete value="#{userListMB.filter.entity.nom}" forceSelection="true"
@@ -99,11 +104,26 @@
                                             oncomplete="PF('usersTable').filter()"/>
                                 </p:autoComplete>
                             </f:facet>
-                            <p:link value="#{c.nom}" outcome="/car-form">
+                            <p:link value="#{c.email}" outcome="/user-form">
                                 <f:param name="id" value="#{c.id}"/>
                             </p:link>
                         </p:column>
-
+                        <p:column headerText="Username" sortBy="#{c.username}" filterBy="#{c.username}">
+                            <f:facet name="filter">
+                                <p:inputText value="#{userListMB.filter.entity.username}">
+                                    <p:ajax process="@this" update="@none" oncomplete="PF('usersTable').filter()"/>
+                                </p:inputText>
+                            </f:facet>
+                            #{c.username}
+                        </p:column>
+                        <p:column headerText="Nom" sortBy="#{c.nom}" filterBy="#{c.nom}">
+                            <f:facet name="filter">
+                                <p:inputText value="#{userListMB.filter.entity.nom}">
+                                    <p:ajax process="@this" update="@none" oncomplete="PF('usersTable').filter()"/>
+                                </p:inputText>
+                            </f:facet>
+                            #{c.nom}
+                        </p:column>
                         <p:column headerText="Prénom" sortBy="#{c.prenom}" filterBy="#{c.prenom}">
                             <f:facet name="filter">
                                 <p:inputText value="#{userListMB.filter.entity.prenom}">
@@ -111,14 +131,6 @@
                                 </p:inputText>
                             </f:facet>
                             #{c.prenom}
-                        </p:column>
-                        <p:column headerText="Login" sortBy="#{c.login}" filterBy="#{c.login}">
-                            <f:facet name="filter">
-                                <p:inputText value="#{userListMB.filter.entity.login}">
-                                    <p:ajax process="@this" update="@none" oncomplete="PF('usersTable').filter()"/>
-                                </p:inputText>
-                            </f:facet>
-                            #{c.login}
                         </p:column>
                     </p:dataTable>
                 </div>
@@ -132,11 +144,11 @@
         </h:form>
 
 
-        <p:dialog header="Selected users" widgetVar="selectedUsers" height="250"
+        <p:dialog header="Détails de l'utilisateur" widgetVar="selectedUsers" height="250"
                   width="400" responsive="true" styleClass="box-success">
             <p:dataList id="selectedUsersList" value="#{userListMB.selectedUsers}" var="user"
                         type="definition">
-                ID: #{user.id} - Nom: #{user.nom} - Prénom: #{user.prenom} - Login: #{user.login}
+                - ID: #{user.id} <br/>- Email: #{user.email} <br/>- Nom: #{user.nom} <br/>- Prénom: #{user.prenom} <br/>- Username: #{user.username}
             </p:dataList>
         </p:dialog>
 
