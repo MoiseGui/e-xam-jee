@@ -7,7 +7,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @author Ulrich Cech
+ * @author MoiseGui
  */
 @Qualifier
 @Retention(RetentionPolicy.RUNTIME)

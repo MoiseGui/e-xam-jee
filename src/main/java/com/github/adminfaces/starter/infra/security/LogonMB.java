@@ -56,6 +56,17 @@ public class LogonMB extends AdminSession implements Serializable {
             FacesMessage facesMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Login ou Mot de passe incorrect", "Login ou Mot de passe incorrect");
             FacesContext.getCurrentInstance().addMessage(null, facesMessage);
         }
+
+//        User loadedUser = userService.findById("61812c3b5231274884b64e4b");
+//        User loadedUser = userService.findUserByEmail(email);
+//        if(loadedUser == null){
+//            FacesMessage facesM = new FacesMessage(FacesMessage.SEVERITY_ERROR, "NUll", "Null");
+//            FacesContext.getCurrentInstance().addMessage(null, facesM);
+//        }
+//        else {
+//            FacesMessage facesM = new FacesMessage(FacesMessage.SEVERITY_ERROR, loadedUser.getUsername(), loadedUser.getEmail());
+//            FacesContext.getCurrentInstance().addMessage(null, facesM);
+//        }
     }
 
     public boolean loginFailed(){

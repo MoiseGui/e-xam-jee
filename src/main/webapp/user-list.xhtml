@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
-                xmlns:p="http://primefaces.org/ui"
-                xmlns:adm="http://github.com/adminfaces"
+                xmlns:p="http://primefaces.org/ui" xmlns:adm="http://github.com/adminfaces"
                 template="#{layoutMB.template}">
 
     <ui:define name="metadata">
@@ -40,7 +39,7 @@
                             <p:confirm header="Confirmation" message="Are you sure?" icon="ui-icon-danger"/>
                         </p:commandButton>
                         <p:spacer width="5"/>
-                        <p:commandButton value="View selected" update="@(.ui-dialog)" styleClass="btn-info"
+                        <p:commandButton value="Voir les détails" update="@(.ui-dialog)" styleClass="btn-info"
                                          disabled="#{empty userListMB.selectedUsers or userListMB.selectedUsers.size() == 0}"
                                          oncomplete="PF('selectedUsers').show()" icon="fa fa-search"/>
                     </div>
@@ -148,7 +147,7 @@
                   width="400" responsive="true" styleClass="box-success">
             <p:dataList id="selectedUsersList" value="#{userListMB.selectedUsers}" var="user"
                         type="definition">
-                - ID: #{user.id} <br/>- Email: #{user.email} <br/>- Nom: #{user.nom} <br/>- Prénom: #{user.prenom} <br/>- Username: #{user.username}
+                - ID: #{user.id} <br/>- Email: #{user.email} <br/>- Username: #{user.username} <br/>- Nom: #{user.nom} <br/>- Prénom: #{user.prenom}
             </p:dataList>
         </p:dialog>
 

@@ -77,7 +77,7 @@ public class UserFormMB implements Serializable {
             msg = "Utilisateur " + user.getEmail() + " créé avec succès";
         } else {
             userService.update(user);
-            msg = "User " + user.getEmail() + " modifié avec succès";
+            msg = "Utilisateur " + user.getEmail() + " modifié avec succès";
         }
         addDetailMessage(msg);
     }

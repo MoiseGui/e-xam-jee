@@ -46,6 +46,10 @@ public abstract class PersistentEntity implements Serializable {
         return id.toString();
     }
 
+    public ObjectId getObjectId() {
+        return id;
+    }
+
     public Long getVersion() {
         return version;
     }

@@ -33,7 +33,7 @@ public class UserListMB implements Serializable {
 
     List<User> filteredValue;
 
-    Integer id;
+    String id;
     String email;
 
     @PostConstruct
@@ -140,11 +140,11 @@ public class UserListMB implements Serializable {
         this.userService = userService;
     }
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 

@@ -1,14 +1,18 @@
 package com.github.adminfaces.starter.service;
 
+import com.github.adminfaces.starter.infra.dao.UserDao;
 import com.github.adminfaces.starter.infra.model.Filter;
 import com.github.adminfaces.starter.infra.model.SortOrder;
-import com.github.adminfaces.starter.model.Car;
 import com.github.adminfaces.starter.model.User;
 import com.github.adminfaces.template.exception.BusinessException;
 import org.mongodb.morphia.Datastore;
+import org.mongodb.morphia.query.UpdateOperations;
+import org.omnifaces.util.Faces;
 
 import javax.ejb.Stateless;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -23,7 +27,10 @@ public class UserService implements Serializable {
 
     @Inject
     @RequestScoped
-    private Datastore datastore;
+    Datastore datastore;
+
+    @Inject
+    UserDao userDao;
 
     @Inject
     List<User> allUsers;
@@ -32,26 +39,20 @@ public class UserService implements Serializable {
         return "Nombre d'utilisateurs : " + allUsers.size();
     }
 
-    public User findBylogin(String login) {
-        return null;
-    }
-
-    public int signIn(String login, String password) {
-        return 0;
-    }
-
     public User findById(String id) {
-        return allUsers.stream()
+        User user = allUsers.stream()
                 .filter(c -> c.getId().equals(id))
                 .findFirst()
                 .orElseThrow(() -> new BusinessException("Utilisateur non trouvé avec l'id " + id));
+        return userDao.read(user.getObjectId());
     }
     
     public long count(Filter<User> filter) {
-        return allUsers.stream()
-                .filter(configFilter(filter).stream()
-                        .reduce(Predicate::or).orElse(t -> true))
-                .count();
+//        return allUsers.stream()
+//                .filter(configFilter(filter).stream()
+//                        .reduce(Predicate::or).orElse(t -> true))
+//                .count();
+        return userDao.getCount();
     }
 
     private List<Predicate<User>> configFilter(Filter<User> filter) {
@@ -130,8 +131,12 @@ public class UserService implements Serializable {
                 .orElse(null);
     }
 
+    public User findUserByEmail(String email){
+        return userDao.findByEmail(email);
+    }
+
     public User login(String email, String password) {
-        User loadedUser = findByEmail(email);
+        User loadedUser = findUserByEmail(email);
         if (loadedUser != null && loadedUser.getPassword().equals(password)) {
             return loadedUser;
         }
@@ -140,17 +145,26 @@ public class UserService implements Serializable {
 
     public void insert(User user) {
         validate(user);
-        /*user.setId(allUsers.stream()
-                .mapToInt(c -> c.getId())
-                .max()
-                .getAsInt() + 1);*/
+        userDao.create(user);
         allUsers.add(user);
     }
 
     public void update(User user) {
         validate(user);
-        allUsers.remove(allUsers.indexOf(user));
-        allUsers.add(user);
+//        User oldUser = findById(user.getId());
+//        UpdateOperations<User> ops = userDao.createOperations()
+//                .set("nom", user.getNom())
+//                .set("prenom", user.getPrenom())
+//                .set("email", user.getEmail())
+//                .set("username", user.getUsername());
+//        userDao.update(oldUser, ops);
+        userDao.create(user);
+        allUsers = allUsers.stream().map(u -> {
+            if(u.getId().equals(user.getId())) {
+                return user;
+            }
+            return u;
+        }).collect(Collectors.toList());
     }
 
     public void remove(User user) {
