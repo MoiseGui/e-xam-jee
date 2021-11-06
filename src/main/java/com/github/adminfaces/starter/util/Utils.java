@@ -1,6 +1,7 @@
 package com.github.adminfaces.starter.util;
 
 import com.github.adminfaces.starter.model.Car;
+import com.github.adminfaces.starter.model.Examen;
 import org.omnifaces.util.Messages;
 
 import javax.annotation.PostConstruct;
@@ -19,7 +20,6 @@ import java.util.stream.IntStream;
 public class Utils implements Serializable {
 
     private List<Car> cars;
-
 
     @PostConstruct
     public void init() {

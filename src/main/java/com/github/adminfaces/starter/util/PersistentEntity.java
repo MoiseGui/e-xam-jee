@@ -43,6 +43,9 @@ public abstract class PersistentEntity implements Serializable {
 
 
     public String getId() {
+        if(id == null){
+            return "";
+        }
         return id.toString();
     }
 

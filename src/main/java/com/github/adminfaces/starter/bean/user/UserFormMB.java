@@ -88,7 +88,7 @@ public class UserFormMB implements Serializable {
     }
 
     public boolean isNew() {
-        return user == null || user.getId() == null;
+        return user.getId() == null;
     }
 
 }

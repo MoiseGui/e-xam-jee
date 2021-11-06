@@ -26,10 +26,6 @@ import static com.github.adminfaces.template.util.Assert.has;
 public class UserService implements Serializable {
 
     @Inject
-    @RequestScoped
-    Datastore datastore;
-
-    @Inject
     UserDao userDao;
 
     @Inject

@@ -1,7 +1,13 @@
 package com.github.adminfaces.starter.util;
 
+import com.github.adminfaces.starter.model.Examen;
 import com.github.adminfaces.starter.model.User;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBCollection;
+import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
+import com.mongodb.client.MongoCollection;
+import org.bson.Document;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
 
@@ -11,6 +17,7 @@ import javax.ejb.Startup;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Produces;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 @Singleton
@@ -31,11 +38,18 @@ public class MongoConnexion implements Serializable {
             Morphia morphia = new Morphia();
             datastore = morphia.createDatastore(mongo, "e-xam");
             morphia.getMapper().getConverters().addConverter(BigDecimalConverter.class);
-
             allUsers = datastore.createQuery(User.class).asList();
             System.out.println("********************************");
             allUsers.forEach(System.out::println);
             System.out.println("********************************");
+            System.out.println("insert exams");
+            String random = String.valueOf((int) Math.floor(Math.random() * 10));
+            Examen examen1 = new Examen();
+            examen1.setLibelle("libelle" + random);
+            examen1.setDateDebut(new Date());
+            examen1.setDateFin(new Date());
+            datastore.save(examen1);
+
         }
     }
 
