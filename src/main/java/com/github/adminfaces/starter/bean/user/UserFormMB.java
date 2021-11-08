@@ -10,6 +10,7 @@ import com.github.adminfaces.starter.service.UserService;
 import org.omnifaces.cdi.ViewScoped;
 import org.omnifaces.util.Faces;
 
+import javax.faces.application.FacesMessage;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.IOException;
@@ -32,12 +33,24 @@ public class UserFormMB implements Serializable {
     @Inject
     UserService userService;
 
-    public void init() {
-        if(Faces.isAjaxRequest()){
-           return;
+    public void init() throws IOException {
+        if (Faces.isAjaxRequest()) {
+            return;
         }
         if (has(id)) {
-            user = userService.findById(id);
+            try {
+                user = userService.findById(id);
+                if(user == null){
+                    addDetailMessage("Utilisateur inexistant.");
+                    Faces.getFlash().setKeepMessages(true);
+                    Faces.redirect("user-list.jsf");
+                }
+            } catch (Exception e) {
+                addDetailMessage("Utilisateur inexistant.");
+                Faces.getFlash().setKeepMessages(true);
+                Faces.redirect("user-list.jsf");
+            }
+
         } else {
             user = new User();
         }
@@ -61,7 +74,7 @@ public class UserFormMB implements Serializable {
 
 
     public void remove() throws IOException {
-        if (has(user) && has(user.getId())) {
+        if (has(user) && !user.getId().isEmpty()) {
             userService.remove(user);
             addDetailMessage("Utilisateur " + user.getEmail()
                     + " supprimé avec succès.");
@@ -70,16 +83,29 @@ public class UserFormMB implements Serializable {
         }
     }
 
-    public void save() {
+    public void save() throws IOException {
         String msg;
-        if (user.getId() == null) {
-            userService.insert(user);
-            msg = "Utilisateur " + user.getEmail() + " créé avec succès";
+        int result = 0;
+        if (user.getId().isEmpty()) {
+            result = userService.insert(user);
+            if(result < 0){
+                msg = "Un utilisateur existe déjà avec cette adresse mail";
+                addDetailMessage(msg, FacesMessage.SEVERITY_ERROR);
+            }
+            else msg = "Utilisateur " + user.getEmail() + " créé avec succès";
         } else {
-            userService.update(user);
-            msg = "Utilisateur " + user.getEmail() + " modifié avec succès";
+            result = userService.update(user);
+            if(result < 0){
+                msg = "Un utilisateur existe déjà avec cette adresse mail";
+                addDetailMessage(msg, FacesMessage.SEVERITY_ERROR);
+            }
+            else msg = "Utilisateur " + user.getEmail() + " modifié avec succès";
         }
-        addDetailMessage(msg);
+        if(result >= 0) {
+            addDetailMessage(msg);
+            Faces.getFlash().setKeepMessages(true);
+            Faces.redirect("user-list.jsf");
+        }
     }
 
     public void clear() {
@@ -88,7 +114,7 @@ public class UserFormMB implements Serializable {
     }
 
     public boolean isNew() {
-        return user.getId() == null;
+        return user == null || user.getId().isEmpty();
     }
 
 }

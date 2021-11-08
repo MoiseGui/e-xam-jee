@@ -41,8 +41,8 @@ public class UserListMB implements Serializable {
         users = new LazyDataModel<User>() {
             @Override
             public List<User> load(int first, int pageSize,
-                                  String sortField, SortOrder sortOrder,
-                                  Map<String, FilterMeta> filters) {
+                                   String sortField, SortOrder sortOrder,
+                                   Map<String, FilterMeta> filters) {
                 com.github.adminfaces.starter.infra.model.SortOrder order = null;
                 if (sortOrder != null) {
                     order = sortOrder.equals(SortOrder.ASCENDING) ? com.github.adminfaces.starter.infra.model.SortOrder.ASCENDING
@@ -80,7 +80,7 @@ public class UserListMB implements Serializable {
 
     public void findUserByEmail(String email) {
         if (email == null) {
-            throw new BusinessException("Provide User ID to load");
+            throw new BusinessException("Aucun résultat");
         }
         selectedUsers.add(userService.findByEmail(email));
     }
@@ -90,14 +90,19 @@ public class UserListMB implements Serializable {
         return result;
     }
 
+    public List<String> completeEmail(String query) {
+        List<String> result = userService.getByEmail(query);
+        return result;
+    }
+
     public void delete() {
         int numUsers = 0;
         for (User selectedUser : selectedUsers) {
-            numUsers++;
             userService.remove(selectedUser);
+            numUsers++;
         }
         selectedUsers.clear();
-        addDetailMessage(numUsers + " Users deleted successfully!");
+        addDetailMessage(numUsers + " utilisateur supprimé avec succès !");
     }
 
     public Filter<User> getFilter() {

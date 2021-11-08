@@ -1,38 +1,16 @@
 package com.github.adminfaces.starter.util;
 
-import com.github.adminfaces.starter.model.Car;
-import com.github.adminfaces.starter.model.Examen;
 import org.omnifaces.util.Messages;
 
-import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Produces;
 import javax.faces.application.FacesMessage;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.IntStream;
 
 /**
- * Created by rmpestano on 07/02/17.
+ * Created by MoiseGui
  */
 @ApplicationScoped
 public class Utils implements Serializable {
-
-    private List<Car> cars;
-
-    @PostConstruct
-    public void init() {
-        System.out.println("hello world");
-        System.out.println("/////////////////////////////");
-        cars = new ArrayList<>();
-        IntStream.rangeClosed(1, 50)
-                .forEach(i -> cars.add(create(i)));
-    }
-
-    private static Car create(int i) {
-        return new Car(i).model("model " + i).name("name" + i).price(Double.valueOf(i));
-    }
 
     public static void addDetailMessage(String message) {
         addDetailMessage(message, null);
@@ -45,11 +23,6 @@ public class Utils implements Serializable {
             facesMessage.setSeverity(severity);
         }
         Messages.add(null, facesMessage);
-    }
-
-    @Produces
-    public List<Car> getCars() {
-        return cars;
     }
 
 }

@@ -5,6 +5,7 @@ import com.github.adminfaces.starter.infra.model.Filter;
 import com.github.adminfaces.starter.infra.model.SortOrder;
 import com.github.adminfaces.starter.model.User;
 import com.github.adminfaces.template.exception.BusinessException;
+import org.bson.types.ObjectId;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.query.UpdateOperations;
 import org.omnifaces.util.Faces;
@@ -42,7 +43,12 @@ public class UserService implements Serializable {
                 .orElseThrow(() -> new BusinessException("Utilisateur non trouvé avec l'id " + id));
         return userDao.read(user.getObjectId());
     }
-    
+
+    public User findUserById(String id){
+//        return userDao.read(new ObjectId(id));
+        return userDao.findById(id);
+    }
+
     public long count(Filter<User> filter) {
 //        return allUsers.stream()
 //                .filter(configFilter(filter).stream()
@@ -57,7 +63,7 @@ public class UserService implements Serializable {
             Predicate<User> idPredicate = (User c) -> c.getId().equals(filter.getParam("id"));
             predicates.add(idPredicate);
         }
-        
+
         return predicates;
     }
 
@@ -113,6 +119,13 @@ public class UserService implements Serializable {
                 .collect(Collectors.toList());
     }
 
+    public List<String> getByEmail(String email) {
+        return allUsers.stream().filter(c -> c.getEmail()
+                        .toLowerCase().contains(email.toLowerCase()))
+                .map(User::getEmail)
+                .collect(Collectors.toList());
+    }
+
     public User findByUsername(String username) {
         return allUsers.stream()
                 .filter(c -> c.getUsername().equals(username))
@@ -139,35 +152,42 @@ public class UserService implements Serializable {
         return null;
     }
 
-    public void insert(User user) {
-        validate(user);
+    public int insert(User user) {
+        validate(user, true);
+
+        if(userDao.findByEmail(user.getEmail()) != null) return -1;
+
         userDao.create(user);
         allUsers.add(user);
+        return 1;
     }
 
-    public void update(User user) {
-        validate(user);
-//        User oldUser = findById(user.getId());
-//        UpdateOperations<User> ops = userDao.createOperations()
-//                .set("nom", user.getNom())
-//                .set("prenom", user.getPrenom())
-//                .set("email", user.getEmail())
-//                .set("username", user.getUsername());
-//        userDao.update(oldUser, ops);
-        userDao.create(user);
+    public int update(User user) {
+        validate(user, false);
+        User realUser = findById(user.getId());
+        User emailUser = findUserByEmail(user.getEmail());
+        if(emailUser != null && ! emailUser.getId().equals(realUser.getId())) return -1;
+        UpdateOperations<User> ops = userDao.createOperations()
+                .set("nom", user.getNom())
+                .set("prenom", user.getPrenom())
+                .set("email", user.getEmail())
+                .set("username", user.getUsername());
+        userDao.update(realUser, ops);
         allUsers = allUsers.stream().map(u -> {
             if(u.getId().equals(user.getId())) {
                 return user;
             }
             return u;
         }).collect(Collectors.toList());
+        return 1;
     }
 
     public void remove(User user) {
+        userDao.delete(user);
         allUsers.remove(user);
     }
 
-    public void validate(User user) {
+    public void validate(User user, boolean creating) {
         BusinessException be = new BusinessException();
         if (user.getEmail() == null && "".equals(user.getEmail().trim())){
             be.addException(new BusinessException("Vous devez saisir un email"));
@@ -180,6 +200,9 @@ public class UserService implements Serializable {
         }
         if (user.getUsername() == null && "".equals(user.getUsername().trim())) {
             be.addException(new BusinessException("Vous devez saisir un username"));
+        }
+        if(creating && (user.getPassword() == null || user.getPassword().trim().isEmpty())){
+            be.addException(new BusinessException("Vous devez saisir un mot de passe"));
         }
 
 //        if (allUsers.stream().filter(c -> c.getEmail().equalsIgnoreCase(user.getEmail())

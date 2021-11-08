@@ -61,20 +61,22 @@
                                 icon="fa fa-reply"/>
                 </p:splitButton>
 
-                    <p:separator/>
+                <p:separator/>
 
                 <div class="ui-g ui-fluid">
-                    <div class="ui-sm-12 ui-g-6 ui-g-nopad">
-                        <div class="ui-sm-12 ui-g-11">
-                            <p:outputLabel for="id" value="ID"/>
+                    <p:column rendered="#{not userFormMB.isNew()}">
+                        <div class="ui-sm-12 ui-g-6 ui-g-nopad">
+                            <div class="ui-sm-12 ui-g-11">
+                                <p:outputLabel for="id" value="ID"/>
+                            </div>
+                            <div class="ui-sm-12 ui-g-11" >
+                                <p:inputText id="id" value="#{userFormMB.user.id}" readonly="true" styleClass="form-control ui-state-disabled" style="width: 100%"/>
+                                <span class="help-block">
+                                    <p:message for="id" />
+                                </span>
+                            </div>
                         </div>
-                        <div class="ui-sm-12 ui-g-11" >
-                            <p:inputText id="id" value="#{userFormMB.user.id}" readonly="true" styleClass="form-control ui-state-disabled" style="width: 100%"/>
-                            <span class="help-block">
-                                <p:message for="id" />
-                            </span>
-                        </div>
-                    </div>
+                    </p:column>
                     <div class="ui-sm-12 ui-g-6 ui-g-nopad">
                         <div class="ui-sm-12 ui-g-11">
                             <p:outputLabel value="Email" for="inptEmail"/>
@@ -119,17 +121,19 @@
                             </span>
                         </div>
                     </div>
-                    <div class="ui-sm-12 ui-g-6 ui-g-nopad">
-                        <div class="ui-sm-12 ui-g-11">
-                            <p:outputLabel value="Mot de passe" for="inptPassword"/>
+                    <p:column rendered="#{userFormMB.isNew()}">
+                        <div class="ui-sm-12 ui-g-6 ui-g-nopad">
+                            <div class="ui-sm-12 ui-g-11">
+                                <p:outputLabel value="Mot de passe" for="inptPassword"/>
+                            </div>
+                            <div class="ui-sm-12 ui-g-11" >
+                                <p:inputText type="password" id="inptPassword" value="#{userFormMB.user.password}" required="true"/>
+                                <span class="help-block">
+                                    <p:message for="inptPassword" />
+                                </span>
+                            </div>
                         </div>
-                        <div class="ui-sm-12 ui-g-11" >
-                            <p:inputText type="password" id="inptPassword" value="#{userFormMB.user.password}" required="true"/>
-                            <span class="help-block">
-                                <p:message for="inptPassword" />
-                            </span>
-                        </div>
-                    </div>
+                    </p:column>
                 </div>
                 <h:panelGroup id="footer" layout="block" styleClass="hidden-sm hidden-md hidden-lg">
                     <hr/>

@@ -31,6 +31,11 @@ public class UserDao {
         return datastore.get(User.class, id);
     }
 
+
+    public User findById(String id) {
+        return datastore.find(User.class, "id", id).get();
+    }
+
     public User findByEmail(String email){
         return datastore.find(User.class, "email", email).get();
     }
@@ -46,4 +51,5 @@ public class UserDao {
     public UpdateOperations<User> createOperations(){
         return datastore.createUpdateOperations(User.class);
     }
+
 }

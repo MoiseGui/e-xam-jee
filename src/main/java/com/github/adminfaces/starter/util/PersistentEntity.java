@@ -11,7 +11,7 @@ import java.util.Date;
 import java.util.Objects;
 
 /**
- * @author Ulrich Cech
+ * @author MoiseGui
  */
 public abstract class PersistentEntity implements Serializable {
 
