@@ -5,6 +5,7 @@
 package com.github.adminfaces.starter.bean.exman;
 
 import com.github.adminfaces.starter.model.Examen;
+import com.github.adminfaces.starter.model.Question;
 import com.github.adminfaces.starter.model.User;
 import com.github.adminfaces.starter.service.ExamenService;
 import com.github.adminfaces.starter.service.UserService;
@@ -18,6 +19,8 @@ import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.github.adminfaces.starter.util.Utils.addDetailMessage;
 import static com.github.adminfaces.template.util.Assert.has;
@@ -39,16 +42,13 @@ public class ExamenFormMB implements Serializable {
     ExamenService examenService;
 
     public void init() {
-        if(Faces.isAjaxRequest()){
-           return;
+        if (Faces.isAjaxRequest()) {
+            return;
         }
         if (has(id)) {
             examen = examenService.findById(id);
-            System.out.println("ùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùù");
-            System.out.println("examen = " + examen.getDateDebut());
-            System.out.println("ùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùù");
         } else {
-           examen = new Examen();
+            examen = new Examen();
         }
     }
 
@@ -115,13 +115,22 @@ public class ExamenFormMB implements Serializable {
     public boolean isNew() {
         return examen.getId() == null;
     }
-    public String formatDate(Date date){
-        if(date != null){
+
+    public String formatDate(Date date) {
+        if (date != null) {
             DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
             String strDate = dateFormat.format(date);
             return strDate;
         }
         return "Date inexistante";
 
+    }
+
+    public String getQuestionsLength() {
+        return examen.getQuestions() != null ? String.valueOf(examen.getQuestions().size()) : "0";
+    }
+    public List<Question> getQuestions(){
+        System.out.println("sorted exams "+examen.getQuestions().stream().sorted(Question::compareTo).collect(Collectors.toList()));
+        return examen.getQuestions().stream().sorted(Question::compareTo).collect(Collectors.toList());
     }
 }

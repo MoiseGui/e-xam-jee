@@ -13,6 +13,7 @@ public class User extends PersistentEntity {
     private String password;
     private String cne;
 
+
     public String getNom() {
         return nom;
     }

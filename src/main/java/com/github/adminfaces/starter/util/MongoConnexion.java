@@ -1,6 +1,7 @@
 package com.github.adminfaces.starter.util;
 
 import com.github.adminfaces.starter.model.Examen;
+import com.github.adminfaces.starter.model.Question;
 import com.github.adminfaces.starter.model.User;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
@@ -17,6 +18,7 @@ import javax.ejb.Startup;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Produces;
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -48,8 +50,16 @@ public class MongoConnexion implements Serializable {
             examen1.setLibelle("libelle" + random);
             examen1.setDateDebut(new Date());
             examen1.setDateFin(new Date());
+            System.out.println("create Questions");
+            Question question = new Question();
+            question.setOrdre(1);
+            question.setImage("image");
+            question.setDateCreation(new Date());
+            question.setPoints(10.0);
+            question.setTitre("titre 1");
+            examen1.setQuestions(Arrays.asList(question));
             datastore.save(examen1);
-
+            System.out.println("********************************");
         }
     }
 

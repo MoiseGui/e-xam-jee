@@ -1,11 +1,13 @@
 package com.github.adminfaces.starter.model;
 
 import com.github.adminfaces.starter.util.PersistentEntity;
+import org.mongodb.morphia.annotations.Embedded;
 import org.mongodb.morphia.annotations.Entity;
 
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import java.util.Date;
+import java.util.List;
 
 @Entity(value = "examens", noClassnameStored = true)
 public class Examen extends PersistentEntity {
@@ -14,6 +16,16 @@ public class Examen extends PersistentEntity {
     private Date dateDebut;
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateFin;
+    @Embedded
+    private List<Question> questions;
+
+    public List<Question> getQuestions() {
+        return questions;
+    }
+
+    public void setQuestions(List<Question> questions) {
+        this.questions = questions;
+    }
 
     public String getLibelle() {
         return libelle;
