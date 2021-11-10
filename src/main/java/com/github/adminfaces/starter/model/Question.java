@@ -18,10 +18,13 @@ public class Question extends PersistentEntity implements Comparable<Question> {
     private Integer points;
     private String image;
     private String video;
-    private String vraiOuFaux;
+    private boolean vraiOuFaux;
     private String typeQuestion;
     @Embedded
     private List<Choix> choix;
+
+    @Embedded
+    List<ReponsesQuestion> reponses;
 
     public Question() {
     }
@@ -74,11 +77,11 @@ public class Question extends PersistentEntity implements Comparable<Question> {
         this.video = video;
     }
 
-    public String getVraiOuFaux() {
+    public boolean isVraiOuFaux() {
         return vraiOuFaux;
     }
 
-    public void setVraiOuFaux(String vraiOuFaux) {
+    public void setVraiOuFaux(boolean vraiOuFaux) {
         this.vraiOuFaux = vraiOuFaux;
     }
 
@@ -101,5 +104,13 @@ public class Question extends PersistentEntity implements Comparable<Question> {
 
     public void setTypeQuestion(String typeQuestion) {
         this.typeQuestion = typeQuestion;
+    }
+
+    public List<ReponsesQuestion> getReponses() {
+        return reponses;
+    }
+
+    public void setReponses(List<ReponsesQuestion> reponses) {
+        this.reponses = reponses;
     }
 }

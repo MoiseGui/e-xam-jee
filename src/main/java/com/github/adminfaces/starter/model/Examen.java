@@ -19,6 +19,10 @@ public class Examen extends PersistentEntity {
     private Date dateFin;
     @Embedded
     private List<Question> questions;
+    @Embedded
+    private List<EtudiantExamen> etudiantExamens;
+
+    private String owner;
 
     public List<Question> getQuestions() {
         if(questions == null){
@@ -53,5 +57,13 @@ public class Examen extends PersistentEntity {
 
     public void setDateFin(Date dateFin) {
         this.dateFin = dateFin;
+    }
+
+    public String getOwner() {
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
     }
 }
