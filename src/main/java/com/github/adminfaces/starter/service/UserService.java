@@ -3,6 +3,7 @@ package com.github.adminfaces.starter.service;
 import com.github.adminfaces.starter.infra.dao.UserDao;
 import com.github.adminfaces.starter.infra.model.Filter;
 import com.github.adminfaces.starter.infra.model.SortOrder;
+import com.github.adminfaces.starter.model.Role;
 import com.github.adminfaces.starter.model.User;
 import com.github.adminfaces.template.exception.BusinessException;
 import org.bson.types.ObjectId;
@@ -49,12 +50,42 @@ public class UserService implements Serializable {
         return userDao.findById(id);
     }
 
-    public long count(Filter<User> filter) {
+    public long count() {
 //        return allUsers.stream()
 //                .filter(configFilter(filter).stream()
 //                        .reduce(Predicate::or).orElse(t -> true))
 //                .count();
         return userDao.getCount();
+    }
+
+    public long countEtudiants() {
+        long count = 0;
+        for (User user : allUsers) {
+            if (user.getRole().equals(Role.etu)) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public long countEnseignants() {
+        long count = 0;
+        for (User user : allUsers) {
+            if (user.getRole().equals(Role.prof)) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public long countAdministrateurs() {
+        long count = 0;
+        for (User user : allUsers) {
+            if (user.getRole().equals(Role.admin)) {
+                count++;
+            }
+        }
+        return count;
     }
 
     private List<Predicate<User>> configFilter(Filter<User> filter) {

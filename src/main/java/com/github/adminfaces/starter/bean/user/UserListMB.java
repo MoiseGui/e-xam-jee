@@ -53,7 +53,7 @@ public class UserListMB implements Serializable {
                         .setSortField(sortField).setSortOrder(order)
                         .setParams(filters);
                 List<User> list = userService.paginate(filter);
-                setRowCount((int) userService.count(filter));
+                setRowCount((int) userService.count());
                 return list;
 
             }
@@ -102,6 +102,22 @@ public class UserListMB implements Serializable {
         }
         selectedUsers.clear();
         addDetailMessage(numUsers + " utilisateur supprimé avec succès !");
+    }
+
+    public long getUserCount(){
+        return this.userService.count();
+    }
+
+    public long getEtudiantCount(){
+        return this.userService.countEtudiants();
+    }
+
+    public long getEnseignantCount(){
+        return this.userService.countEnseignants();
+    }
+
+    public long getAdministrateurCount(){
+        return this.userService.countAdministrateurs();
     }
 
     public Filter<User> getFilter() {
