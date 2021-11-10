@@ -19,6 +19,7 @@ public class Question extends PersistentEntity implements Comparable<Question> {
     private String image;
     private String video;
     private String vraiOuFaux;
+    private String typeQuestion;
     @Embedded
     private List<Choix> choix;
 
@@ -92,5 +93,13 @@ public class Question extends PersistentEntity implements Comparable<Question> {
     @Override
     public int compareTo(Question o) {
         return o.getOrdre().compareTo(this.getOrdre());
+    }
+
+    public String getTypeQuestion() {
+        return typeQuestion;
+    }
+
+    public void setTypeQuestion(String typeQuestion) {
+        this.typeQuestion = typeQuestion;
     }
 }
