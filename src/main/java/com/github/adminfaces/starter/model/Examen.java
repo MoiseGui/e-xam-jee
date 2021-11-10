@@ -6,6 +6,7 @@ import org.mongodb.morphia.annotations.Entity;
 
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -20,6 +21,9 @@ public class Examen extends PersistentEntity {
     private List<Question> questions;
 
     public List<Question> getQuestions() {
+        if(questions == null){
+            questions = new ArrayList<>();
+        }
         return questions;
     }
 

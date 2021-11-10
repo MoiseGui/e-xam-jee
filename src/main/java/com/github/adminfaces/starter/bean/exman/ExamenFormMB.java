@@ -127,10 +127,12 @@ public class ExamenFormMB implements Serializable {
     }
 
     public String getQuestionsLength() {
-        return examen.getQuestions() != null ? String.valueOf(examen.getQuestions().size()) : "0";
+        System.out.println("getQuestionsLength " + examen.getQuestions());
+        return examen.getQuestions().size() > 0 ? String.valueOf(examen.getQuestions().size()) : "0";
     }
-    public List<Question> getQuestions(){
-        System.out.println("sorted exams "+examen.getQuestions().stream().sorted(Question::compareTo).collect(Collectors.toList()));
+
+    public List<Question> getQuestions() {
+        System.out.println("sorted exams " + examen.getQuestions().stream().sorted(Question::compareTo).collect(Collectors.toList()));
         return examen.getQuestions().stream().sorted(Question::compareTo).collect(Collectors.toList());
     }
 }
