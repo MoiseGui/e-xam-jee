@@ -98,9 +98,9 @@ public class ExamenFormMB implements Serializable {
         }
     }
 
-    public void save() {
+    public void save() throws IOException {
         String msg;
-        if (examen.getId() == null) {
+        if (examen.getId() == null || examen.getId().isEmpty()) {
             examen.setQuestions(getQuestions());
             examenService.insert(examen);
             msg = "Examen " + examen.getLibelle() + " créé avec succès";
@@ -109,6 +109,8 @@ public class ExamenFormMB implements Serializable {
             msg = "Examen " + examen.getLibelle() + " modifié avec succès";
         }
         addDetailMessage(msg);
+        Faces.getFlash().setKeepMessages(true);
+        Faces.redirect("examen-list.jsf");
     }
 
     public void clear() {
@@ -117,7 +119,7 @@ public class ExamenFormMB implements Serializable {
     }
 
     public boolean isNew() {
-        return examen.getId() == null;
+        return examen.getId() == null || examen.getId().isEmpty();
     }
 
     public String formatDate(Date date) {

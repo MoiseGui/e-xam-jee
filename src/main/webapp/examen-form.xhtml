@@ -33,11 +33,11 @@
         </style>
     </ui:define>
     <ui:define name="title">
-        Formulaire d'utilisateur
+        Formulaire d'examen
     </ui:define>
     <ui:define name="body">
         <adm:breadcrumb
-                title="#{empty examenFormMB.id ? 'Nouveau Utilisateur' : 'Utilisateur '.concat(examenFormMB.id)}"
+                title="#{empty examenFormMB.id ? 'Nouvel examen' : 'Examen '.concat(examenFormMB.id)}"
                 link="/examen-form.jsf?id=#{examenFormMB.id}"/>
         <h:form id="form" prependId="false">
             <p:focus rendered="#{empty examenFormMB.id}"/>
@@ -86,6 +86,7 @@
                 <p:separator/>
 
                 <div class="ui-g ui-fluid">
+                    <p:column rendered="#{not examenFormMB.isNew()}">
                     <div class="ui-sm-12 ui-g-6 ui-g-nopad">
                         <div class="ui-sm-12 ui-g-11">
                             <p:outputLabel for="id" value="ID"/>
@@ -98,6 +99,7 @@
                             </span>
                         </div>
                     </div>
+                    </p:column>
                     <div class="ui-sm-12 ui-g-6 ui-g-nopad">
                         <div class="ui-sm-12 ui-g-11">
                             <p:outputLabel value="Libelle" for="inptLibelle"/>
@@ -115,7 +117,7 @@
                             <p:outputLabel value="date début" for="dateDebutPicker"/>
                         </div>
                         <div class="ui-sm-12 ui-g-11">
-                            <p:datePicker id="dateDebutPicker" value="#{examenFormMB.examen.dateDebut}"/>
+                            <p:datePicker id="dateDebutPicker" showTime="true" value="#{examenFormMB.examen.dateDebut}"/>
                             <span class="help-block">
                                 <p:message for="dateDebutPicker"/>
                             </span>
@@ -126,7 +128,7 @@
                             <p:outputLabel value="date fin" for="dateFinPicker"/>
                         </div>
                         <div class="ui-sm-12 ui-g-11">
-                            <p:datePicker id="dateFinPicker" value="#{examenFormMB.examen.dateFin}"/>
+                            <p:datePicker id="dateFinPicker" showTime="true" value="#{examenFormMB.examen.dateFin}"/>
                             <span class="help-block">
                                 <p:message for="dateFinPicker"/>
                             </span>

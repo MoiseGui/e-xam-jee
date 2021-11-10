@@ -23,7 +23,7 @@ public class ExamenDao {
         return datastore.getCount(Examen.class);
     }
     public List<Examen> findAll() {
-        return datastore.createQuery(Examen.class).asList();
+        return datastore.createQuery(Examen.class).order("-dateDebut").asList();
     }
     public WriteResult delete(Examen entity){
         return datastore.delete(entity);

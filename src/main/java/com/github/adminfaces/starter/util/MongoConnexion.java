@@ -41,25 +41,25 @@ public class MongoConnexion implements Serializable {
             datastore = morphia.createDatastore(mongo, "e-xam");
             morphia.getMapper().getConverters().addConverter(BigDecimalConverter.class);
             allUsers = datastore.createQuery(User.class).asList();
-            System.out.println("********************************");
-            allUsers.forEach(System.out::println);
-            System.out.println("********************************");
-            System.out.println("insert exams");
-            String random = String.valueOf((int) Math.floor(Math.random() * 10));
-            Examen examen1 = new Examen();
-            examen1.setLibelle("libelle" + random);
-            examen1.setDateDebut(new Date());
-            examen1.setDateFin(new Date());
-            System.out.println("create Questions");
-            Question question = new Question();
-            question.setOrdre(1);
-            question.setImage("image");
-            question.setDateCreation(new Date());
-            question.setPoints(10);
-            question.setTitre("titre 1");
-            examen1.setQuestions(Arrays.asList(question));
-            datastore.save(examen1);
-            System.out.println("********************************");
+//            System.out.println("********************************");
+//            allUsers.forEach(System.out::println);
+//            System.out.println("********************************");
+//            System.out.println("insert exams");
+//            String random = String.valueOf((int) Math.floor(Math.random() * 10));
+//            Examen examen1 = new Examen();
+//            examen1.setLibelle("libelle" + random);
+//            examen1.setDateDebut(new Date());
+//            examen1.setDateFin(new Date());
+//            System.out.println("create Questions");
+//            Question question = new Question();
+//            question.setOrdre(1);
+//            question.setImage("image");
+//            question.setDateCreation(new Date());
+//            question.setPoints(10);
+//            question.setTitre("titre 1");
+//            examen1.setQuestions(Arrays.asList(question));
+//            datastore.save(examen1);
+//            System.out.println("********************************");
         }
     }
 

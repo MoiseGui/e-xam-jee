@@ -12,6 +12,7 @@ import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -53,12 +54,23 @@ public class ExamenService {
         return foundExam.orElseThrow(() -> new BusinessException("Examen non trouvé par libelle " + libelle));
     }
 
-    public long count(Filter<Examen> filter) {
+    public long count() {
 //        return allUsers.stream()
 //                .filter(configFilter(filter).stream()
 //                        .reduce(Predicate::or).orElse(t -> true))
 //                .count();
         return examenDao.getCount();
+    }
+
+    public long countCurrentGoingOnExams() {
+    	long count = 0;
+        Date now = new Date();
+        for (Examen examen : examens) {
+            if(examen.getDateDebut().before(now) && examen.getDateFin().after(now)) {
+                count ++;
+            }
+        }
+        return count;
     }
 
     private List<Predicate<Examen>> configFilter(Filter<Examen> filter) {
