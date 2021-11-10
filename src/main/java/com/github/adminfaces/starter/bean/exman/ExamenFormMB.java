@@ -135,11 +135,11 @@ public class ExamenFormMB implements Serializable {
     }
 
     public List<Question> getQuestions() {
-        System.out.println("the size of the exams in the getter"+ examen.getQuestions().size());
-        if(examen.getQuestions().size() > 1) {
+        System.out.println("the size of the exams in the getter" + examen.getQuestions().size());
+        if (examen.getQuestions().size() > 1) {
             return examen.getQuestions().stream().sorted(Question::compareTo).collect(Collectors.toList());
         }
-        return  examen.getQuestions();
+        return examen.getQuestions();
     }
 
     public Question getQuestionToAdd() {
@@ -164,11 +164,33 @@ public class ExamenFormMB implements Serializable {
     public void addQuestion() {
         System.out.println("the question i wanna add");
         if (questionToAdd != null) {
-            examen.getQuestions().add(questionToAdd);
+            if (!questionToAdd.getTitre().isEmpty()) {
+                System.out.println("m gonna edit the exam object");
+                List<Question> questionToEdit = examen.getQuestions().stream().filter(q -> q.getOrdre() != questionToAdd.getOrdre()).collect(Collectors.toList());
+                questionToEdit.add(questionToAdd);
+                examen.setQuestions(questionToEdit);
+            } else {
+                System.out.println("m gonna add the question to the exams question list");
+                examen.getQuestions().add(questionToAdd);
+            }
+
             questionToAdd = new Question();
         }
         String msg = "Question crée avec succès !!";
         addDetailMessage(msg);
         System.out.println("*************************");
+    }
+
+    public void fillFormToEdit(Question question) {
+        System.out.println(question.getOrdre());
+        questionToAdd = question;
+        System.out.println("*****************");
+        System.out.println("the question i wanna edit");
+    }
+    public void removeQuestion(Question question) {
+        System.out.println("the question i wanna remove");
+        List<Question> questionsToKeep = examen.getQuestions().stream().filter(q -> q.getOrdre() != question.getOrdre()).collect(Collectors.toList());
+        questionsToKeep.forEach(q -> System.out.println(q.getOrdre()));
+        examen.setQuestions(questionsToKeep);
     }
 }
