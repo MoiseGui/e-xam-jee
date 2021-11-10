@@ -12,6 +12,7 @@ public class User extends PersistentEntity {
     private String email;
     private String password;
     private String cne;
+    private String role;
 
 
     public String getNom() {
@@ -61,4 +62,27 @@ public class User extends PersistentEntity {
     public void setCne(String cne) {
         this.cne = cne;
     }
+
+    public String getRole() {
+        if (role == null) {
+            return Role.etu;
+        }
+        return role;
+    }
+
+    public void setRole(String role) {
+        if (role == null) {
+            this.role = Role.etu;
+            return;
+        }
+        this.role = role;
+    }
+
+    public boolean isAdmin() { return this.getRole().equals(Role.admin); }
+
+    public boolean isProfesseur() {
+        return this.getRole().equals(Role.prof);
+    }
+
+    public boolean isEtudiant() { return this.getRole().equals(Role.etu); }
 }
