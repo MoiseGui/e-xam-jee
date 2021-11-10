@@ -12,8 +12,9 @@
         <ui:param name="renderFormAsterisks" value="true"/>
         <style type="text/css">
             .mt-1 {
-                margin-top: 1rem;
+                margin-top: 1rem !important;
             }
+
             .box-shadow-xl {
                 box-shadow: 0 1px 3px 0 rgb(0 0 0 / 20%), 0 1px 1px 0 rgb(0 0 0 / 14%), 0 2px 1px -1px rgb(0 0 0 / 12%)
             }
@@ -21,8 +22,12 @@
             .ui-datatable {
                 text-align: center !important;
             }
-            .object-contain{
+
+            .object-contain {
                 object-fit: contain;
+            }
+            .ui-accordion-header{
+                font-size: 1.8rem !important;
             }
         </style>
     </ui:define>
@@ -157,8 +162,78 @@
                                  icon="fa fa-close"/>
             </p:confirmDialog>
         </h:form>
-        <div class="box-shadow-xl mt-1"  rendered="#{examenFormMB.getQuestionsLength() ne '0'}">
-            <p:dataTable var="question" value="#{examenFormMB.getQuestions()}">
+      <div>
+          <p:accordionPanel styleClass="box-shadow-xl mt-1" activeIndex="-2">
+              <p:tab title="Ajouter une question">
+                  <h:outputText />
+                  <h:form id="questionForm"  prependId="false">
+                          <div id="question-buttons" class="hidden-sm hidden-xs">
+                              <p:commandButton value="Enregistrer" action="#{examenFormMB.addQuestion}"
+                                               icon="fa fa-check" update="questionForm,questionList"
+                                               styleClass="btn-success"/>
+                              <p:spacer width="5"/>
+                          </div>
+
+                          <p:separator/>
+
+                          <div class="ui-g ui-fluid">
+                              <div class="ui-sm-12 ui-g-6 ui-g-nopad">
+                                  <div class="ui-sm-12 ui-g-11">
+                                      <p:outputLabel for="titre" value="Titre"/>
+                                  </div>
+                                  <div class="ui-sm-12 ui-g-11">
+                                      <p:inputText id="titre" value="#{examenFormMB.questionToAdd.titre}"
+                                                   required="true"
+                                                   style="width: 100%"/>
+                                      <span class="help-block">
+                                <p:message for="titre"/>
+                            </span>
+                                  </div>
+                              </div>
+                              <div class="ui-sm-12 ui-g-6 ui-g-nopad">
+                                  <div class="ui-sm-12 ui-g-11">
+                                      <p:outputLabel for="titre" value="Points"/>
+                                  </div>
+                                  <div class="ui-sm-12 ui-g-11">
+                                      <p:inputText id="points" value="#{examenFormMB.questionToAdd.points}"
+                                                   required="true" styleClass="form-control ui-state-active"
+                                                   style="width: 100%"/>
+                                      <span class="help-block">
+                                <p:message for="points"/>
+                            </span>
+                                  </div>
+                              </div>
+                              <div class="ui-sm-12 ui-g-6 ui-g-nopad">
+                                  <div class="ui-sm-12 ui-g-11">
+                                      <p:outputLabel for="ordre" value="Ordre"/>
+                                  </div>
+                                  <div class="ui-sm-12 ui-g-11">
+                                      <p:inputText id="ordre" value="#{examenFormMB.questionToAdd.ordre}"
+                                                   required="true" styleClass="form-control ui-state-active"
+                                                   style="width: 100%"/>
+                                      <span class="help-block">
+                                <p:message for="points"/>
+                            </span>
+                                  </div>
+                              </div>
+                          </div>
+
+
+                      <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" styleClass="box-danger box-solid">
+                          <p:commandButton value="Oui" type="button"
+                                           styleClass="btn-material btn-primary ui-confirmdialog-yes"
+                                           icon="fa fa-check"/>
+                          <p:commandButton value="Non" type="button" styleClass="btn-material btn-danger ui-confirmdialog-no"
+                                           icon="fa fa-close"/>
+                      </p:confirmDialog>
+                  </h:form>
+              </p:tab>
+          </p:accordionPanel>
+      </div>
+        <div>
+            <p:dataTable id="questionList" var="question" styleClass="box-shadow-xl mt-1"
+                         value="#{examenFormMB.getQuestions()}"
+                         emptyMessage="Aucune questions trouvé">
                 <f:facet name="header">
                     La liste des questions
                 </f:facet>
@@ -178,7 +253,6 @@
         </div>
 
     </ui:define>
-
 
 
 </ui:composition>

@@ -55,7 +55,7 @@ public class MongoConnexion implements Serializable {
             question.setOrdre(1);
             question.setImage("image");
             question.setDateCreation(new Date());
-            question.setPoints(10.0);
+            question.setPoints(10);
             question.setTitre("titre 1");
             examen1.setQuestions(Arrays.asList(question));
             datastore.save(examen1);
