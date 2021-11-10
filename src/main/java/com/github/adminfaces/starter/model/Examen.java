@@ -19,6 +19,8 @@ public class Examen extends PersistentEntity {
     private Date dateFin;
     @Embedded
     private List<Question> questions;
+    @Embedded
+    private List<EtudiantExamen> etudiantExamens;
 
     private String owner;
 
