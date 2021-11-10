@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -37,6 +38,8 @@ public class ExamenFormMB implements Serializable {
     private Examen examen;
     private Date dateDebut;
     private Date dateFin;
+    private Question questionToAdd;
+    private List<Question> questionsToAdd;
 
     @Inject
     ExamenService examenService;
@@ -98,6 +101,7 @@ public class ExamenFormMB implements Serializable {
     public void save() {
         String msg;
         if (examen.getId() == null) {
+            examen.setQuestions(getQuestions());
             examenService.insert(examen);
             msg = "Examen " + examen.getLibelle() + " créé avec succès";
         } else {
@@ -127,10 +131,44 @@ public class ExamenFormMB implements Serializable {
     }
 
     public String getQuestionsLength() {
-        return examen.getQuestions() != null ? String.valueOf(examen.getQuestions().size()) : "0";
+        return examen.getQuestions().size() > 0 ? String.valueOf(examen.getQuestions().size()) : "0";
     }
-    public List<Question> getQuestions(){
-        System.out.println("sorted exams "+examen.getQuestions().stream().sorted(Question::compareTo).collect(Collectors.toList()));
-        return examen.getQuestions().stream().sorted(Question::compareTo).collect(Collectors.toList());
+
+    public List<Question> getQuestions() {
+        System.out.println("the size of the exams in the getter"+ examen.getQuestions().size());
+        if(examen.getQuestions().size() > 1) {
+            return examen.getQuestions().stream().sorted(Question::compareTo).collect(Collectors.toList());
+        }
+        return  examen.getQuestions();
+    }
+
+    public Question getQuestionToAdd() {
+        if (questionToAdd == null) {
+            questionToAdd = new Question();
+        }
+        return questionToAdd;
+    }
+
+    public List<Question> getQuestionsToAdd() {
+        if (questionsToAdd == null) {
+            questionsToAdd = new ArrayList<>();
+        }
+        return questionsToAdd;
+    }
+
+    public void setQuestionToAdd(Question questionToAdd) {
+        this.questionToAdd = questionToAdd;
+    }
+
+
+    public void addQuestion() {
+        System.out.println("the question i wanna add");
+        if (questionToAdd != null) {
+            examen.getQuestions().add(questionToAdd);
+            questionToAdd = new Question();
+        }
+        String msg = "Question crée avec succès !!";
+        addDetailMessage(msg);
+        System.out.println("*************************");
     }
 }

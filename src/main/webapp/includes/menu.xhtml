@@ -7,34 +7,31 @@
         <li>
             <p:link outcome="/index" onclick="clearBreadCrumbs()">
                 <i class="fa fa-home"></i>
-                <span>Home</span>
+                <span>Accueil</span>
             </p:link>
         </li>
+        <p:column rendered="#{logonMB.currentUser.isProfesseur() || logonMB.currentUser.isAdmin()}">
         <li class="header">
             Gestion des examens
         </li>
+        <li>
+            <p:link outcome="/examen-list">
+                <i class="fa fa-table"></i>
+                <span>Examens</span>
+            </p:link>
+        </li>
+        </p:column>
+        <p:column rendered="#{logonMB.currentUser.isAdmin()}">
         <li class="header">
             Gestion des utilisateurs
         </li>
-<!--        <li>-->
-<!--            <p:link outcome="/car-list">-->
-<!--                <i class="fa fa-car"></i>-->
-<!--                <span>Cars</span>-->
-<!--            </p:link>-->
-<!--        </li>-->
         <li>
             <p:link outcome="/user-list">
                 <i class="fa fa-users"></i>
                 <span>Utilisateurs</span>
             </p:link>
         </li>
-        <li>
-            <p:link outcome="/examen-list">
-                <i class="fa fa-users"></i>
-                <span>Examens</span>
-            </p:link>
-        </li>
-
+        </p:column>
     </ul>
 
 </ui:composition>

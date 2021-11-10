@@ -171,6 +171,7 @@ public class UserService implements Serializable {
                 .set("nom", user.getNom())
                 .set("prenom", user.getPrenom())
                 .set("email", user.getEmail())
+                .set("role", user.getRole())
                 .set("username", user.getUsername());
         userDao.update(realUser, ops);
         allUsers = allUsers.stream().map(u -> {

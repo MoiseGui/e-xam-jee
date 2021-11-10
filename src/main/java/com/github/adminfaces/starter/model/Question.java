@@ -15,7 +15,7 @@ public class Question extends PersistentEntity implements Comparable<Question> {
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateCreation;
     private Integer ordre;
-    private Double points;
+    private Integer points;
     private String image;
     private String video;
     private String vraiOuFaux;
@@ -49,11 +49,11 @@ public class Question extends PersistentEntity implements Comparable<Question> {
         this.ordre = ordre;
     }
 
-    public Double getPoints() {
+    public Integer getPoints() {
         return points;
     }
 
-    public void setPoints(Double points) {
+    public void setPoints(Integer points) {
         this.points = points;
     }
 
