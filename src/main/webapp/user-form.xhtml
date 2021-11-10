@@ -16,7 +16,8 @@
         Formulaire d'utilisateur
     </ui:define>
     <ui:define name="body">
-        <adm:breadcrumb title="#{empty userFormMB.id ? 'Nouveau Utilisateur' : 'Utilisateur '.concat(userFormMB.id)}" link="/user-form.jsf?id=#{userFormMB.id}"/>
+        <adm:breadcrumb title="#{empty userFormMB.id ? 'Nouveau Utilisateur' : 'Utilisateur '.concat(userFormMB.id)}"
+                        link="/user-form.jsf?id=#{userFormMB.id}"/>
         <h:form id="form" prependId="false">
             <p:focus rendered="#{empty userFormMB.id}"/>
             <p:panel styleClass="box-primary card">
@@ -69,10 +70,11 @@
                             <div class="ui-sm-12 ui-g-11">
                                 <p:outputLabel for="id" value="ID"/>
                             </div>
-                            <div class="ui-sm-12 ui-g-11" >
-                                <p:inputText id="id" value="#{userFormMB.user.id}" readonly="true" styleClass="form-control ui-state-disabled" style="width: 100%"/>
+                            <div class="ui-sm-12 ui-g-11">
+                                <p:inputText id="id" value="#{userFormMB.user.id}" readonly="true"
+                                             styleClass="form-control ui-state-disabled" style="width: 100%"/>
                                 <span class="help-block">
-                                    <p:message for="id" />
+                                    <p:message for="id"/>
                                 </span>
                             </div>
                         </div>
@@ -81,10 +83,10 @@
                         <div class="ui-sm-12 ui-g-11">
                             <p:outputLabel value="Email" for="inptEmail"/>
                         </div>
-                        <div class="ui-sm-12 ui-g-11" >
+                        <div class="ui-sm-12 ui-g-11">
                             <p:inputText type="email" id="inptEmail" value="#{userFormMB.user.email}" required="true"/>
                             <span class="help-block">
-                                <p:message for="inptEmail" />
+                                <p:message for="inptEmail"/>
                             </span>
                         </div>
                     </div>
@@ -92,10 +94,10 @@
                         <div class="ui-sm-12 ui-g-11">
                             <p:outputLabel value="Username" for="inptUsername"/>
                         </div>
-                        <div class="ui-sm-12 ui-g-11" >
+                        <div class="ui-sm-12 ui-g-11">
                             <p:inputText id="inptUsername" value="#{userFormMB.user.username}" required="true"/>
                             <span class="help-block">
-                                <p:message for="inptUsername" />
+                                <p:message for="inptUsername"/>
                             </span>
                         </div>
                     </div>
@@ -103,10 +105,10 @@
                         <div class="ui-sm-12 ui-g-11">
                             <p:outputLabel value="Nom" for="inptNom"/>
                         </div>
-                        <div class="ui-sm-12 ui-g-11" >
+                        <div class="ui-sm-12 ui-g-11">
                             <p:inputText id="inptNom" value="#{userFormMB.user.nom}" required="true"/>
                             <span class="help-block">
-                                <p:message for="inptNom" />
+                                <p:message for="inptNom"/>
                             </span>
                         </div>
                     </div>
@@ -114,10 +116,10 @@
                         <div class="ui-sm-12 ui-g-11">
                             <p:outputLabel value="Prénom" for="inptPrenom"/>
                         </div>
-                        <div class="ui-sm-12 ui-g-11" >
+                        <div class="ui-sm-12 ui-g-11">
                             <p:inputText id="inptPrenom" value="#{userFormMB.user.prenom}" required="true"/>
                             <span class="help-block">
-                                <p:message for="inptPrenom" />
+                                <p:message for="inptPrenom"/>
                             </span>
                         </div>
                     </div>
@@ -126,14 +128,27 @@
                             <div class="ui-sm-12 ui-g-11">
                                 <p:outputLabel value="Mot de passe" for="inptPassword"/>
                             </div>
-                            <div class="ui-sm-12 ui-g-11" >
-                                <p:inputText type="password" id="inptPassword" value="#{userFormMB.user.password}" required="true"/>
+                            <div class="ui-sm-12 ui-g-11">
+                                <p:inputText type="password" id="inptPassword" value="#{userFormMB.user.password}"
+                                             required="true"/>
                                 <span class="help-block">
-                                    <p:message for="inptPassword" />
+                                    <p:message for="inptPassword"/>
                                 </span>
                             </div>
                         </div>
                     </p:column>
+                    <div class="ui-sm-12 ui-g-6 ui-g-nopad">
+                        <div class="ui-sm-12 ui-g-11">
+                            <p:outputLabel value="Rôle" for="role"/>
+                        </div>
+                        <div class="ui-sm-12 ui-g-11">
+                            <p:selectOneMenu id="role" value="#{userFormMB.user.role}">
+                                <f:selectItem itemLabel="Etudiant" itemValue="Etudiant"/>
+                                <f:selectItem itemLabel="Professeur" itemValue="Professeur"/>
+                                <f:selectItem itemLabel="Administrateur" itemValue="Administrateur"/>
+                            </p:selectOneMenu>
+                        </div>
+                    </div>
                 </div>
                 <h:panelGroup id="footer" layout="block" styleClass="hidden-sm hidden-md hidden-lg">
                     <hr/>

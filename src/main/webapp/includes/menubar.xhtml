@@ -7,33 +7,35 @@
         <li>
             <p:link outcome="/index" onclick="clearBreadCrumbs()">
                 <i class="fa fa-home"></i>
-                <span>Home</span>
+                <span>Accueil </span>
             </p:link>
         </li>
-        <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Utilisateurs <span
-                    class="caret"></span>
-                <i class="fa fa-users"></i>
-            </a>
+         <p:column rendered="#{logonMB.currentUser.isAdmin()}">
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Utilisateurs <span
+                        class="caret"></span>
+                    <i class="fa fa-users"></i>
+                </a>
 
-            <ul class="dropdown-menu" role="menu">
-                <li>
-                    <p:link outcome="/user-list">
-                        <span>Liste</span>
-                        <i class="fa fa-th-list"></i>
-                    </p:link>
-                </li>
-                <li>
-                    <p:link outcome="/user-form">
-                        <span>nouveau</span>
-                        <i class="fa fa-plus-circle"></i>
-                    </p:link>
-                </li>
+                <ul class="dropdown-menu" role="menu">
+                    <li>
+                        <p:link outcome="/user-list">
+                            <span>Liste</span>
+                            <i class="fa fa-th-list"></i>
+                        </p:link>
+                    </li>
+                    <li>
+                        <p:link outcome="/user-form">
+                            <span>Nouveau</span>
+                            <i class="fa fa-plus-circle"></i>
+                        </p:link>
+                    </li>
 
 
-            </ul>
+                </ul>
 
-        </li>
+            </li>
+         </p:column>
     </ul>
 
 </ui:composition>
