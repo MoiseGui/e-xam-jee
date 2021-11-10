@@ -26,7 +26,8 @@
             .object-contain {
                 object-fit: contain;
             }
-            .ui-accordion-header{
+
+            .ui-accordion-header {
                 font-size: 1.8rem !important;
             }
         </style>
@@ -162,74 +163,98 @@
                                  icon="fa fa-close"/>
             </p:confirmDialog>
         </h:form>
-      <div>
-          <p:accordionPanel styleClass="box-shadow-xl mt-1" activeIndex="-2">
-              <p:tab title="Ajouter une question">
-                  <h:outputText />
-                  <h:form id="questionForm"  prependId="false">
-                          <div id="question-buttons" class="hidden-sm hidden-xs">
-                              <p:commandButton value="Enregistrer" action="#{examenFormMB.addQuestion}"
-                                               icon="fa fa-check" update="questionForm,questionList"
-                                               styleClass="btn-success"/>
-                              <p:spacer width="5"/>
-                          </div>
+        <div>
+            <p:accordionPanel id="accordion" styleClass="box-shadow-xl mt-1" activeIndex="-2">
+                <p:tab  title="Ajouter une question">
+                    <h:outputText/>
+                    <h:form id="questionForm" prependId="false">
+                        <div id="question-buttons" class="hidden-sm hidden-xs">
+                            <p:commandButton value="Enregistrer" rendered="#{empty examenFormMB.questionToAdd.ordre}" action="#{examenFormMB.addQuestion}"
+                                             icon="fa fa-check" update="questionForm,questionList"
+                                             styleClass="btn-success"/>
+                            <p:commandButton value="Mettre à jour" rendered="#{not empty examenFormMB.questionToAdd.ordre}" action="#{examenFormMB.addQuestion}"
+                                             icon="fa fa-check" update="questionForm,questionList"
+                                             styleClass="btn-success"/>
+                            <p:spacer width="5"/>
+                        </div>
 
-                          <p:separator/>
+                        <p:separator/>
 
-                          <div class="ui-g ui-fluid">
-                              <div class="ui-sm-12 ui-g-6 ui-g-nopad">
-                                  <div class="ui-sm-12 ui-g-11">
-                                      <p:outputLabel for="titre" value="Titre"/>
-                                  </div>
-                                  <div class="ui-sm-12 ui-g-11">
-                                      <p:inputText id="titre" value="#{examenFormMB.questionToAdd.titre}"
-                                                   required="true"
-                                                   style="width: 100%"/>
-                                      <span class="help-block">
+                        <div class="ui-g ui-fluid">
+                            <div class="ui-sm-12 ui-g-6 ui-g-nopad">
+                                <div class="ui-sm-12 ui-g-11">
+                                    <p:outputLabel for="titre" value="Titre"/>
+                                </div>
+                                <div class="ui-sm-12 ui-g-11">
+                                    <p:inputText id="titre" value="#{examenFormMB.questionToAdd.titre}"
+                                                 required="true"
+                                                 style="width: 100%"/>
+                                    <span class="help-block">
                                 <p:message for="titre"/>
                             </span>
-                                  </div>
-                              </div>
-                              <div class="ui-sm-12 ui-g-6 ui-g-nopad">
-                                  <div class="ui-sm-12 ui-g-11">
-                                      <p:outputLabel for="titre" value="Points"/>
-                                  </div>
-                                  <div class="ui-sm-12 ui-g-11">
-                                      <p:inputText id="points" value="#{examenFormMB.questionToAdd.points}"
-                                                   required="true" styleClass="form-control ui-state-active"
-                                                   style="width: 100%"/>
-                                      <span class="help-block">
+                                </div>
+                            </div>
+                            <div class="ui-sm-12 ui-g-6 ui-g-nopad">
+                                <div class="ui-sm-12 ui-g-11">
+                                    <p:outputLabel for="titre" value="Points"/>
+                                </div>
+                                <div class="ui-sm-12 ui-g-11">
+                                    <p:inputText id="points" value="#{examenFormMB.questionToAdd.points}"
+                                                 required="true" styleClass="form-control ui-state-active"
+                                                 style="width: 100%"/>
+                                    <span class="help-block">
                                 <p:message for="points"/>
                             </span>
-                                  </div>
-                              </div>
-                              <div class="ui-sm-12 ui-g-6 ui-g-nopad">
-                                  <div class="ui-sm-12 ui-g-11">
-                                      <p:outputLabel for="ordre" value="Ordre"/>
-                                  </div>
-                                  <div class="ui-sm-12 ui-g-11">
-                                      <p:inputText id="ordre" value="#{examenFormMB.questionToAdd.ordre}"
-                                                   required="true" styleClass="form-control ui-state-active"
-                                                   style="width: 100%"/>
-                                      <span class="help-block">
+                                </div>
+                            </div>
+
+                            <div class="ui-sm-12 ui-g-6 ui-g-nopad">
+                                <div class="ui-sm-12 ui-g-11">
+                                    <p:outputLabel for="ordre" value="Ordre"/>
+                                </div>
+                                <div class="ui-sm-12 ui-g-11">
+                                    <p:inputText id="ordre" value="#{examenFormMB.questionToAdd.ordre}"
+                                                 required="true" styleClass="form-control ui-state-active"
+                                                 style="width: 100%"/>
+                                    <span class="help-block">
                                 <p:message for="points"/>
                             </span>
-                                  </div>
-                              </div>
-                          </div>
+                                </div>
+                            </div>
+                            <div class="ui-sm-12 ui-g-6 ui-g-nopad">
+                                <div class="ui-sm-12 ui-g-11">
+                                    <p:outputLabel for="titre" value="Type de la question"/>
+                                </div>
+                                <div class="ui-sm-12 ui-g-11">
+                                    <p:selectOneMenu id="typeQuestion" required="true"
+                                                     value="#{examenFormMB.questionToAdd.typeQuestion}">
+                                        <f:selectItem itemLabel="Choix unique" itemValue="choixUnique"/>
+                                        <f:selectItem itemLabel="Choix multiple" itemValue="choixMultiple"/>
+                                        <f:selectItem itemLabel="Vrai ou Faux" itemValue="vraiOuFaux"/>
+                                        <f:selectItem itemLabel="Réponse libre" itemValue="reponseLibre"/>
+                                    </p:selectOneMenu>
+                                    <span class="help-block">
+                                <p:message for="typeQuestion"/>
+                            </span>
+                                </div>
+                            </div>
+
+                        </div>
 
 
-                      <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" styleClass="box-danger box-solid">
-                          <p:commandButton value="Oui" type="button"
-                                           styleClass="btn-material btn-primary ui-confirmdialog-yes"
-                                           icon="fa fa-check"/>
-                          <p:commandButton value="Non" type="button" styleClass="btn-material btn-danger ui-confirmdialog-no"
-                                           icon="fa fa-close"/>
-                      </p:confirmDialog>
-                  </h:form>
-              </p:tab>
-          </p:accordionPanel>
-      </div>
+                        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade"
+                                         styleClass="box-danger box-solid">
+                            <p:commandButton value="Oui" type="button"
+                                             styleClass="btn-material btn-primary ui-confirmdialog-yes"
+                                             icon="fa fa-check"/>
+                            <p:commandButton value="Non" type="button"
+                                             styleClass="btn-material btn-danger ui-confirmdialog-no"
+                                             icon="fa fa-close"/>
+                        </p:confirmDialog>
+                    </h:form>
+                </p:tab>
+            </p:accordionPanel>
+        </div>
         <div>
             <p:dataTable id="questionList" var="question" styleClass="box-shadow-xl mt-1"
                          value="#{examenFormMB.getQuestions()}"
@@ -246,12 +271,18 @@
                 <p:column headerText="Ordre">
                     #{question.ordre}
                 </p:column>
+                <p:column headerText="Action">
+                    <p:commandButton value="Modifier"
+                                     icon="fa fa-edit " action="#{examenFormMB.fillFormToEdit(question)}" update="@all:accordion:questionForm"
+                    />
+                    <p:commandButton value="Supprimer"
+                                     icon="fa fa-trash"  action="#{examenFormMB.removeQuestion(question)}" update="@all:questionList"/>
+                </p:column>
                 <f:facet name="footer">
                     In total there are #{examenFormMB.getQuestionsLength()} questions.
                 </f:facet>
             </p:dataTable>
         </div>
-
     </ui:define>
 
 
