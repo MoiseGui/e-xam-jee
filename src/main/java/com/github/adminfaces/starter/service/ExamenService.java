@@ -13,6 +13,7 @@ import org.mongodb.morphia.query.UpdateOperations;
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -23,7 +24,7 @@ import java.util.stream.Collectors;
 import static com.github.adminfaces.template.util.Assert.has;
 
 @Stateless
-public class ExamenService {
+public class ExamenService implements Serializable {
     @Inject
     private ExamenDao examenDao;
     List<Examen> examens;

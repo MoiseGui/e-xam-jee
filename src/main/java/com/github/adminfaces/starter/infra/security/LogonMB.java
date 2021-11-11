@@ -1,6 +1,7 @@
 package com.github.adminfaces.starter.infra.security;
 
 import com.github.adminfaces.starter.model.User;
+import com.github.adminfaces.starter.service.ExamenService;
 import com.github.adminfaces.starter.service.UserService;
 import com.github.adminfaces.template.session.AdminSession;
 import org.omnifaces.util.Faces;
@@ -43,10 +44,15 @@ public class LogonMB extends AdminSession implements Serializable {
     @Inject
     UserService userService;
 
+    @Inject
+    ExamenService examenService;
+
 
     public void login() throws IOException {
         currentUser = userService.login(email, password);
         if(currentUser != null){
+//            userService.init();
+            examenService.init();
             addDetailMessage("Vous êtes connecté en tant que <b>" + currentUser.getPrenom() + " " + currentUser.getNom() + "</b>");
             Faces.getExternalContext().getFlash().setKeepMessages(true);
             Faces.redirect(adminConfig.getIndexPage());
@@ -56,17 +62,6 @@ public class LogonMB extends AdminSession implements Serializable {
             FacesMessage facesMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Login ou Mot de passe incorrect", "Login ou Mot de passe incorrect");
             FacesContext.getCurrentInstance().addMessage(null, facesMessage);
         }
-
-//        User loadedUser = userService.findById("61812c3b5231274884b64e4b");
-//        User loadedUser = userService.findUserByEmail(email);
-//        if(loadedUser == null){
-//            FacesMessage facesM = new FacesMessage(FacesMessage.SEVERITY_ERROR, "NUll", "Null");
-//            FacesContext.getCurrentInstance().addMessage(null, facesM);
-//        }
-//        else {
-//            FacesMessage facesM = new FacesMessage(FacesMessage.SEVERITY_ERROR, loadedUser.getUsername(), loadedUser.getEmail());
-//            FacesContext.getCurrentInstance().addMessage(null, facesM);
-//        }
     }
 
     public boolean loginFailed(){
