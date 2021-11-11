@@ -4,6 +4,7 @@
  */
 package com.github.adminfaces.starter.bean.exman;
 
+import com.github.adminfaces.starter.model.Choix;
 import com.github.adminfaces.starter.model.Examen;
 import com.github.adminfaces.starter.model.Question;
 import com.github.adminfaces.starter.model.User;
@@ -39,7 +40,11 @@ public class ExamenFormMB implements Serializable {
     private Date dateDebut;
     private Date dateFin;
     private Question questionToAdd;
+    private Choix choiceToAdd;
+
     private List<Question> questionsToAdd;
+    private List<Choix> choicesToAdd;
+
 
     @Inject
     ExamenService examenService;
@@ -161,9 +166,19 @@ public class ExamenFormMB implements Serializable {
     public void setQuestionToAdd(Question questionToAdd) {
         this.questionToAdd = questionToAdd;
     }
+    
+    
 
 
-    public void addQuestion() {
+    public Choix getChoiceToAdd() {
+		return choiceToAdd;
+	}
+
+	public void setChoiceToAdd(Choix choiceToAdd) {
+		this.choiceToAdd = choiceToAdd;
+	}
+
+	public void addQuestion() {
         System.out.println("the question i wanna add");
         if (questionToAdd != null) {
             if (!questionToAdd.getTitre().isEmpty()) {
