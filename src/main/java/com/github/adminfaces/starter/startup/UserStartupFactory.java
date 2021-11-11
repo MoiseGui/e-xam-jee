@@ -31,7 +31,7 @@ public class UserStartupFactory {
                 user.setRole(Role.admin);
                 user.setEmail("admin@gmail.com");
                 user.setUsername("admin");
-                user.setPassword("12345");
+                user.setPassword("1234");
                 datastore.save(user);
             
         }

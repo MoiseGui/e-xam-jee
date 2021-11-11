@@ -11,7 +11,7 @@ import java.util.Date;
 import java.util.List;
 
 @Entity(value = "examens", noClassnameStored = true)
-public class Examen extends PersistentEntity {
+public class Examen extends PersistentEntity implements Comparable<Examen> {
     private String libelle;
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateDebut;
@@ -65,5 +65,10 @@ public class Examen extends PersistentEntity {
 
     public void setOwner(String owner) {
         this.owner = owner;
+    }
+
+    @Override
+    public int compareTo(Examen o) {
+        return this.getDateDebut().compareTo(o.getDateDebut());
     }
 }

@@ -5,6 +5,7 @@
 package com.github.adminfaces.starter.bean.exman;
 
 import com.github.adminfaces.starter.model.Choix;
+import com.github.adminfaces.starter.infra.security.LogonMB;
 import com.github.adminfaces.starter.model.Examen;
 import com.github.adminfaces.starter.model.Question;
 import com.github.adminfaces.starter.model.User;
@@ -48,6 +49,9 @@ public class ExamenFormMB implements Serializable {
 
     @Inject
     ExamenService examenService;
+
+    @Inject
+    LogonMB logonMB;
 
     public void init() {
         if (Faces.isAjaxRequest()) {
@@ -104,13 +108,19 @@ public class ExamenFormMB implements Serializable {
     }
 
     public void save() throws IOException {
-        String msg;
+        String msg = "";
         if (examen.getId() == null || examen.getId().isEmpty()) {
             examen.setQuestions(getQuestions());
+            examen.setOwner(logonMB.getCurrentUser().getId());
             examenService.insert(examen);
             msg = "Examen " + examen.getLibelle() + " créé avec succès";
         } else {
-            examenService.insert(examen);
+            int result = examenService.update(examen);
+            if(result < 1) {
+                msg = "Erreur lors de la modification de l'examen, Cet examen n'existe peut-être plus";
+                addDetailMessage(msg);
+                return;
+            }
             msg = "Examen " + examen.getLibelle() + " modifié avec succès";
         }
         addDetailMessage(msg);
