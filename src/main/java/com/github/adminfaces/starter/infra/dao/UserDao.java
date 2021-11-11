@@ -12,6 +12,7 @@ import org.mongodb.morphia.query.UpdateResults;
 import javax.ejb.Stateless;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import java.util.List;
 
 @Stateless
 public class UserDao {
@@ -31,6 +32,9 @@ public class UserDao {
         return datastore.get(User.class, id);
     }
 
+    public List<User> findAll(){
+        return datastore.find(User.class).asList();
+    }
 
     public User findById(String id) {
         return datastore.find(User.class, "id", id).get();

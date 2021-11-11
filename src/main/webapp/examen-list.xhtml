@@ -37,7 +37,7 @@
                                          disabled="#{empty examenListMB.selectedExamens or examenListMB.selectedExamens.size() == 0}"
                                          process="@this" update="@form"
                         >
-                            <p:confirm header="Confirmation" message="Are you sure?" icon="ui-icon-danger"/>
+                            <p:confirm header="Confirmation" message="Êtes vous sure ?" icon="ui-icon-danger"/>
                         </p:commandButton>
                         <p:spacer width="5"/>
                         <p:commandButton value="Voir les détails" update="@(.ui-dialog)" styleClass="btn-info"
@@ -52,7 +52,7 @@
                                     process="@this" update="@form"
                                     disabled="#{empty examenListMB.selectedExamens or examenListMB.selectedExamens.size() == 0}"
                                     icon="fa fa-trash">
-                            <p:confirm header="Confirmation" message="Are you sure?" icon="ui-icon-danger"/>
+                            <p:confirm header="Confirmation" message="Êtes vous sure ?" icon="ui-icon-danger"/>
                         </p:menuitem>
                         <p:menuitem value="View selected" update="@(.ui-dialog)"
                                     oncomplete="PF('selectedExamens').show()"
@@ -126,9 +126,9 @@
                 </div>
             </div>
             <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" styleClass="box-danger box-solid">
-                <p:commandButton value="Yes" type="button" styleClass="btn-material btn-primary ui-confirmdialog-yes"
+                <p:commandButton value="Oui" type="button" styleClass="btn-material btn-primary ui-confirmdialog-yes"
                                  icon="fa fa-check"/>
-                <p:commandButton value="No" type="button" styleClass="btn-material btn-danger ui-confirmdialog-no"
+                <p:commandButton value="Non" type="button" styleClass="btn-material btn-danger ui-confirmdialog-no"
                                  icon="fa fa-close"/>
             </p:confirmDialog>
         </h:form>

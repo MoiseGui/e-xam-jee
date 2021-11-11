@@ -60,7 +60,6 @@ public class ExamenListMB implements Serializable {
                         .setParams(filters);
                 List<Examen> list = examenService.paginate(filter);
                 setRowCount((int) examenService.count());
-                addDetailMessage("Hello");
                 return list;
 
             }
@@ -124,6 +123,14 @@ public class ExamenListMB implements Serializable {
         return examenService.countCurrentGoingOnExams();
     }
 
+    public long countFinishedExams(){
+        return examenService.countFinishedExams();
+    }
+
+    public long countComingExams(){
+        return examenService.countCommingExams();
+    }
+
     public Filter<Examen> getFilter() {
         return filter;
     }
@@ -169,7 +176,7 @@ public class ExamenListMB implements Serializable {
     }
     public String formatDate(Date date){
         if(date != null){
-            DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm a");
+            DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
             String strDate = dateFormat.format(date);
             return strDate;
         }

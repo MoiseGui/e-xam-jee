@@ -31,7 +31,6 @@ public class MongoConnexion implements Serializable {
     private final String connectionString = "mongodb+srv://e-xam:GFor1FraPS9OGHhw@cluster0.paraj.mongodb.net/e-xam?retryWrites=true&w=majority";
     private static MongoClient mongo;
     private static Datastore datastore;
-    private List<User> allUsers;
 
     @PostConstruct
     public void init() {
@@ -40,7 +39,6 @@ public class MongoConnexion implements Serializable {
             Morphia morphia = new Morphia();
             datastore = morphia.createDatastore(mongo, "e-xam");
             morphia.getMapper().getConverters().addConverter(BigDecimalConverter.class);
-            allUsers = datastore.createQuery(User.class).asList();
 //            System.out.println("********************************");
 //            allUsers.forEach(System.out::println);
 //            System.out.println("********************************");
@@ -67,12 +65,6 @@ public class MongoConnexion implements Serializable {
     @RequestScoped
     public Datastore getDatastore() {
         return datastore;
-    }
-
-    @Produces
-    @RequestScoped
-    public List<User> getAllUsers() {
-        return allUsers;
     }
 
     public MongoClient getMongoClient() {

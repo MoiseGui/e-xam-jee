@@ -11,6 +11,7 @@ import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.query.UpdateOperations;
 import org.omnifaces.util.Faces;
 
+import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
@@ -30,8 +31,12 @@ public class UserService implements Serializable {
     @Inject
     UserDao userDao;
 
-    @Inject
     List<User> allUsers;
+
+    @PostConstruct
+    public void init() {
+        allUsers = userDao.findAll();
+    }
 
     public String showUsersSize(){
         return "Nombre d'utilisateurs : " + allUsers.size();

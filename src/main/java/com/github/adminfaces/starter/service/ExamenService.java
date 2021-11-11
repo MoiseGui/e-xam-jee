@@ -4,9 +4,11 @@ import com.github.adminfaces.starter.infra.dao.ExamenDao;
 import com.github.adminfaces.starter.infra.dao.UserDao;
 import com.github.adminfaces.starter.infra.model.Filter;
 import com.github.adminfaces.starter.infra.model.SortOrder;
+import com.github.adminfaces.starter.infra.security.LogonMB;
 import com.github.adminfaces.starter.model.Examen;
 import com.github.adminfaces.starter.model.User;
 import com.github.adminfaces.template.exception.BusinessException;
+import org.mongodb.morphia.query.UpdateOperations;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
@@ -26,10 +28,16 @@ public class ExamenService {
     private ExamenDao examenDao;
     List<Examen> examens;
 
+    @Inject
+    LogonMB logonMB;
+
     @PostConstruct
     public void init() {
+        if(logonMB.getCurrentUser().isProfesseur()){
+            this.examens = examenDao.findAll(logonMB.getCurrentUser().getId());
+            return;
+        }
         this.examens = examenDao.findAll();
-        System.out.println("examens.size() = " + examens.size());
     }
 
     public List<String> getByLibelle(String query) {
@@ -55,10 +63,9 @@ public class ExamenService {
     }
 
     public long count() {
-//        return allUsers.stream()
-//                .filter(configFilter(filter).stream()
-//                        .reduce(Predicate::or).orElse(t -> true))
-//                .count();
+        if(logonMB.getCurrentUser().isProfesseur()){
+            return examenDao.getCount(logonMB.getCurrentUser().getId());
+        }
         return examenDao.getCount();
     }
 
@@ -67,6 +74,28 @@ public class ExamenService {
         Date now = new Date();
         for (Examen examen : examens) {
             if(examen.getDateDebut().before(now) && examen.getDateFin().after(now)) {
+                count ++;
+            }
+        }
+        return count;
+    }
+
+    public long countFinishedExams(){
+        long count = 0;
+        Date now = new Date();
+        for (Examen examen : examens) {
+            if(examen.getDateFin().before(now)) {
+                count ++;
+            }
+        }
+        return count;
+    }
+
+    public long countCommingExams(){
+        long count = 0;
+        Date now = new Date();
+        for (Examen examen : examens) {
+            if(examen.getDateDebut().after(now)) {
                 count ++;
             }
         }
@@ -88,9 +117,9 @@ public class ExamenService {
             pagedExamens = examens.stream().
                     sorted((c1, c2) -> {
                         if (filter.getSortOrder().isAscending()) {
-                            return c1.getId().compareTo(c2.getId());
+                            return c1.compareTo(c2);
                         } else {
-                            return c2.getId().compareTo(c1.getId());
+                            return c2.compareTo(c1);
                         }
                     })
                     .collect(Collectors.toList());
@@ -98,7 +127,7 @@ public class ExamenService {
 
         int page = filter.getFirst() + filter.getPageSize();
         if (filter.getParams().isEmpty()) {
-            pagedExamens = pagedExamens.subList(filter.getFirst(), page > examens.size() ? examens.size() : page);
+            pagedExamens = pagedExamens.subList(filter.getFirst(), Math.min(page, examens.size()));
             return pagedExamens;
         }
 
@@ -130,7 +159,22 @@ public class ExamenService {
     public void insert(Examen examen) {
         validate(examen);
         examenDao.create(examen);
-        examens.add(examen);
+        examens.add(0, examen);
+    }
+
+    public int update(Examen examen) {
+        validate(examen);
+        Examen realExamen = findById(examen.getId());
+        if (realExamen == null) {
+            return -1;
+        }
+        UpdateOperations<Examen> updateOperations = examenDao.createOperations();
+        updateOperations.set("libelle", examen.getLibelle());
+        updateOperations.set("dateDebut", examen.getDateDebut());
+        updateOperations.set("dateFin", examen.getDateFin());
+        updateOperations.set("questions", examen.getQuestions());
+        examenDao.update(realExamen, updateOperations);
+        return 1;
     }
 
     public void remove(Examen examen) {
@@ -142,6 +186,15 @@ public class ExamenService {
         BusinessException be = new BusinessException();
         if (examen.getLibelle() == null && "".equals(examen.getLibelle().trim())) {
             be.addException(new BusinessException("Vous devez saisir un email"));
+        }
+        if(examen.getDateDebut() == null) {
+            be.addException(new BusinessException("Vous devez saisir une date de début"));
+        }
+        if(examen.getDateFin() == null) {
+            be.addException(new BusinessException("Vous devez saisir une date de fin"));
+        }
+        if(examen.getQuestions() == null || examen.getQuestions().isEmpty()) {
+            be.addException(new BusinessException("Vous devez ajouter au moins une question à cet examen"));
         }
         if (has(be.getExceptionList())) {
             throw be;
