@@ -146,9 +146,26 @@
                                 <f:selectItem itemLabel="Etudiant" itemValue="Etudiant"/>
                                 <f:selectItem itemLabel="Professeur" itemValue="Professeur"/>
                                 <f:selectItem itemLabel="Administrateur" itemValue="Administrateur"/>
+                                <f:ajax render="cneColumn" />
                             </p:selectOneMenu>
                         </div>
                     </div>
+                    <h:panelGroup id="cneColumn" class="ui-sm-12 ui-g-6 ui-g-nopad">
+                        <h:panelGroup rendered="#{userFormMB.user.role eq 'Etudiant'}">
+                            <div>
+                                <div class="ui-sm-12 ui-g-11">
+                                    <p:outputLabel for="cne" value="CNE"/>
+                                </div>
+                                <div class="ui-sm-12 ui-g-11">
+                                    <p:inputText id="cne" value="#{userFormMB.user.cne}"
+                                                 styleClass="form-control" style="width: 100%"/>
+                                    <span class="help-block">
+                                    <p:message for="cne"/>
+                                </span>
+                                </div>
+                            </div>
+                        </h:panelGroup>
+                    </h:panelGroup>
                 </div>
                 <h:panelGroup id="footer" layout="block" styleClass="hidden-sm hidden-md hidden-lg">
                     <hr/>

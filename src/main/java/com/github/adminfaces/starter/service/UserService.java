@@ -207,6 +207,7 @@ public class UserService implements Serializable {
                 .set("nom", user.getNom())
                 .set("prenom", user.getPrenom())
                 .set("email", user.getEmail())
+                .set("cne", user.getCne())
                 .set("role", user.getRole())
                 .set("username", user.getUsername());
         userDao.update(realUser, ops);

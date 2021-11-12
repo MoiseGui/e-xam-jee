@@ -150,7 +150,19 @@
                   width="400" responsive="true" styleClass="box-success">
             <p:dataList id="selectedUsersList" value="#{userListMB.selectedUsers}" var="user"
                         type="definition">
-                - ID: #{user.id} <br/>- Email: #{user.email} <br/>- Username: #{user.username} <br/>- Nom: #{user.nom} <br/>- Prénom: #{user.prenom}
+                <div style="border: 1px solid;padding: 10px;border-radius: 10px;box-shadow: 1px 1px 7px 1px #2F86A6;margin-bottom: 20px">-
+                    <span style="color: #007FBF"> ID:</span> #{user.id}</div>
+                <p:column rendered="#{user.isEtudiant()}">
+                <div style="border: 1px solid;padding: 10px;border-radius: 10px;box-shadow: 1px 1px 7px 1px #2F86A6;margin-bottom: 20px">-
+                    <span style="color: #007FBF"> CNE:</span> #{user.cne}</div>
+                </p:column>
+                <div style="border: 1px solid;padding: 10px;border-radius: 10px;box-shadow: 1px 1px 7px 1px #2F86A6;margin-bottom: 20px">-
+                    <span style="color: #007FBF"> Email:</span> #{user.email}</div>
+                <div style="border: 1px solid;padding: 10px;border-radius: 10px;box-shadow: 1px 1px 7px 1px #2F86A6;margin-bottom: 20px">-
+                    <span style="color: #007FBF"> Username:</span> #{user.username}</div>
+                <div style="border: 1px solid;padding: 10px;border-radius: 10px;box-shadow: 1px 1px 7px 1px #2F86A6;margin-bottom: 20px">-
+                    <span style="color: #007FBF"> Nom complet:</span> #{user.prenom} #{user.nom}</div>
+<!--                - ID: #{user.id} <br/>- Email: #{user.email} <br/>- Username: #{user.username} <br/>- Nom: #{user.nom} <br/>- Prénom: #{user.prenom}-->
             </p:dataList>
         </p:dialog>
 

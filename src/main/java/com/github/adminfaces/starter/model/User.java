@@ -56,6 +56,9 @@ public class User extends PersistentEntity {
     }
 
     public String getCne() {
+        if (cne == null) {
+            return "";
+        }
         return cne;
     }
 
