@@ -1,17 +1,20 @@
 package com.github.adminfaces.starter.model;
 
-public class Choix {
-    private String choixTexte;
-    private Boolean bonneReponse;
-    private Integer Ordre;
+import java.io.Serializable;
 
-    public Choix(String choixTexte, Boolean bonneReponse, Integer ordre) {
+public class Choix implements Serializable {
+    private String choixTexte;
+    private String bonneReponse;
+    private Integer ordre;
+
+    public Choix(String choixTexte, String bonneReponse, Integer ordre) {
         this.choixTexte = choixTexte;
         this.bonneReponse = bonneReponse;
-        Ordre = ordre;
+        this.ordre = ordre;
     }
 
     public Choix() {
+        choixTexte = "";
     }
 
     public String getChoixTexte() {
@@ -22,19 +25,23 @@ public class Choix {
         this.choixTexte = choixTexte;
     }
 
-    public Boolean getBonneReponse() {
+    public String getBonneReponse() {
+        if (bonneReponse == null) {
+            bonneReponse = "false";
+        }
         return bonneReponse;
     }
 
-    public void setBonneReponse(Boolean bonneReponse) {
+    public void setBonneReponse(String bonneReponse) {
         this.bonneReponse = bonneReponse;
     }
 
     public Integer getOrdre() {
-        return Ordre;
+
+        return ordre;
     }
 
     public void setOrdre(Integer ordre) {
-        Ordre = ordre;
+        this.ordre = ordre;
     }
 }

@@ -4,18 +4,17 @@
  */
 package com.github.adminfaces.starter.bean.exman;
 
-import com.github.adminfaces.starter.model.Choix;
 import com.github.adminfaces.starter.infra.security.LogonMB;
+import com.github.adminfaces.starter.model.Choix;
 import com.github.adminfaces.starter.model.Examen;
 import com.github.adminfaces.starter.model.Question;
-import com.github.adminfaces.starter.model.User;
 import com.github.adminfaces.starter.service.ExamenService;
-import com.github.adminfaces.starter.service.UserService;
 import org.omnifaces.cdi.ViewScoped;
 import org.omnifaces.util.Faces;
 import org.primefaces.PrimeFaces;
 
 import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.IOException;
@@ -42,6 +41,17 @@ public class ExamenFormMB implements Serializable {
     private Date dateFin;
     private Question questionToAdd;
     private Choix choiceToAdd;
+    private boolean editChoice = false;
+    private boolean addQuestion = true;
+
+
+    public boolean isAddQuestion() {
+        return addQuestion;
+    }
+
+    public void setAddQuestion(boolean addQuestion) {
+        this.addQuestion = addQuestion;
+    }
 
     private List<Question> questionsToAdd;
     private List<Choix> choicesToAdd;
@@ -110,25 +120,20 @@ public class ExamenFormMB implements Serializable {
     }
 
     public void showAddQuestionModal() {
-        Map<String,Object> options = new HashMap<String, Object>();
-        options.put("modal", true);
-        options.put("width", 640);
-        options.put("height", 340);
-        options.put("contentWidth", "100%");
-        options.put("contentHeight", "100%");
-        options.put("headerElement", "customheader");
+        System.out.println("showAddQuestionModal : Opening the dialog");
+        Map<String, Object> options = new HashMap<>();
+        options.put("resizable", false);
+        PrimeFaces.current().dialog().openDynamic("dialogs/addQuestionDialog", options, null);
 
-        PrimeFaces.current().dialog().openDynamic("addQuestionModal", options, null);
     }
 
     public void save() throws IOException {
         String msg = "";
-        if(examen.getDateDebut().after(examen.getDateFin())){
+        if (examen.getDateDebut().after(examen.getDateFin())) {
             msg = "La date de début doit être antérieure à la date de fin";
             addDetailMessage(msg, FacesMessage.SEVERITY_ERROR);
             Faces.getFlash().setKeepMessages(true);
-        }
-        else{
+        } else {
             if (examen.getId() == null || examen.getId().isEmpty()) {
                 examen.setQuestions(getQuestions());
                 examen.setOwner(logonMB.getCurrentUser().getId());
@@ -136,7 +141,7 @@ public class ExamenFormMB implements Serializable {
                 msg = "Examen " + examen.getLibelle() + " créé avec succès";
             } else {
                 int result = examenService.update(examen);
-                if(result < 1) {
+                if (result < 1) {
                     msg = "Erreur lors de la modification de l'examen, Cet examen n'existe peut-être plus";
                     addDetailMessage(msg);
                     return;
@@ -200,49 +205,137 @@ public class ExamenFormMB implements Serializable {
     }
 
 
-
-
     public Choix getChoiceToAdd() {
-		return choiceToAdd;
-	}
+        if (choiceToAdd == null) {
+            choiceToAdd = new Choix();
+        }
+        return choiceToAdd;
+    }
 
-	public void setChoiceToAdd(Choix choiceToAdd) {
-		this.choiceToAdd = choiceToAdd;
-	}
+    public void setChoiceToAdd(Choix choiceToAdd) {
+        this.choiceToAdd = choiceToAdd;
+    }
 
-	public void addQuestion() {
-        System.out.println("the question i wanna add");
+    public void addQuestion() {
+        PrimeFaces current = PrimeFaces.current();
         if (questionToAdd != null) {
+            System.out.println("hello");
+            long count = examen.getQuestions().stream().filter(q -> q.getTitre().equals(questionToAdd.getTitre())).count();
+            getQuestionsToAdd().forEach(q -> {
+                System.out.println("q.getTitre() : " + q.getTitre());
+            });
+            System.out.println("count : " + count);
+            if (count > 0) {
+                System.out.println("Question already exists");
+                String msg = "Cette question existe déjà";
+                FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, msg, null);
+                FacesContext.getCurrentInstance().addMessage(null, message);
+                questionToAdd = new Question();
+                return;
+            }
+            long countOrders = examen.getQuestions().stream().filter(q -> q.getOrdre() == questionToAdd.getOrdre()).count();
+            if (countOrders > 0) {
+                String msg = "Vous ne peuvez pas ajouter deux questions avec le même ordre";
+                FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, msg, null);
+                FacesContext.getCurrentInstance().addMessage(null, message);
+                questionToAdd = new Question();
+                return;
+            }
             if (editingQuestion) {
-                System.out.println("m gonna edit the exam object");
-                examen.getQuestions().stream().map(q -> {
-                    if (q.getOrdre().equals(questionToAdd.getOrdre())) return questionToAdd;
-                    return q;
-                });
+                examen.setQuestions(examen
+                        .getQuestions()
+                        .stream()
+                        .map(question -> question.getTitre().equals(questionToAdd.getTitre()) ? questionToAdd : question)
+                        .collect(Collectors.toList()));
             } else {
-                System.out.println("m gonna add the question to the exams question list");
                 examen.getQuestions().add(questionToAdd);
             }
-
+            current.executeScript("PF('addQuestion').hide();");
             questionToAdd = new Question();
         }
         editingQuestion = false;
         String msg = "Question crée avec succès !!";
         addDetailMessage(msg);
-        System.out.println("*************************");
+    }
+
+    public void addChoice() {
+        if (questionToAdd.getTypeQuestion().equals("VraiFaux")) {
+            questionToAdd.setVraiOuFaux(choiceToAdd.getBonneReponse().equals("true"));
+        }
+        if (questionToAdd.getTypeQuestion().equals("choixUnique")) {
+            long correctChoices = questionToAdd.getChoix().stream().filter(choix -> choix.getBonneReponse().equals(choiceToAdd.getBonneReponse())).count();
+            System.out.println("the number of correct choices is " + correctChoices);
+            if (correctChoices > 0) {
+                String msg = "Vous ne pouvez pas avoir plus d'une bonne réponse pour une question de type vrai ou faux";
+                FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, msg, null);
+                FacesContext.getCurrentInstance().addMessage(null, message);
+                System.out.println("*********************************");
+                questionToAdd.getChoix().forEach(choix -> System.out.println(choix.getBonneReponse()));
+                System.out.println("*********************************");
+                choiceToAdd = new Choix();
+                return;
+            }
+        }
+        if (questionToAdd.getTypeQuestion().equals("choixUnique") || questionToAdd.getTypeQuestion().equals("choixMultiple")) {
+            long orderDuplicates = questionToAdd.getChoix().stream().filter(choix -> choix.getOrdre().equals(choiceToAdd.getOrdre())).count();
+            if (orderDuplicates > 0) {
+                String msg = "Vous ne pouvez pas avoir deux choix avec le même ordre";
+                FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, msg, null);
+                FacesContext.getCurrentInstance().addMessage(null, message);
+                choiceToAdd = new Choix();
+                return;
+            }
+        }
+        if (editChoice) {
+            addChoiceToQuestion(questionToAdd, choiceToAdd);
+            editChoice = false;
+        } else {
+            questionToAdd.getChoix().add(choiceToAdd);
+        }
+
+        choiceToAdd = new Choix();
+    }
+
+    public void addChoiceToQuestion(Question question, Choix choiceToAdd) {
+        question
+                .setChoix(questionToAdd.getChoix().stream()
+                        .map(choice -> choice.getOrdre().equals(choiceToAdd.getOrdre()) ? choiceToAdd : choice)
+                        .collect(Collectors.toList()));
+
     }
 
     public void fillFormToEdit(Question question) {
+        PrimeFaces current = PrimeFaces.current();
+        current.executeScript("PF('addQuestion').show();");
         editingQuestion = true;
-        System.out.println(question.getOrdre());
         questionToAdd = question;
-        System.out.println("*****************");
-        System.out.println("the question i wanna edit");
     }
+
     public void removeQuestion(Question question) {
-        System.out.println("the question i wanna remove");
         List<Question> questionsToKeep = examen.getQuestions().stream().filter(q -> q.getOrdre() != question.getOrdre()).collect(Collectors.toList());
-        questionsToKeep.forEach(q -> System.out.println(q.getOrdre()));
         examen.setQuestions(questionsToKeep);
+    }
+
+    public void removeChoice(Choix choix) {
+        List<Choix> choixToKeep = questionToAdd.getChoix().stream().filter(q -> !q.getOrdre().equals(choix.getOrdre())).collect(Collectors.toList());
+        questionToAdd.setChoix(choixToKeep);
+    }
+
+    public void fillChoiceFormToEdit(Choix choix) {
+
+        editChoice = true;
+        choiceToAdd = choix;
+    }
+
+    public boolean isEditChoice() {
+        return editChoice;
+    }
+
+    public void emptyQuestionAddForm() {
+        questionToAdd = new Question();
+    }
+
+    public void setEditChoice(boolean editChoice) {
+        this.editChoice = editChoice;
     }
 }
