@@ -31,6 +31,14 @@ public class Examen extends PersistentEntity implements Comparable<Examen> {
         return questions;
     }
 
+    public List<EtudiantExamen> getEtudiantExamens() {
+        return etudiantExamens;
+    }
+
+    public void setEtudiantExamens(List<EtudiantExamen> etudiantExamens) {
+        this.etudiantExamens = etudiantExamens;
+    }
+
     public void setQuestions(List<Question> questions) {
         this.questions = questions;
     }

@@ -2,6 +2,7 @@ package com.github.adminfaces.starter.infra.dao;
 
 import com.github.adminfaces.starter.model.Examen;
 import com.mongodb.WriteResult;
+import org.bson.types.ObjectId;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Key;
 import org.mongodb.morphia.query.UpdateOperations;
@@ -37,6 +38,13 @@ public class ExamenDao {
         return datastore.find(Examen.class, "owner", userId).order("created").asList();
     }
 
+    public Examen findById(String id) {
+        return datastore.get(Examen.class, new ObjectId(id));
+    }
+
+    public Examen findByLibelle(String libelle) {
+        return datastore.find(Examen.class, "libelle", libelle).get();
+    }
 
     public WriteResult delete(Examen entity){
         return datastore.delete(entity);

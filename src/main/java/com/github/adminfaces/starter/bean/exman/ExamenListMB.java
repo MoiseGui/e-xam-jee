@@ -77,8 +77,7 @@ public class ExamenListMB implements Serializable {
     }
 
     public List<String> completeNom(String query) {
-        List<String> result = examenService.getByLibelle(query);
-        return result;
+        return examenService.getByLibelle(query);
     }
 
     public String getLibelle() {
@@ -174,11 +173,11 @@ public class ExamenListMB implements Serializable {
     public void setExamenService(ExamenService examenService) {
         this.examenService = examenService;
     }
+
     public String formatDate(Date date){
         if(date != null){
             DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-            String strDate = dateFormat.format(date);
-            return strDate;
+            return dateFormat.format(date);
         }
         return "Date inexistante";
 
