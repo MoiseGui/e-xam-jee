@@ -56,6 +56,10 @@ public class ExamenService implements Serializable {
         return foundExam.orElseThrow(() -> new BusinessException("Examen non trouvé par id " + id));
     }
 
+    public Examen findByID(String id) {
+        return examenDao.findById(id);
+    }
+
     public Examen findByLibelle(String libelle) {
         Optional<Examen> foundExam = examens.stream()
                 .filter(examen -> examen.getLibelle().equals(libelle))
@@ -63,11 +67,19 @@ public class ExamenService implements Serializable {
         return foundExam.orElseThrow(() -> new BusinessException("Examen non trouvé par libelle " + libelle));
     }
 
+    public Examen findByLibelleDao(String libelle) {
+        return examenDao.findByLibelle(libelle);
+    }
+
     public long count() {
         if(logonMB.getCurrentUser().isProfesseur()){
             return examenDao.getCount(logonMB.getCurrentUser().getId());
         }
         return examenDao.getCount();
+    }
+
+    public long getPassedExamCountForEtudiant(String idEtudiant) {
+        return this.examens.stream().filter(examen -> examen.getEtudiantExamens().stream().anyMatch(etudiantExamen -> etudiantExamen.getEtudiant().equals(idEtudiant))).count();
     }
 
     public long countCurrentGoingOnExams() {

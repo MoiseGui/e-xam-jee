@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets" template="#{layoutMB.template}"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:define name="metadata">
+        <f:metadata>
+            <f:viewParam name="id" value="#{passerExamenMB.id}"/>
+            <!-- use view action if you are in a Java EE 7 server: <f:viewAction action="#{userFormMB.init()}"/>-->
+            <f:event type="preRenderView" listener="#{passerExamenMB.init}"/>
+        </f:metadata>
+        <style type="text/css">
+            .card-counter {
+                box-shadow: 2px 2px 10px #DADADA;
+                margin: 5px;
+                padding: 20px 10px;
+                background-color: #fff;
+                height: 100px;
+                border-radius: 5px;
+                transition: .3s linear all;
+            }
+
+            .card-counter:hover {
+                box-shadow: 4px 4px 20px #DADADA;
+                transition: .3s linear all;
+            }
+
+            .card-counter.primary {
+                background-color: #007bff;
+                color: #FFF;
+            }
+
+            .card-counter.danger {
+                background-color: #ef5350;
+                color: #FFF;
+            }
+
+            .card-counter.success {
+                background-color: #66bb6a;
+                color: #FFF;
+            }
+
+            .card-counter.info {
+                background-color: #26c6da;
+                color: #FFF;
+            }
+
+            .card-counter i {
+                font-size: 5em;
+                opacity: 0.2;
+            }
+
+            .card-counter .count-numbers {
+                position: absolute;
+                right: 35px;
+                top: 20px;
+                font-size: 32px;
+                display: block;
+            }
+
+            .card-counter .count-name {
+                position: absolute;
+                right: 35px;
+                top: 65px;
+                font-style: italic;
+                text-transform: capitalize;
+                opacity: 0.5;
+                display: block;
+                font-size: 18px;
+            }
+
+            .exam_lookup_card {
+                margin-left: auto;
+                margin-right: auto;
+                width: 50%;
+                min-height: 300px !important;
+                margin-top: 20px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: space-evenly;
+                padding: 15px 100px;
+            }
+
+            .exam_info {
+                font-size: 18px;
+            }
+
+            .exam_info_value {
+                font-size: 16px;
+                font-weight: bold;
+                color: #00C0EF;
+            }
+
+            .exam_info_time {
+                display: flex;
+                justify-content: space-between;
+                width: 100%;
+            }
+
+            @media (max-width: 1045px) {
+                .exam_info_time {
+                    flex-direction: column;
+                }
+            }
+
+            @media (max-width: 880px) {
+                .exam_lookup_card {
+                    width: 100%;
+                }
+
+                .hideOnMobile {
+                    display: none !important;
+                }
+            }
+
+            @media (min-width: 880px) {
+                .hideOnDesktop {
+                    display: none !important;
+                }
+            }
+        </style>
+    </ui:define>
+
+    <ui:param name="renderBreadCrumb" value="false"/>
+    <ui:define name="title">
+        <h2 class="align-center">
+            Examen: <span class="text-aqua"> <i> #{passerExamenMB.examen.libelle} </i> </span>
+        </h2>
+
+    </ui:define>
+    <ui:define name="body">
+
+        <!--        <p:column rendered="#{logonMB.currentUser.isEtudiant()}">-->
+        <h:form>
+            <div class="card-counter exam_lookup_card">
+                <p class="exam_info" style="align-self: flex-start">Mis en ligne par: <span
+                        class="exam_info_value">#{passerExamenMB.ownerName}</span></p>
+                <div class="exam_info_time">
+                    <p class="exam_info">Date début: <span
+                            class="exam_info_value">#{passerExamenMB.formatDate(passerExamenMB.examen.dateDebut)}</span>
+                    </p>
+                    <p class="exam_info">Durée: <span class="exam_info_value">#{passerExamenMB.getExamDuration()}</span>
+                    </p>
+                </div>
+                <!--       Si l'exam est terminé et que l'étudiant l'as passé afficher le button voir ma note         -->
+                <p:commandButton rendered="#{passerExamenMB.canPasssExam()}" styleClass="btn btn-success"
+                                 value="Commencer maintenant"
+                                 icon="fa fa-sign-out"></p:commandButton>
+            </div>
+        </h:form>
+        <!--        </p:column>-->
+    </ui:define>
+</ui:composition>

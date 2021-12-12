@@ -37,7 +37,7 @@ public class UserDao {
     }
 
     public User findById(String id) {
-        return datastore.find(User.class, "id", id).get();
+        return datastore.get(User.class, new ObjectId(id));
     }
 
     public User findByEmail(String email){

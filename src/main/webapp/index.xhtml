@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets" template="#{layoutMB.template}"
                 xmlns:f="http://java.sun.com/jsf/core">
 
@@ -63,31 +64,60 @@
                 display: block;
                 font-size: 18px;
             }
+
+            .exam_lookup_card {
+                margin-left: auto;
+                margin-right: auto;
+                padding: 15px;
+                width: 50%;
+                min-height: 300px !important;
+                margin-top: 20px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+            @media (max-width: 880px) {
+                .exam_lookup_card {
+                    width: 100%;
+                }
+                .hideOnMobile {
+                    display: none !important;
+                }
+            }
+            @media (min-width: 880px) {
+                .hideOnDesktop {
+                    display: none !important;
+                }
+            }
         </style>
     </ui:define>
 
     <ui:param name="renderBreadCrumb" value="false"/>
     <ui:define name="title">
         <h2 class="align-center">
-            Bienvenue sur <span class="text-aqua"> <i> e-xam </i> </span>
+            Bienvenue sur <span class="text-aqua"> <i> E-XAM </i> </span>
         </h2>
+    </ui:define>
 
+    <ui:define name="body">
         <div class="row">
-            <div class="col-md-3">
-                <div class="card-counter primary">
-                    <i class="fa fa-list"></i>
-                    <span class="count-numbers">#{examenListMB.getExamenCount()}</span>
-                    <span class="count-name">Examens</span>
+            <p:column rendered="#{!logonMB.currentUser.isEtudiant()}">
+                <div class="col-md-3">
+                    <div class="card-counter primary">
+                        <i class="fa fa-list"></i>
+                        <span class="count-numbers">#{examenListMB.getExamenCount()}</span>
+                        <span class="count-name">Examens</span>
+                    </div>
                 </div>
-            </div>
 
-            <div class="col-md-3">
-                <div class="card-counter danger">
-                    <i class="fa fa-code-fork"></i>
-                    <span class="count-numbers">#{examenListMB.getCurrentGoingOnExams()}</span>
-                    <span class="count-name">Examens en cours</span>
+                <div class="col-md-3">
+                    <div class="card-counter danger">
+                        <i class="fa fa-code-fork"></i>
+                        <span class="count-numbers">#{examenListMB.getCurrentGoingOnExams()}</span>
+                        <span class="count-name">Examens en cours</span>
+                    </div>
                 </div>
-            </div>
+            </p:column>
 
             <p:column rendered="#{logonMB.currentUser.isAdmin()}">
                 <div class="col-md-3">
@@ -131,23 +161,23 @@
         </div>
 
         <p:column rendered="#{logonMB.currentUser.isEtudiant()}">
-            <div class="card-counter"
-                 style="margin-left: auto; margin-right: auto; padding: 15px; width: 50%; min-height: 300px !important; margin-top: 20px; display: flex; flex-direction: column; align-items: center">
+            <h:form>
+            <div class="card-counter exam_lookup_card">
                 <img class="card-img-top" src="#{resource['images/logo.svg']}" alt="E-xam"/>
-                <div>
+                <div style="width: 80%; display: flex; flex-direction: column; align-items: center; justify-content: center">
                     <h2 class="card-title">Participer à un examen</h2>
                     <p class="card-text">Utilisez le code de l'examen pour y participer.</p>
-                    <div style="display: flex; align-items: center; justify-content: center">
-                        <div>
-                            <p:inputText id="lien" placeholder="Le lien de l'examen"
-                                         style="flex: 1"/>
+                    <div style="display: flex; align-items: center; justify-content: center; width: 100%">
+                        <div style="flex: 2">
+                            <p:inputText id="lien" placeholder="Le code de l'examen" value="#{passerExamenMB.examenId}" style="width: 100%"/>
                         </div>
-                        <p:commandButton styleClass="btn btn-success btn-block" value="Participer"></p:commandButton>
-                    </div>
+                        <p:commandButton action="#{passerExamenMB.findExamen}" styleClass="btn btn-success btn-block hideOnMobile" style="flex: 1" value="Participer" icon="fa fa-sign-out"></p:commandButton>
+                        <p:commandButton action="#{passerExamenMB.findExamen}" styleClass="btn btn-success btn-box-tool hideOnDesktop" style="flex: 1" icon="fa fa-sign-out"></p:commandButton>
                     </div>
                 </div>
-
+            </div>
+            </h:form>
         </p:column>
-
     </ui:define>
+
 </ui:composition>
