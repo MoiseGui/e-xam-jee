@@ -48,11 +48,11 @@
 			<p:panel styleClass="box-primary card">
 				<div id="main-buttons" class="hidden-sm hidden-xs">
 					<p:commandButton value="Enregistrer" action="#{examenFormMB.save}"
-						update="@form" icon="fa fa-check" styleClass="btn-primary" />
+						update="@form" icon="fa fa-check" styleClass="btn-success" />
 					<p:spacer width="5" rendered="#{examenFormMB.isNew()}" />
 					<p:commandButton value="Tout effacer"
 						action="#{examenFormMB.clear}" process="@this"
-						icon="fa fa-refresh" styleClass="btn-success" update="@form"
+						icon="fa fa-refresh" styleClass="btn-warning" update="@form"
 						rendered="#{examenFormMB.isNew()}" resetValues="true" />
 					<p:spacer width="5" rendered="#{not examenFormMB.isNew()}" />
 
@@ -68,6 +68,12 @@
 					<p:commandButton value="Retour" immediate="true"
 						action="examen-list?faces-redirect=true" process="@this"
 						icon="fa fa-reply" />
+					<p:spacer width="5" />
+					<h:form>
+						<p:commandButton value="Ajouter une question"
+							action="#{examenFormMB.showAddQuestionModal}"
+							icon="fa fa-plus" styleClass="btn-primary"/>
+					</h:form>
 				</div>
 
 				<p:splitButton value="Enregistrer" action="#{examenFormMB.save}"
@@ -242,12 +248,12 @@
 								<div class="ui-sm-12 ui-g-11">
 									<p:selectOneMenu id="typeQuestion" required="true"
 										value="#{examenFormMB.questionToAdd.typeQuestion}">
+										<f:selectItem itemLabel="Réponse libre"
+											itemValue="reponseLibre" />
+										<f:selectItem itemLabel="Vrai ou Faux" itemValue="vraiOuFaux" />
 										<f:selectItem itemLabel="Choix unique" itemValue="choixUnique" />
 										<f:selectItem itemLabel="Choix multiple"
 											itemValue="choixMultiple" />
-										<f:selectItem itemLabel="Vrai ou Faux" itemValue="vraiOuFaux" />
-										<f:selectItem itemLabel="Réponse libre"
-											itemValue="reponseLibre" />
 										<f:ajax render="results" />
 									</p:selectOneMenu>
 									<span class="help-block"> <p:message for="typeQuestion" />
@@ -328,7 +334,7 @@
 												</div>
 												<div class="ui-sm-12 ui-g-11">
 													<p:inputText id="choixTexte"
-														value="#{examenFormMB.choiceToAdd.choixTexte}"
+
 														required="true" style="width: 100%" />
 													<span class="help-block"> <p:message
 															for="choixTexte" />
@@ -341,7 +347,7 @@
 												</div>
 												<div class="ui-sm-12 ui-g-11">
 													<p:inputText id="bonneReponse"
-														value="#{examenFormMB.choiceToAdd.bonneReponse}"
+
 														required="true" styleClass="form-control ui-state-active"
 														style="width: 100%" />
 													<span class="help-block"> <p:message
@@ -356,7 +362,7 @@
 												</div>
 												<div class="ui-sm-12 ui-g-11">
 													<p:inputText id="choiceOrdre"
-														value="#{examenFormMB.choiceToAdd.ordre}" required="true"
+														 required="true"
 														styleClass="form-control ui-state-active"
 														style="width: 100%" />
 													<span class="help-block"> <p:message
@@ -383,15 +389,15 @@
 							</h:panelGroup>
 							<h:panelGroup
 								rendered="#{examenFormMB.questionToAdd.typeQuestion eq 'choixMultiple'}">
-								        You have selected "choixMultiple".
+								        Cette question proposera des choix multiples.
 								    </h:panelGroup>
 							<h:panelGroup
 								rendered="#{examenFormMB.questionToAdd.typeQuestion eq 'vraiOuFaux'}">
-								        You have selected "vraiOuFaux".
+								        Cette réponse sera de type Vrai ou Faux.
 								    </h:panelGroup>
 							<h:panelGroup
 								rendered="#{examenFormMB.questionToAdd.typeQuestion eq 'reponseLibre'}">
-								        You have selected "reponseLibre".
+								        Cette question recevra des réponse libres.
 								    </h:panelGroup>
 						</h:panelGroup>
 						<!-- Choice form end -->

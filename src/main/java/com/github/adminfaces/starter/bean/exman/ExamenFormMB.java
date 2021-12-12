@@ -13,16 +13,16 @@ import com.github.adminfaces.starter.service.ExamenService;
 import com.github.adminfaces.starter.service.UserService;
 import org.omnifaces.cdi.ViewScoped;
 import org.omnifaces.util.Faces;
+import org.primefaces.PrimeFaces;
 
+import javax.faces.application.FacesMessage;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.IOException;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.github.adminfaces.starter.util.Utils.addDetailMessage;
@@ -45,6 +45,8 @@ public class ExamenFormMB implements Serializable {
 
     private List<Question> questionsToAdd;
     private List<Choix> choicesToAdd;
+
+    private boolean editingQuestion = false;
 
 
     @Inject
@@ -107,25 +109,45 @@ public class ExamenFormMB implements Serializable {
         }
     }
 
+    public void showAddQuestionModal() {
+        Map<String,Object> options = new HashMap<String, Object>();
+        options.put("modal", true);
+        options.put("width", 640);
+        options.put("height", 340);
+        options.put("contentWidth", "100%");
+        options.put("contentHeight", "100%");
+        options.put("headerElement", "customheader");
+
+        PrimeFaces.current().dialog().openDynamic("addQuestionModal", options, null);
+    }
+
     public void save() throws IOException {
         String msg = "";
-        if (examen.getId() == null || examen.getId().isEmpty()) {
-            examen.setQuestions(getQuestions());
-            examen.setOwner(logonMB.getCurrentUser().getId());
-            examenService.insert(examen);
-            msg = "Examen " + examen.getLibelle() + " créé avec succès";
-        } else {
-            int result = examenService.update(examen);
-            if(result < 1) {
-                msg = "Erreur lors de la modification de l'examen, Cet examen n'existe peut-être plus";
-                addDetailMessage(msg);
-                return;
-            }
-            msg = "Examen " + examen.getLibelle() + " modifié avec succès";
+        if(examen.getDateDebut().after(examen.getDateFin())){
+            msg = "La date de début doit être antérieure à la date de fin";
+            addDetailMessage(msg, FacesMessage.SEVERITY_ERROR);
+            Faces.getFlash().setKeepMessages(true);
         }
-        addDetailMessage(msg);
-        Faces.getFlash().setKeepMessages(true);
-        Faces.redirect("examen-list.jsf");
+        else{
+            if (examen.getId() == null || examen.getId().isEmpty()) {
+                examen.setQuestions(getQuestions());
+                examen.setOwner(logonMB.getCurrentUser().getId());
+                examenService.insert(examen);
+                msg = "Examen " + examen.getLibelle() + " créé avec succès";
+            } else {
+                int result = examenService.update(examen);
+                if(result < 1) {
+                    msg = "Erreur lors de la modification de l'examen, Cet examen n'existe peut-être plus";
+                    addDetailMessage(msg);
+                    return;
+                }
+                msg = "Examen " + examen.getLibelle() + " modifié avec succès";
+            }
+            addDetailMessage(msg);
+            Faces.getFlash().setKeepMessages(true);
+            Faces.redirect("examen-list.jsf");
+        }
+
     }
 
     public void clear() {
@@ -176,8 +198,8 @@ public class ExamenFormMB implements Serializable {
     public void setQuestionToAdd(Question questionToAdd) {
         this.questionToAdd = questionToAdd;
     }
-    
-    
+
+
 
 
     public Choix getChoiceToAdd() {
@@ -191,11 +213,12 @@ public class ExamenFormMB implements Serializable {
 	public void addQuestion() {
         System.out.println("the question i wanna add");
         if (questionToAdd != null) {
-            if (!questionToAdd.getTitre().isEmpty()) {
+            if (editingQuestion) {
                 System.out.println("m gonna edit the exam object");
-                List<Question> questionToEdit = examen.getQuestions().stream().filter(q -> q.getOrdre() != questionToAdd.getOrdre()).collect(Collectors.toList());
-                questionToEdit.add(questionToAdd);
-                examen.setQuestions(questionToEdit);
+                examen.getQuestions().stream().map(q -> {
+                    if (q.getOrdre().equals(questionToAdd.getOrdre())) return questionToAdd;
+                    return q;
+                });
             } else {
                 System.out.println("m gonna add the question to the exams question list");
                 examen.getQuestions().add(questionToAdd);
@@ -203,12 +226,14 @@ public class ExamenFormMB implements Serializable {
 
             questionToAdd = new Question();
         }
+        editingQuestion = false;
         String msg = "Question crée avec succès !!";
         addDetailMessage(msg);
         System.out.println("*************************");
     }
 
     public void fillFormToEdit(Question question) {
+        editingQuestion = true;
         System.out.println(question.getOrdre());
         questionToAdd = question;
         System.out.println("*****************");

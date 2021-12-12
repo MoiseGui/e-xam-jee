@@ -1,7 +1,5 @@
 package com.github.adminfaces.starter.startup;
 
-import java.math.BigDecimal;
-
 import javax.annotation.PostConstruct;
 import javax.ejb.DependsOn;
 import javax.ejb.Singleton;

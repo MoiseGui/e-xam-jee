@@ -19,7 +19,7 @@ public class Question extends PersistentEntity implements Comparable<Question> {
     private String image;
     private String video;
     private boolean vraiOuFaux;
-    private String typeQuestion = "choixUnique";
+    private String typeQuestion = "reponseLibre";
     @Embedded
     private List<Choix> choix;
 
