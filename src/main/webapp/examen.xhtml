@@ -147,7 +147,8 @@
                 <!--       Si l'exam est terminé et que l'étudiant l'as passé afficher le button voir ma note         -->
                 <p:commandButton rendered="#{passerExamenMB.canPasssExam()}" styleClass="btn btn-success"
                                  value="Commencer maintenant"
-                                 icon="fa fa-sign-out"></p:commandButton>
+                                 icon="fa fa-sign-out"
+                                 action="#{passerExamenMB.passerExam}"></p:commandButton>
             </div>
         </h:form>
         <!--        </p:column>-->
