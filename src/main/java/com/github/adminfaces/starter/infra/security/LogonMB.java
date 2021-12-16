@@ -1,8 +1,10 @@
 package com.github.adminfaces.starter.infra.security;
 
+import com.github.adminfaces.starter.model.Role;
 import com.github.adminfaces.starter.model.User;
 import com.github.adminfaces.starter.service.ExamenService;
 import com.github.adminfaces.starter.service.UserService;
+import com.github.adminfaces.starter.service.jms.Subscriber;
 import com.github.adminfaces.template.session.AdminSession;
 import org.omnifaces.util.Faces;
 
@@ -16,7 +18,11 @@ import java.io.Serializable;
 
 import static com.github.adminfaces.starter.util.Utils.addDetailMessage;
 import com.github.adminfaces.template.config.AdminConfig;
+import org.primefaces.PrimeFaces;
+
 import javax.inject.Inject;
+import javax.jms.JMSException;
+import javax.naming.NamingException;
 
 /**
  * Created by MoiseGui
@@ -51,8 +57,15 @@ public class LogonMB extends AdminSession implements Serializable {
     public void login() throws IOException {
         currentUser = userService.login(email, password);
         if(currentUser != null){
-//            userService.init();
-            examenService.init();
+            if(currentUser.getRole().equals(Role.etu)){
+                try {
+                    Subscriber.subscribe("myTopic");
+                    System.out.println("subscribed to the topic");
+                } catch (JMSException | NamingException e) {
+                    e.printStackTrace();
+                }
+            }
+
             addDetailMessage("Vous êtes connecté en tant que <b>" + currentUser.getPrenom() + " " + currentUser.getNom() + "</b>");
             Faces.getExternalContext().getFlash().setKeepMessages(true);
             Faces.redirect(adminConfig.getIndexPage());
@@ -62,6 +75,14 @@ public class LogonMB extends AdminSession implements Serializable {
             FacesMessage facesMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Login ou Mot de passe incorrect", "Login ou Mot de passe incorrect");
             FacesContext.getCurrentInstance().addMessage(null, facesMessage);
         }
+    }
+
+    public void showMessage(String message){
+        System.out.println("Trying to show recieved message");
+        Faces.getExternalContext().getFlash().setKeepMessages(true);
+        FacesMessage facesMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, "Message du", message);
+        PrimeFaces.current().dialog().showMessageDynamic(facesMessage);
+        System.out.println("Recieved message is shown");
     }
 
     public boolean loginFailed(){

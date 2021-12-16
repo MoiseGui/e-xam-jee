@@ -9,6 +9,7 @@ import com.github.adminfaces.starter.model.Choix;
 import com.github.adminfaces.starter.model.Examen;
 import com.github.adminfaces.starter.model.Question;
 import com.github.adminfaces.starter.service.ExamenService;
+import com.github.adminfaces.starter.service.jms.Publisher;
 import org.omnifaces.cdi.ViewScoped;
 import org.omnifaces.util.Faces;
 import org.primefaces.PrimeFaces;
@@ -75,8 +76,8 @@ public class ExamenFormMB implements Serializable {
             examen = new Examen();
         }
     }
-    
-    public boolean canChat(){
+
+    public boolean canChat() {
         return !isNew() && examen.getDateDebut().before(new Date()) && examen.getDateFin().after(new Date());
     }
 
@@ -121,6 +122,13 @@ public class ExamenFormMB implements Serializable {
             Faces.getFlash().setKeepMessages(true);
             Faces.redirect("examen-list.jsf");
         }
+    }
+
+    public void showMessage() {
+        Publisher.sendMessage("myTopic", "Voilà un message....");
+//        Faces.getExternalContext().getFlash().setKeepMessages(true);
+//        FacesMessage facesMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, "Message du", "Ceci est un message d'information");
+//        PrimeFaces.current().dialog().showMessageDynamic(facesMessage);
     }
 
     public void showAddQuestionModal() {

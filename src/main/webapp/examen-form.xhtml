@@ -39,11 +39,6 @@
     </ui:define>
 
     <ui:define name="body">
-        <p:commandButton value="Ajouter une queestion" update="@(.ui-dialog)" styleClass="btn-info"
-                         disabled="#{!examenFormMB.addQuestion}"
-                         oncomplete="PF('addQuestion').show()" action="#{examenFormMB.emptyQuestionAddForm}"
-                         icon="fa fa-search"/>
-
         <adm:breadcrumb
                 title="#{empty examenFormMB.id ? 'Nouvel examen' : 'Examen '.concat(examenFormMB.id)}"
                 link="/examen-form.jsf?id=#{examenFormMB.id}"/>
@@ -424,6 +419,13 @@
 
         </div>
         <div>
+            <div style="display: flex; justify-content: flex-end">
+                <p:commandButton value="Ajouter une question" update="@(.ui-dialog)" styleClass="btn-info"
+                                 style="margin-top: 10px"
+                                 disabled="#{!examenFormMB.addQuestion}"
+                                 oncomplete="PF('addQuestion').show()" action="#{examenFormMB.emptyQuestionAddForm}"
+                                 icon="fa fa-plus"/>
+            </div>
             <p:dataTable id="questionList" var="question"
                          rendered="#{examenFormMB.questionToAdd.typeQuestion ne 'vraiOuFaux'}"
                          styleClass="box-shadow-xl mt-1"
@@ -460,19 +462,17 @@
             <h:form id="messageForm" prependId="false">
             	<table>
             		<tr>
-            			<td colpan="4">
+            			<td colspan="4">
             				<p:inputTextarea id="message" required="true" cols="60"
                                 styleClass="form-control ui-state-active" />
             			</td>
             		</tr>
             		<tr>
-            			<td style="padding-top:10px;" colspan="4" align="right"><p:commandButton value="Envoyer" icon="fa fa-send" /></td>
+            			<td style="padding-top:10px;" colspan="4" align="right"><p:commandButton action="#{examenFormMB.showMessage}" value="Envoyer" icon="fa fa-send" /></td>
             		</tr>
             	</table>
             </h:form>
         </p:dialog>
-
     </ui:define>
-
 
 </ui:composition>

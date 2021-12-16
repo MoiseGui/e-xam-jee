@@ -2,6 +2,7 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
                 xmlns:h="http://java.sun.com/jsf/html"
                 template="/admin.xhtml">
 
@@ -34,6 +35,10 @@
     <ui:define name="top-menu">
         <ui:include src="/includes/top-bar.xhtml"/>
     </ui:define>
+
+
+<!--    this is to show the messages as a toast-->
+    <p:growl id="growl" showDetail="true" sticky="true" />
     
     <!-- below is just an example on how to define more tabs for control sidebar --> 
 <!--    <ui:define name="controlsidebar-tabs">-->
