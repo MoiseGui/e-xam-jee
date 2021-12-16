@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui" xmlns:adm="http://github.com/adminfaces"
+                template="#{layoutMB.template}">
+
+    <ui:define name="metadata">
+        <ui:param name="title"
+                  value="Liste des utilisateurs"/> <!-- Automatic create breadCrumb and page title when param 'title' is provided. -->
+
+        <style type="text/css">
+            .ui-datatable-header {
+                text-align: right !important;
+            }
+            .ui-datatable {
+                text-align: center !important;
+            }
+        </style>
+    </ui:define>
+
+    <ui:define name="description">
+        Administration des utilisateurs
+    </ui:define>
+
+    <ui:define name="body">
+        <h:form>
+            <p:focus context="@form"/>
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <div id="main-buttons" class="hidden-sm hidden-xs">
+                        <p:commandButton action="/user-form?faces-redirect=true" icon="fa fa-plus"
+                                         value="Nouveau" styleClass="btn-primary"/>
+                        <p:spacer width="5"/>
+                        <p:commandButton value="Supprimer" icon="fa fa-trash" styleClass="btn-danger"
+                                         action="#{userListMB.delete}"
+                                         disabled="#{empty userListMB.selectedUsers or userListMB.selectedUsers.size() == 0}"
+                                         process="@this" update="@form"
+                        >
+                            <p:confirm header="Confirmation" message="Êtes vous sûr de votre choix ??" icon="ui-icon-danger"/>
+                        </p:commandButton>
+                        <p:spacer width="5"/>
+                        <p:commandButton value="Voir les détails" update="@(.ui-dialog)" styleClass="btn-info"
+                                         disabled="#{empty userListMB.selectedUsers or userListMB.selectedUsers.size() == 0}"
+                                         oncomplete="PF('selectedUsers').show()" icon="fa fa-search"/>
+                    </div>
+
+                    <p:splitButton value="Nouveau" action="/user-form?faces-redirect=true"
+                                   icon="fa fa-plus"
+                                   styleClass="hidden-md hidden-lg btn-primary">
+                        <p:menuitem value="Supprimer" action="#{userListMB.delete}"
+                                    process="@this" update="@form"
+                                    disabled="#{empty userListMB.selectedUsers or userListMB.selectedUsers.size() == 0}"
+                                    icon="fa fa-trash">
+                            <p:confirm header="Confirmation" message="Êtes vous sûr de votre choix ??" icon="ui-icon-danger"/>
+                        </p:menuitem>
+                        <p:menuitem value="View selected" update="@(.ui-dialog)"
+                                    oncomplete="PF('selectedUsers').show()"
+                                    disabled="#{empty userListMB.selectedUsers or userListMB.selectedUsers.size() == 0}"
+                                    icon="fa fa-search"
+                        />
+                    </p:splitButton>
+
+                    <p:separator/>
+
+                    <p:dataTable widgetVar="usersTable" var="c" value="#{userListMB.users}" rows="5"
+                                 rowKey="#{c.id}" lazy="true" paginator="true"
+                                 filteredValue="#{userListMB.filteredValue}"
+                                 paginatorPosition="bottom" selection="#{userListMB.selectedUsers}"
+                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {JumpToPageDropdown}"
+                                 currentPageReportTemplate="[ de {startRecord} à {endRecord}, total:  {totalRecords} ]"
+                                 rowsPerPageTemplate="5,10,15,20,30"
+                    >
+
+                        <p:ajax event="rowSelectCheckbox" update="@(.ui-button, .ui-confirm-dialog)"/>
+                        <p:ajax event="rowUnselectCheckbox" update="@(.ui-button, .ui-confirm-dialog)"/>
+                        <p:ajax event="rowSelect" update="@(.ui-button, .ui-confirm-dialog)"/>
+                        <p:ajax event="rowUnselect" update="@(.ui-button, .ui-confirm-dialog)"/>
+                        <p:ajax event="toggleSelect" update="@(.ui-button, .ui-confirm-dialog)"/>
+
+                        <f:facet name="header">
+                            Trouver un utilisateur: <p:inputText
+                                type="email" id="inptId" placeholder="Email"
+                                value="#{userListMB.email}" style="padding-left: 10px"/>
+                            <p:spacer height="5"/>
+                            <p:commandButton id="brFind"
+                                             value="Recherche"
+                                             action="#{userListMB.findUserByEmail(userListMB.email)}"
+                                             process="@form"
+                                             update="@form"
+                                             styleClass="btn-flat bg-black btn-states"
+                                             partialSubmit="true"/>
+                        </f:facet>
+
+                        <p:column selectionMode="multiple" width="5%" styleClass="align-center"/>
+
+                        <p:column headerText="Email" filterBy="#{c.email}" sortBy="#{c.email}"
+                                  filterMatchMode="contains">
+                            <f:facet name="filter">
+                                <p:autoComplete value="#{userListMB.filter.entity.email}" forceSelection="true"
+                                                minQueryLength="2" queryDelay="500" dropdown="true"
+                                                completeMethod="#{userListMB.completeEmail}" maxResults="10">
+                                    <p:ajax event="itemSelect" process="@this" update="@none"
+                                            oncomplete="PF('usersTable').filter()"/>
+                                </p:autoComplete>
+                            </f:facet>
+                            <p:link value="#{c.email}" outcome="/user-form">
+                                <f:param name="id" value="#{c.id}"/>
+                            </p:link>
+                        </p:column>
+                        <p:column headerText="Username" sortBy="#{c.username}" filterBy="#{c.username}">
+                            <f:facet name="filter">
+                                <p:inputText value="#{userListMB.filter.entity.username}">
+                                    <p:ajax process="@this" update="@none" oncomplete="PF('usersTable').filter()"/>
+                                </p:inputText>
+                            </f:facet>
+                            #{c.username}
+                        </p:column>
+                        <p:column headerText="Nom" sortBy="#{c.nom}" filterBy="#{c.nom}">
+                            <f:facet name="filter">
+                                <p:inputText value="#{userListMB.filter.entity.nom}">
+                                    <p:ajax process="@this" update="@none" oncomplete="PF('usersTable').filter()"/>
+                                </p:inputText>
+                            </f:facet>
+                            #{c.nom}
+                        </p:column>
+                        <p:column headerText="Prénom" sortBy="#{c.prenom}" filterBy="#{c.prenom}">
+                            <f:facet name="filter">
+                                <p:inputText value="#{userListMB.filter.entity.prenom}">
+                                    <p:ajax process="@this" update="@none" oncomplete="PF('usersTable').filter()"/>
+                                </p:inputText>
+                            </f:facet>
+                            #{c.prenom}
+                        </p:column>
+                        <p:column headerText="Role" sortBy="#{c.role}" filterBy="#{c.role}">
+                            #{c.role}
+                        </p:column>
+                    </p:dataTable>
+                </div>
+            </div>
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" styleClass="box-danger box-solid">
+                <p:commandButton value="Oui" type="button" styleClass="btn-material btn-primary ui-confirmdialog-yes"
+                                 icon="fa fa-check"/>
+                <p:commandButton value="Non" type="button" styleClass="btn-material btn-danger ui-confirmdialog-no"
+                                 icon="fa fa-close"/>
+            </p:confirmDialog>
+        </h:form>
+
+
+        <p:dialog header="Détails de l'utilisateur" widgetVar="selectedUsers" height="250"
+                  width="400" responsive="true" styleClass="box-success">
+            <p:dataList id="selectedUsersList" value="#{userListMB.selectedUsers}" var="user"
+                        type="definition">
+                <div style="border: 1px solid;padding: 10px;border-radius: 10px;box-shadow: 1px 1px 7px 1px #2F86A6;margin-bottom: 20px">-
+                    <span style="color: #007FBF"> ID:</span> #{user.id}</div>
+                <p:column rendered="#{user.isEtudiant()}">
+                <div style="border: 1px solid;padding: 10px;border-radius: 10px;box-shadow: 1px 1px 7px 1px #2F86A6;margin-bottom: 20px">-
+                    <span style="color: #007FBF"> CNE:</span> #{user.cne}</div>
+                </p:column>
+                <div style="border: 1px solid;padding: 10px;border-radius: 10px;box-shadow: 1px 1px 7px 1px #2F86A6;margin-bottom: 20px">-
+                    <span style="color: #007FBF"> Email:</span> #{user.email}</div>
+                <div style="border: 1px solid;padding: 10px;border-radius: 10px;box-shadow: 1px 1px 7px 1px #2F86A6;margin-bottom: 20px">-
+                    <span style="color: #007FBF"> Username:</span> #{user.username}</div>
+                <div style="border: 1px solid;padding: 10px;border-radius: 10px;box-shadow: 1px 1px 7px 1px #2F86A6;margin-bottom: 20px">-
+                    <span style="color: #007FBF"> Nom complet:</span> #{user.prenom} #{user.nom}</div>
+<!--                - ID: #{user.id} <br/>- Email: #{user.email} <br/>- Username: #{user.username} <br/>- Nom: #{user.nom} <br/>- Prénom: #{user.prenom}-->
+            </p:dataList>
+        </p:dialog>
+
+    </ui:define>
+
+</ui:composition>

@@ -75,6 +75,10 @@ public class ExamenFormMB implements Serializable {
             examen = new Examen();
         }
     }
+    
+    public boolean canChat(){
+        return !isNew() && examen.getDateDebut().before(new Date()) && examen.getDateFin().after(new Date());
+    }
 
     public String getId() {
         return id;
