@@ -87,7 +87,7 @@ public class PasserExamenMB implements Serializable {
             long heure = dureeEnMinutes / 60;
             // calcul des minutes
             long minutes = dureeEnMinutes % 60;
-            if(heure == 0) return minutes + " minutes";
+            if(heure == 0) return minutes + " min";
             String result = heure + "h ";
             if(minutes > 0) result += minutes + "min";
             return result;
