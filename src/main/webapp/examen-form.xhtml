@@ -74,11 +74,6 @@
                                      action="examen-list?faces-redirect=true" process="@this"
                                      icon="fa fa-reply"/>
                     <p:spacer width="5"/>
-                    
-                    <p:commandButton styleClass="btn-warning" value="Notifier les examinés" update="@(.ui-dialog)"
-                                     icon="fa fa-comment" rendered="#{examenFormMB.canChat()}"
-                                     oncomplete="PF('chatDialog').show()" />
-                    <p:spacer width="5"/>
 
                 </div>
 
@@ -454,23 +449,6 @@
                 </f:facet>
             </p:dataTable>
         </div>
-        
-        <p:dialog header="Envoyer un message en direct" widgetVar="chatDialog"
-                  width="400" responsive="true">
-            <h:form id="messageForm" prependId="false">
-            	<table>
-            		<tr>
-            			<td colpan="4">
-            				<p:inputTextarea id="message" required="true" cols="60"
-                                styleClass="form-control ui-state-active" />
-            			</td>
-            		</tr>
-            		<tr>
-            			<td style="padding-top:10px;" colspan="4" align="right"><p:commandButton value="Envoyer" icon="fa fa-send" /></td>
-            		</tr>
-            	</table>
-            </h:form>
-        </p:dialog>
 
     </ui:define>
 

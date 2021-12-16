@@ -1,6 +1,7 @@
 package com.github.adminfaces.starter.bean.exman;
 
 import com.github.adminfaces.starter.model.Examen;
+import com.github.adminfaces.starter.model.Question;
 import com.github.adminfaces.starter.model.User;
 import com.github.adminfaces.starter.service.ExamenService;
 import com.github.adminfaces.starter.service.UserService;
@@ -17,7 +18,9 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.List;
 
 import static com.github.adminfaces.starter.util.Utils.addDetailMessage;
 import static com.github.adminfaces.template.util.Assert.has;
@@ -75,7 +78,7 @@ public class PasserExamenMB implements Serializable {
 		if (examen == null) {
 			throw new BusinessException("Examen introuvable " + new ObjectId(examenId));
 		} else {
-		Faces.redirect("examen-pass.jsf?id=" + examenId);
+			Faces.redirect("examen-pass.jsf?id=" + examenId);
 		}
 	}
 
@@ -107,6 +110,10 @@ public class PasserExamenMB implements Serializable {
 		return "";
 	}
 
+	public List<Question> getOrderedQuestions() {
+		return this.getExamen().getQuestions();
+	}
+
 	public boolean canPasssExam() {
 		return examen.getDateDebut().before(new Date()) && examen.getDateFin().after(new Date());
 	}
@@ -128,6 +135,9 @@ public class PasserExamenMB implements Serializable {
 	}
 
 	public Examen getExamen() {
+		if (examen == null) {
+			return new Examen();
+		}
 		return examen;
 	}
 

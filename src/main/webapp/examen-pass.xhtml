@@ -4,6 +4,7 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:adm="http://github.com/adminfaces"
 	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
 	xmlns:f="http://java.sun.com/jsf/core">
 
 <h:head>
@@ -28,20 +29,82 @@
 		<f:viewParam name="id" value="#{passerExamenMB.id}" />
 		<!-- use view action if you are in a Java EE 7 server: <f:viewAction action="#{userFormMB.init()}"/>-->
 		<f:event type="preRenderView" listener="#{passerExamenMB.init}" />
-	</f:metadata> 
+	</f:metadata>
 	<style type="text/css">
+body {
+	background-color: #ECEEF8;
+}
+
+.body__question__header {
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 20px;
+}
+
+.btn-send {
+	padding: 4px 10px !important;
+	background-color: #577BC1 !important;
+	border: 0 !important;
+	color: white !important;
+	border-radius: 6px !important;
+	width: 12vw !important;
+	color: white !important;
+}
+
+.btn-send:hover {
+	box-shadow: 0px 0px 7px 0px #94B3FD !important;
+}
+
+.btn-send:active {
+	transform: translateY(-2px);
+}
+
+.body {
+	margin-top: 8vh;
+}
+
+.header {
+	width: 100vw;
+	margin: 0;
+	height: 13vh;
+	border-bottom: 2px solid #F5F5F5;
+	background-color: white;
+	font-size: 2rem;
+	position: fixed;
+	top: 0;
+	font-weight: 500;
+}
+
+.header__elements {
+	display: flex;
+	justify-content: space-between !important;
+	padding: 5vh 5vw;
+}
+
+.body__question {
+	border-radius: 5px;
+	min-height: 20vh;
+	margin-top: 3vh;
+	margin-left: auto;
+	margin-right: auto;
+	padding: 20px 20px;
+	width: 60%;
+	background-color: white;
+	box-shadow: 0 2px 1px -1px rgb(0 0 0/ 20%), 0 1px 1px 0 rgb(0 0 0/ 14%),
+		0 1px 3px 0 rgb(0 0 0/ 12%);
+	margin-left: auto;
+	width: 60%;
+}
+
 .card-counter {
-	box-shadow: 2px 2px 10px #DADADA;
 	margin: 5px;
-	padding: 20px 10px;
-	background-color: #fff;
-	height: 100px;
+	height: 100px !important;
 	border-radius: 5px;
 	transition: .3s linear all;
 }
 
 .card-counter:hover {
-	box-shadow: 4px 4px 20px #DADADA;
+	box-shadow: 4px 4px 20px #94B3FD;
 	transition: .3s linear all;
 }
 
@@ -51,7 +114,7 @@
 }
 
 .card-counter.danger {
-	background-color: #ef5350;
+	background-color: #94B3FD;
 	color: #FFF;
 }
 
@@ -92,14 +155,14 @@
 .exam_lookup_card {
 	margin-left: auto;
 	margin-right: auto;
-	width: 50%;
-	min-height: 300px !important;
+	width: 60%;
+	min-height: 200px !important;
 	margin-top: 20px;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	justify-content: space-evenly;
-	padding: 15px 100px;
+	height: 10vh;
 }
 
 .exam_info {
@@ -128,6 +191,9 @@
 	.exam_lookup_card {
 		width: 100%;
 	}
+	.body__question {
+		width: 100%;
+	}
 	.hideOnMobile {
 		display: none !important;
 	}
@@ -141,27 +207,54 @@
 </style>
 </h:head>
 <body>
+	<div class="header">
+		<div class="header__elements">
+			<div class="header__title">#{passerExamenMB.examen.libelle}</div>
+			<div class="header__timer">#{passerExamenMB.ownerName}</div>
+
+
+			<div class="header__btn">
+				<p:commandButton styleClass="btn-send" value="Envoyer" />
+			</div>
+		</div>
+	</div>
 	<div class="title">
 		<h2 class="align-center">
-			Examen: <span class="text-aqua"> <i>
-					#{passerExamenMB.examen.libelle} </i>
+			Examen: <span class="text-aqua"> <i> </i>
 			</span>
 		</h2>
 	</div>
+
+
 	<div class="body">
-			<div class="card-counter exam_lookup_card">
-				<p class="exam_info" style="align-self: flex-start">
-					Mis en ligne par: <span class="exam_info_value">#{passerExamenMB.ownerName}</span>
-				</p>
-				<div class="exam_info_time">
-					<p class="exam_info">
-						Date début: <span class="exam_info_value">#{passerExamenMB.formatDate(passerExamenMB.examen.dateDebut)}</span>
-					</p>
-					<p class="exam_info">
-						Durée: <span class="exam_info_value">#{passerExamenMB.getExamDuration()}</span>
-					</p>
+		<img class="card-counter exam_lookup_card"
+			src="#{resource['images/form-image-banner.png']}" alt="e-xam" />
+
+		<c:forEach var="question" items="#{passerExamenMB.examen.questions}">
+			<div class="body__question">
+				<div class="body__question__header">
+					<span style="font-weight: 800; font-size: 2rem">#{question.titre}</span>
+					<span style="font-weight: 500; font-size: 2rem">#{question.points}
+						Points</span>
 				</div>
+				<c:choose>
+					<c:when test="#{question.typeQuestion eq 'choixUnique'}">
+						<p>choixUnique</p>
+					</c:when>
+					<c:when test="#{question.typeQuestion eq 'choixMultiple'}">
+						<p>choixMultiple</p>
+					</c:when>
+					<c:when test="#{question.vraiOuFaux}">
+						<p>Vrai ou faux</p>
+					</c:when>
+					<c:when test="#{question.typeQuestion eq 'reponseLibre'}">
+						<p>reponse libre</p>
+					</c:when>
+				</c:choose>
+
 			</div>
+		</c:forEach>
+
 	</div>
 
 </body>
