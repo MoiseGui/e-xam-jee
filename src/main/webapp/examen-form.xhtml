@@ -5,7 +5,6 @@
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:adm="http://github.com/adminfaces"
-                xmlns:c="http://java.sun.com/jstl/core"
                 template="#{layoutMB.template}">
     <ui:define name="metadata">
         <f:metadata>
@@ -324,9 +323,9 @@
                                             <div class="ui-sm-12 ui-g-11">
                                                 <p:selectOneMenu id="bonneReponse" required="true"
                                                                  value="#{examenFormMB.choiceToAdd.bonneReponse}">
-                                                    <f:selectItem itemLabel="Vrai"
+                                                    <f:selectItem itemLabel="Oui"
                                                                   itemValue="true"/>
-                                                    <f:selectItem itemLabel="Faux" itemValue="false"/>
+                                                    <f:selectItem itemLabel="Non" itemValue="false"/>
                                                 </p:selectOneMenu>
                                             </div>
                                         </div>
@@ -378,14 +377,8 @@
                                         #{choice.choixTexte}
                                     </p:column>
                                     <p:column headerText="Reponse">
-                                        <c:choose>
-                                            <c:when test="#{choice.bonneReponse eq 'false'}">
-                                                <p>Faux</p>
-                                            </c:when>
-                                            <c:otherwise>
-                                                <p>Vrai</p>
-                                            </c:otherwise>
-                                        </c:choose>
+                                        <p:tab rendered="#{choice.bonneReponse eq 'false'}">Non</p:tab>
+                                        <p:tab rendered="#{choice.bonneReponse eq 'true'}">Oui</p:tab>
                                     </p:column>
                                     <p:column headerText="Ordre">
                                         #{choice.ordre}
@@ -451,21 +444,22 @@
                 </f:facet>
             </p:dataTable>
         </div>
-        
+
         <p:dialog header="Envoyer un message en direct" widgetVar="chatDialog"
                   width="400" responsive="true">
             <h:form id="messageForm" prependId="false">
-            	<table>
-            		<tr>
-            			<td colspan="4">
-            				<p:inputTextarea id="message" required="true" cols="60"
-                                styleClass="form-control ui-state-active" />
-            			</td>
-            		</tr>
-            		<tr>
-            			<td style="padding-top:10px;" colspan="4" align="right"><p:commandButton action="#{examenFormMB.showMessage}" value="Envoyer" icon="fa fa-send" /></td>
-            		</tr>
-            	</table>
+                <table>
+                    <tr>
+                        <td colspan="4">
+                            <p:inputTextarea id="message" required="true" cols="60"
+                                             styleClass="form-control ui-state-active"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding-top:10px;" colspan="4" align="right"><p:commandButton
+                                action="#{examenFormMB.showMessage}" value="Envoyer" icon="fa fa-send"/></td>
+                    </tr>
+                </table>
             </h:form>
         </p:dialog>
     </ui:define>

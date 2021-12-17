@@ -275,7 +275,7 @@ public class ExamenFormMB implements Serializable {
             questionToAdd.setVraiOuFaux(choiceToAdd.getBonneReponse().equals("true"));
         }
         if (questionToAdd.getTypeQuestion().equals("choixUnique")) {
-            long correctChoices = questionToAdd.getChoix().stream().filter(choix -> choix.getBonneReponse().equals(choiceToAdd.getBonneReponse())).count();
+            long correctChoices = questionToAdd.getChoix().stream().filter(choix -> choix.getBonneReponse().equals("true")).count();
             System.out.println("the number of correct choices is " + correctChoices);
             if (correctChoices > 0) {
                 String msg = "Vous ne pouvez pas avoir plus d'une bonne réponse pour une question de type vrai ou faux";
