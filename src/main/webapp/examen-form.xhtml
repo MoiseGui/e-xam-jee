@@ -178,8 +178,8 @@
             </p:confirmDialog>
         </h:form>
         <div>
-            <p:dialog header="Ajouter une question" widgetVar="addQuestion" height="500"
-                      width="820" responsive="true">
+            <p:dialog header="Ajouter une question" widgetVar="addQuestion" height="450"
+                      width="700" responsive="true">
                 <h:messages globalOnly="false"/>
                 <p:tab title="Ajouter une question">
                     <h:outputText/>
@@ -324,8 +324,13 @@
                                                 <p:selectOneMenu id="bonneReponse" required="true"
                                                                  value="#{examenFormMB.choiceToAdd.bonneReponse}">
                                                     <f:selectItem itemLabel="Oui"
+                                                                  rendered="#{examenFormMB.questionToAdd.typeQuestion ne 'vraiOuFaux'}"
                                                                   itemValue="true"/>
-                                                    <f:selectItem itemLabel="Non" itemValue="false"/>
+
+                                                    <f:selectItem itemLabel="Non"
+                                                                  rendered="#{examenFormMB.questionToAdd.typeQuestion ne 'vraiOuFaux'}"
+                                                                  itemValue="false"/>
+
                                                 </p:selectOneMenu>
                                             </div>
                                         </div>
