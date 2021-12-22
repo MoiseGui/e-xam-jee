@@ -1,8 +1,9 @@
 package com.github.adminfaces.starter.bean.exman;
 
 import com.github.adminfaces.starter.infra.model.Filter;
-import com.github.adminfaces.starter.model.Examen;
+import com.github.adminfaces.starter.model.hbase.Examen;
 import com.github.adminfaces.starter.service.ExamenService;
+import com.github.adminfaces.starter.servicehbase.ExamenServiceHbase;
 import com.github.adminfaces.template.exception.BusinessException;
 import org.omnifaces.cdi.ViewScoped;
 import org.primefaces.model.FilterMeta;
@@ -12,11 +13,10 @@ import org.primefaces.model.SortOrder;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.io.IOException;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -28,7 +28,7 @@ import static com.github.adminfaces.starter.util.Utils.addDetailMessage;
 @ViewScoped
 public class ExamenListMB implements Serializable {
     @Inject
-    ExamenService examenService;
+    ExamenServiceHbase examenService;
 
     LazyDataModel<Examen> examens;
 
@@ -104,7 +104,7 @@ public class ExamenListMB implements Serializable {
     }
 
 
-    public void delete() {
+    public void delete() throws IOException {
         int numUsers = 0;
         for (Examen selectedExamen : selectedExamens) {
             numUsers++;
@@ -170,7 +170,7 @@ public class ExamenListMB implements Serializable {
         this.filteredExamens = filteredExamens;
     }
 
-    public void setExamenService(ExamenService examenService) {
+    public void setExamenService(ExamenServiceHbase examenService) {
         this.examenService = examenService;
     }
 

@@ -4,9 +4,9 @@
  */
 package com.github.adminfaces.starter.bean.user;
 
-import com.github.adminfaces.starter.model.User;
-import com.github.adminfaces.starter.model.User;
+import com.github.adminfaces.starter.model.hbase.User;
 import com.github.adminfaces.starter.service.UserService;
+import com.github.adminfaces.starter.servicehbase.UserServiceHbase;
 import org.omnifaces.cdi.ViewScoped;
 import org.omnifaces.util.Faces;
 
@@ -31,7 +31,7 @@ public class UserFormMB implements Serializable {
     private User user;
 
     @Inject
-    UserService userService;
+    UserServiceHbase userService;
 
     public void init() throws IOException {
         if (Faces.isAjaxRequest()) {
@@ -73,7 +73,7 @@ public class UserFormMB implements Serializable {
     }
 
 
-    public void remove() throws IOException {
+    public void remove() throws Exception {
         if (has(user) && !user.getId().isEmpty()) {
             userService.remove(user);
             addDetailMessage("Utilisateur " + user.getEmail()
@@ -83,7 +83,7 @@ public class UserFormMB implements Serializable {
         }
     }
 
-    public void save() throws IOException {
+    public void save() throws Exception {
         String msg;
         int result = 0;
         if (user.getId().isEmpty()) {

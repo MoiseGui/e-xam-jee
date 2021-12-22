@@ -5,11 +5,11 @@
 package com.github.adminfaces.starter.bean.exman;
 
 import com.github.adminfaces.starter.infra.security.LogonMB;
-import com.github.adminfaces.starter.model.Choix;
-import com.github.adminfaces.starter.model.Examen;
-import com.github.adminfaces.starter.model.Question;
-import com.github.adminfaces.starter.service.ExamenService;
+import com.github.adminfaces.starter.model.hbase.Choix;
+import com.github.adminfaces.starter.model.hbase.Examen;
+import com.github.adminfaces.starter.model.hbase.Question;
 import com.github.adminfaces.starter.service.jms.Publisher;
+import com.github.adminfaces.starter.servicehbase.ExamenServiceHbase;
 import org.omnifaces.cdi.ViewScoped;
 import org.omnifaces.util.Faces;
 import org.primefaces.PrimeFaces;
@@ -61,7 +61,7 @@ public class ExamenFormMB implements Serializable {
 
 
     @Inject
-    ExamenService examenService;
+    ExamenServiceHbase examenService;
 
     @Inject
     LogonMB logonMB;

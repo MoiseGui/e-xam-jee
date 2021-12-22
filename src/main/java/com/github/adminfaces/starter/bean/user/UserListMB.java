@@ -1,8 +1,8 @@
 package com.github.adminfaces.starter.bean.user;
 
 import com.github.adminfaces.starter.infra.model.Filter;
-import com.github.adminfaces.starter.model.User;
-import com.github.adminfaces.starter.service.UserService;
+import com.github.adminfaces.starter.model.hbase.User;
+import com.github.adminfaces.starter.servicehbase.UserServiceHbase;
 import com.github.adminfaces.template.exception.BusinessException;
 import org.omnifaces.cdi.ViewScoped;
 import org.primefaces.model.FilterMeta;
@@ -12,6 +12,7 @@ import org.primefaces.model.SortOrder;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +24,7 @@ import static com.github.adminfaces.starter.util.Utils.addDetailMessage;
 @ViewScoped
 public class UserListMB implements Serializable {
     @Inject
-    UserService userService;
+    UserServiceHbase userService;
 
     LazyDataModel<User> users;
 
@@ -37,7 +38,7 @@ public class UserListMB implements Serializable {
     String email;
 
     @PostConstruct
-    public void initDataModel(){
+    public void initDataModel() {
         users = new LazyDataModel<User>() {
             @Override
             public List<User> load(int first, int pageSize,
@@ -65,12 +66,17 @@ public class UserListMB implements Serializable {
 
             @Override
             public User getRowData(String key) {
-                return userService.findById(key);
+                try {
+                    return userService.findById(key);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return null;
+                }
             }
         };
     }
 
-    public void findUserById(String id) {
+    public void findUserById(String id) throws IOException {
         if (id == null) {
             throw new BusinessException("Provide User ID to load");
         }
@@ -94,7 +100,7 @@ public class UserListMB implements Serializable {
         return result;
     }
 
-    public void delete() {
+    public void delete() throws Exception {
         int numUsers = 0;
         for (User selectedUser : selectedUsers) {
             userService.remove(selectedUser);
@@ -104,19 +110,19 @@ public class UserListMB implements Serializable {
         addDetailMessage(numUsers + " utilisateur supprimé avec succès !");
     }
 
-    public long getUserCount(){
+    public long getUserCount() {
         return this.userService.count();
     }
 
-    public long getEtudiantCount(){
+    public long getEtudiantCount() {
         return this.userService.countEtudiants();
     }
 
-    public long getEnseignantCount(){
+    public long getEnseignantCount() {
         return this.userService.countEnseignants();
     }
 
-    public long getAdministrateurCount(){
+    public long getAdministrateurCount() {
         return this.userService.countAdministrateurs();
     }
 
@@ -152,11 +158,11 @@ public class UserListMB implements Serializable {
         this.users = users;
     }
 
-    public UserService getUserService() {
+    public UserServiceHbase getUserService() {
         return userService;
     }
 
-    public void setUserService(UserService userService) {
+    public void setUserService(UserServiceHbase userService) {
         this.userService = userService;
     }
 
