@@ -58,7 +58,7 @@ public class ExamenServiceHbase implements Serializable {
         return foundExam.orElseThrow(() -> new BusinessException("Examen non trouvé par id " + id));
     }
 
-    public Examen findByID(String id) {
+    public Examen findByID(String id) throws IOException {
         return examenDao.findById(id);
     }
 
@@ -70,7 +70,10 @@ public class ExamenServiceHbase implements Serializable {
     }
 
     public Examen findByLibelleDao(String libelle) {
-        return examenDao.findByLibelle(libelle);
+        return examens
+                .stream()
+                .filter(examen -> examen.getLibelle().equals(libelle))
+                .findFirst().orElse(new Examen());
     }
 
     public long count() {
