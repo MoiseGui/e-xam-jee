@@ -14,10 +14,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -180,7 +177,7 @@ public class ExamenServiceHbase implements Serializable {
 
     public void insert(Examen examen) throws IOException {
         validate(examen);
-        examenDao.save(examen);
+        examen = examenDao.save(examen);
         examens.add(0, examen);
     }
 
@@ -190,13 +187,14 @@ public class ExamenServiceHbase implements Serializable {
         if (realExamen == null) {
             return -1;
         }
-        examenDao.update(realExamen);
+        Examen finalExamen = examenDao.update(realExamen);
+        examens = examens.stream().map(ex -> Objects.equals(ex.getId(), finalExamen.getId()) ? finalExamen : ex).collect(Collectors.toList());
         return 1;
     }
 
     public void remove(Examen examen) throws IOException {
-        examens.remove(examen);
         examenDao.delete(examen);
+        examens.removeIf(e -> e.getId().equals(examen.getId()));
     }
 
     public void validate(Examen examen) {

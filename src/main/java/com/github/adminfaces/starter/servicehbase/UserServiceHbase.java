@@ -172,8 +172,9 @@ public class UserServiceHbase implements Serializable {
         return userDao.findByEmail(email);
     } */
 
-    public User login(String email, String password) {
+    public User login(String email, String password) throws IOException {
         System.out.println("Inside login");
+//        allUsers = userDao.findAll();
         User loadedUser = findByEmail(email);
         if (loadedUser != null && loadedUser.getPassword().equals(password)) {
             return loadedUser;
@@ -186,7 +187,7 @@ public class UserServiceHbase implements Serializable {
 
         if (findByEmail(user.getEmail()) != null) return -1;
 
-        userDao.save(user);
+        user = userDao.save(user);
         allUsers.add(user);
         return 1;
     }
@@ -196,10 +197,10 @@ public class UserServiceHbase implements Serializable {
         User realUser = findById(user.getId());
         User emailUser = findByEmail(user.getEmail());
         if (emailUser != null && !emailUser.getId().equals(realUser.getId())) return -1;
-        userDao.update(realUser);
+        User finalUser = userDao.update(user);
         allUsers = allUsers.stream().map(u -> {
-            if (u.getId().equals(user.getId())) {
-                return user;
+            if (u.getId().equals(finalUser.getId())) {
+                return finalUser;
             }
             return u;
         }).collect(Collectors.toList());
@@ -208,7 +209,7 @@ public class UserServiceHbase implements Serializable {
 
     public void remove(User user) throws Exception {
         userDao.delete(user);
-        allUsers.remove(user);
+        allUsers.removeIf(u -> u.getId().equals(user.getId()));
     }
 
     public void validate(User user, boolean creating) {
