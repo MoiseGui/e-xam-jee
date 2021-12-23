@@ -5,7 +5,8 @@
 	xmlns:adm="http://github.com/adminfaces"
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
-	xmlns:f="http://java.sun.com/jsf/core">
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:pe="http://primefaces.org/ui/extensions">
 
 <h:head>
 	<title>E-XAM | La gestion des examens rendu facile.</title>
@@ -206,13 +207,33 @@ body {
 }
 </style>
 </h:head>
+<script>
+	window.formatMe = function(value) {
+		return "The End is near (" + value + ")";
+	};
+	moment.locale('de', {
+		relativeTime : {
+			mm : '%d minuten'
+		}
+	});
+	moment
+			.locale(
+					'fr',
+					{
+						months : 'janvier_février_mars_avril_mai_juin_juillet_août_septembre_octobre_novembre_décembre'
+								.split('_')
+					});
+</script>
 <body>
 	<div class="header">
 		<div class="header__elements">
 			<div class="header__title">#{passerExamenMB.examen.libelle}</div>
-			<div class="header__timer">#{passerExamenMB.ownerName}</div>
-
-
+			<div class="header__timer">
+				<h:form>
+					<pe:timer timeout="1000" listener="#{passerExamenMB.onTimeout}"
+						format="HH:mm:ss" />
+				</h:form>
+			</div>
 			<div class="header__btn">
 				<p:commandButton styleClass="btn-send" value="Envoyer" />
 			</div>
@@ -230,7 +251,8 @@ body {
 		<img class="card-counter exam_lookup_card"
 			src="#{resource['images/form-image-banner.png']}" alt="e-xam" />
 
-		<c:forEach var="question" items="#{passerExamenMB.examen.questions}">
+		<c:forEach var="question" items="#{passerExamenMB.examen.questions}"
+			varStatus="loop">
 			<div class="body__question">
 				<div class="body__question__header">
 					<span style="font-weight: 800; font-size: 2rem">#{question.titre}</span>
@@ -239,16 +261,31 @@ body {
 				</div>
 				<c:choose>
 					<c:when test="#{question.typeQuestion eq 'choixUnique'}">
-						<p>choixUnique</p>
+						<p:selectOneRadio id="console"
+							value="#{passerExamenMB.reponseQuestions.get(loop.index).reponse}"
+							layout="responsive" columns="1">
+							<c:forEach var="choix" items="#{question.choix}" varStatus="loop">
+								<f:selectItem itemLabel="#{choix.choixTexte}"
+									itemValue="#{choix.choixTexte}" />
+							</c:forEach>
+						</p:selectOneRadio>
 					</c:when>
 					<c:when test="#{question.typeQuestion eq 'choixMultiple'}">
-						<p>choixMultiple</p>
+						<p:selectManyCheckbox id="custom"
+							value="#{passerExamenMB.reponseQuestions.get(loop.index).reponse}"
+							layout="custom">
+							<c:forEach var="choix" items="#{question.choix}" varStatus="loop">
+								<f:selectItem itemLabel="#{choix.choixTexte}" itemValue="#{choix.choixTexte}" />
+							</c:forEach>
+						</p:selectManyCheckbox>
 					</c:when>
 					<c:when test="#{question.vraiOuFaux}">
-						<p>Vrai ou faux</p>
+
 					</c:when>
 					<c:when test="#{question.typeQuestion eq 'reponseLibre'}">
-						<p>reponse libre</p>
+						<p:inputTextarea
+							value="#{passerExamenMB.reponseQuestions.get(loop.index).reponse}"
+							autoResize="true" rows="5" cols="130" placeholder="Votre reponse" />
 					</c:when>
 				</c:choose>
 

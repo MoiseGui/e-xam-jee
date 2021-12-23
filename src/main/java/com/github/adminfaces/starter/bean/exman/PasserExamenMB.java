@@ -2,6 +2,7 @@ package com.github.adminfaces.starter.bean.exman;
 
 import com.github.adminfaces.starter.model.Examen;
 import com.github.adminfaces.starter.model.Question;
+import com.github.adminfaces.starter.model.ReponsesQuestion;
 import com.github.adminfaces.starter.model.User;
 import com.github.adminfaces.starter.service.ExamenService;
 import com.github.adminfaces.starter.service.UserService;
@@ -18,6 +19,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
@@ -41,13 +43,20 @@ public class PasserExamenMB implements Serializable {
 	@Inject
 	UserService userService;
 
+	List<ReponsesQuestion> reponseQuestions = new ArrayList();
+
+
+
 	public void init() throws IOException {
 		if (Faces.isAjaxRequest()) {
 			return;
 		}
 //        if(examen == null) {
-		if (has(id))
+		if (has(id)) {
 			examen = examenService.findByID(id);
+			hydrateReponseQuestion();
+		}
+
 		else
 			Faces.redirect(adminConfig.getIndexPage());
 //        }
@@ -60,6 +69,12 @@ public class PasserExamenMB implements Serializable {
 			}
 		}
 
+	}
+
+	public void hydrateReponseQuestion() {
+		examen.getQuestions().forEach(question -> {
+			reponseQuestions.add(new ReponsesQuestion());
+		});
 	}
 
 	public void findExamen() throws IOException {
@@ -110,6 +125,10 @@ public class PasserExamenMB implements Serializable {
 		return "";
 	}
 
+	public void onTimeout() {
+		// action to be done after the expiration of ...
+	}
+
 	public List<Question> getOrderedQuestions() {
 		return this.getExamen().getQuestions();
 	}
@@ -151,5 +170,12 @@ public class PasserExamenMB implements Serializable {
 
 	public void setOwnerName(String ownerName) {
 		this.ownerName = ownerName;
+	}
+	public List<ReponsesQuestion> getReponseQuestions() {
+		return reponseQuestions;
+	}
+
+	public void setReponseQuestions(List<ReponsesQuestion> reponseQuestions) {
+		this.reponseQuestions = reponseQuestions;
 	}
 }
