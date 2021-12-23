@@ -2,7 +2,6 @@ package com.github.adminfaces.starter.bean.exman;
 
 import com.github.adminfaces.starter.infra.model.Filter;
 import com.github.adminfaces.starter.model.hbase.Examen;
-import com.github.adminfaces.starter.service.ExamenService;
 import com.github.adminfaces.starter.servicehbase.ExamenServiceHbase;
 import com.github.adminfaces.template.exception.BusinessException;
 import org.omnifaces.cdi.ViewScoped;

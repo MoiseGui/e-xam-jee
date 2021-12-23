@@ -6,17 +6,14 @@ import com.github.adminfaces.starter.model.hbase.User;
 import org.apache.hadoop.hbase.client.Connection;
 import org.apache.hadoop.hbase.client.Scan;
 
-import javax.ejb.Stateless;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-@Stateless
 public class UserDao extends AbstractHBDAO<String, User> {
 
-    protected UserDao(Connection connection) {
-        super(connection);
-    }
+    public UserDao(Connection connection) { super(connection);}
+
 
     public User save(User user) throws IOException {
         String id = persist(user);

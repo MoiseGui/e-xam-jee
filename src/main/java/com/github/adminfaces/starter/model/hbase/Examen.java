@@ -42,6 +42,9 @@ public class Examen implements HBRecord<String>, Comparable<Examen> {
     }
 
     public String getId() {
+        if (id == null) {
+            return "";
+        }
         return id;
     }
 

@@ -8,8 +8,10 @@ import com.github.adminfaces.starter.model.hbase.User;
 import com.github.adminfaces.template.exception.BusinessException;
 
 import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.inject.Named;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -28,8 +30,13 @@ public class UserServiceHbase implements Serializable {
     List<User> allUsers;
 
     @PostConstruct
-    public void init() throws IOException {
-        allUsers = userDao.findAll();
+    public void init() {
+        try {
+            System.out.println("Inside init UserServiceHbase");
+            allUsers = userDao.findAll();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public String showUsersSize() {
@@ -166,6 +173,7 @@ public class UserServiceHbase implements Serializable {
     } */
 
     public User login(String email, String password) {
+        System.out.println("Inside login");
         User loadedUser = findByEmail(email);
         if (loadedUser != null && loadedUser.getPassword().equals(password)) {
             return loadedUser;

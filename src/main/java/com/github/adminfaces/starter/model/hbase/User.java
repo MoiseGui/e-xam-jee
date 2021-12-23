@@ -26,9 +26,16 @@ public class User implements HBRecord<String> {
     @HBColumn(family = "Info", column = "role")
     private String role;
 
-    public String getId() {return id;}
+    public String getId() {
+        if (id == null) {
+            return "";
+        }
+        return id;
+    }
 
-    public void setId(String id) {this.id = id;}
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getNom() {
         return nom;

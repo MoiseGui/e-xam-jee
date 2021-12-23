@@ -54,7 +54,9 @@ public class LogonMB extends AdminSession implements Serializable {
 
 
     public void login() throws IOException {
+        System.out.println("Trying to login");
         currentUser = userService.login(email, password);
+        System.out.println("Passed by service login");
         if (currentUser != null) {
             if (currentUser.getRole().equals(Role.etu)) {
                 try {

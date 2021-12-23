@@ -5,7 +5,6 @@
 package com.github.adminfaces.starter.bean.user;
 
 import com.github.adminfaces.starter.model.hbase.User;
-import com.github.adminfaces.starter.service.UserService;
 import com.github.adminfaces.starter.servicehbase.UserServiceHbase;
 import org.omnifaces.cdi.ViewScoped;
 import org.omnifaces.util.Faces;

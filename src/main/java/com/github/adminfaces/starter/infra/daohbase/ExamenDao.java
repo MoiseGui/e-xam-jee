@@ -6,15 +6,13 @@ import com.github.adminfaces.starter.model.hbase.Examen;
 import org.apache.hadoop.hbase.client.Connection;
 import org.apache.hadoop.hbase.client.Scan;
 
-import javax.ejb.Stateless;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-@Stateless
 public class ExamenDao extends AbstractHBDAO<String, Examen> {
 
-    protected ExamenDao(Connection connection) {
+    public ExamenDao(Connection connection) {
         super(connection);
     }
 

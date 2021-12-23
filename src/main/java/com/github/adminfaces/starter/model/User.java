@@ -81,11 +81,15 @@ public class User extends PersistentEntity {
         this.role = role;
     }
 
-    public boolean isAdmin() { return this.getRole().equals(Role.admin); }
+    public boolean isAdmin() {
+        return this.getRole().equals(Role.admin);
+    }
 
     public boolean isProfesseur() {
         return this.getRole().equals(Role.prof);
     }
 
-    public boolean isEtudiant() { return this.getRole().equals(Role.etu); }
+    public boolean isEtudiant() {
+        return this.getRole().equals(Role.etu);
+    }
 }

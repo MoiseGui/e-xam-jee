@@ -8,8 +8,10 @@ import com.github.adminfaces.starter.model.hbase.Examen;
 import com.github.adminfaces.template.exception.BusinessException;
 
 import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.inject.Named;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -25,22 +27,27 @@ import static com.github.adminfaces.template.util.Assert.has;
 public class ExamenServiceHbase implements Serializable {
     @Inject
     private ExamenDao examenDao;
+
     List<Examen> examens;
 
     @Inject
     LogonMB logonMB;
 
     @PostConstruct
-    public void init() throws IOException {
-        if (logonMB.getCurrentUser().isProfesseur()) {
-            this.examens = examenDao
-                    .findAll()
-                    .stream()
-                    .filter(examen -> examen.getOwner().equals(logonMB.getCurrentUser().getId()))
-                    .collect(Collectors.toList());
-            return;
+    public void init() {
+        try {
+            if (logonMB.getCurrentUser().isProfesseur()) {
+                this.examens = examenDao
+                        .findAll()
+                        .stream()
+                        .filter(examen -> examen.getOwner().equals(logonMB.getCurrentUser().getId()))
+                        .collect(Collectors.toList());
+                return;
+            }
+            this.examens = examenDao.findAll();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        this.examens = examenDao.findAll();
     }
 
     public List<String> getByLibelle(String query) {
