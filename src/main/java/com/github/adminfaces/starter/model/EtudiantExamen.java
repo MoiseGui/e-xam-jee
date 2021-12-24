@@ -22,6 +22,8 @@ public class EtudiantExamen {
         this.note = note;
     }
 
+
+
     public String getEtudiant() {
         return etudiant;
     }

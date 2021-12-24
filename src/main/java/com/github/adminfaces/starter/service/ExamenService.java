@@ -185,7 +185,9 @@ public class ExamenService implements Serializable {
         updateOperations.set("libelle", examen.getLibelle());
         updateOperations.set("dateDebut", examen.getDateDebut());
         updateOperations.set("dateFin", examen.getDateFin());
+        updateOperations.set("total", examen.getTotal());
         updateOperations.set("questions", examen.getQuestions());
+        updateOperations.set("etudiantExamens", examen.getEtudiantExamens());
         examenDao.update(realExamen, updateOperations);
         return 1;
     }

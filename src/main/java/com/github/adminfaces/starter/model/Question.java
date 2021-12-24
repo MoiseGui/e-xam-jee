@@ -87,7 +87,7 @@ public class Question extends PersistentEntity implements Comparable<Question> {
     }
 
     public List<Choix> getChoix() {
-        if(choix == null){
+        if (choix == null) {
             choix = new ArrayList<>();
         }
         return choix;
@@ -111,6 +111,9 @@ public class Question extends PersistentEntity implements Comparable<Question> {
     }
 
     public List<ReponsesQuestion> getReponses() {
+        if (reponses == null) {
+            reponses = new ArrayList<>();
+        }
         return reponses;
     }
 
