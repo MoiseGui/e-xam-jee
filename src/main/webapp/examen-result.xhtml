@@ -53,7 +53,7 @@
         }
 
         .body {
-            margin-top: 8vh;
+            margin-top: 16vh;
         }
 
         .header {
@@ -72,6 +72,14 @@
             display: flex;
             justify-content: space-between !important;
             padding: 5vh 5vw;
+        }
+
+        .body__result {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            font-size: 3rem;
+            font-weight: 600;
         }
 
         .body__question {
@@ -240,8 +248,11 @@
         <div class="body__question__header">
             <span style="font-weight: 800; font-size: 2rem"></span>
         </div>
-        <span>Votre resultat:</span>
-        <span>#{passerExamenMB.calculateScore()}</span>
+        <div class="body__result">
+            <span>Votre resultat :</span>
+            <span>#{passerExamenMB.calculateScore().intValue()} / #{passerExamenMB.examen.total.intValue()}</span>
+        </div>
+
     </div>
 </div>
 </body>
