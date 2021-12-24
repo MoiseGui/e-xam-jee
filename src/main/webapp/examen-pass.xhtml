@@ -231,7 +231,7 @@
         <div class="header__title">#{passerExamenMB.examen.libelle}</div>
         <div class="header__timer">
             <h:form>
-                <pe:timer timeout="1000" listener="#{passerExamenMB.onTimeout}"
+                <pe:timer timeout="#{passerExamenMB.timer()}" listener="#{passerExamenMB.onTimeout}"
                           format="HH:mm:ss"/>
             </h:form>
         </div>

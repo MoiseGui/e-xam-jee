@@ -83,6 +83,12 @@ public class PasserExamenMB implements Serializable {
         examen.displayDetails();
     }
 
+    public String timer() {
+        Date startTime = examen.getDateDebut();
+        Date endTime = examen.getDateFin();
+        return String.valueOf(endTime.getTime() - startTime.getTime());
+    }
+
     public Double getTotalScore() {
         return examen.getQuestions().stream().mapToDouble(Question::getPoints).sum();
     }
