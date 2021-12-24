@@ -65,7 +65,7 @@ public class PasserExamenMB implements Serializable {
     }
 
 
-    public void submitAnswers() {
+    public void submitAnswers() throws IOException {
         Double note = this.calculateScore();
         EtudiantExamen etudiantExamen = new EtudiantExamen();
         etudiantExamen.setEtudiant(logonMB.getCurrentUser().getPrenom() + " " + logonMB.getCurrentUser().getNom());
@@ -80,13 +80,14 @@ public class PasserExamenMB implements Serializable {
         examen.getEtudiantExamens().add(etudiantExamen);
         examen.setTotal(getTotalScore());
         examenService.update(examen);
-        examen.displayDetails();
+        Faces.redirect("examen-result.jsf");
+
     }
 
     public String timer() {
-        Date startTime = examen.getDateDebut();
+        Date currentTime = new Date();
         Date endTime = examen.getDateFin();
-        return String.valueOf(endTime.getTime() - startTime.getTime());
+        return String.valueOf(endTime.getTime() - currentTime.getTime());
     }
 
     public Double getTotalScore() {
