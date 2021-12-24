@@ -228,95 +228,28 @@
 <body>
 <div class="header">
     <div class="header__elements">
-        <div class="header__title">#{passerExamenMB.examen.libelle}</div>
-        <div class="header__timer">
-            <h:form>
-                <pe:timer timeout="#{passerExamenMB.timer()}" listener="#{passerExamenMB.onTimeout}"
-                          format="HH:mm:ss"/>
-            </h:form>
+        <div class="header__title">Resultat</div>
+        <div class="header__examenTitle">
+            #{passerExamenMB.examen.libelle}
         </div>
         <div class="header__btn">
-            <p:commandButton styleClass="btn-send" value="Envoyer"
-                             action="#{passerExamenMB.submitAnswers}"/>
+            <p:commandButton styleClass="btn-send" value="Retour"
+                             action="/index.jsf?faces-redirect=true" />
         </div>
     </div>
 </div>
-<div class="title">
-    <h2 class="align-center">
-        Examen: <span class="text-aqua"> <i> </i>
-			</span>
-    </h2>
-</div>
-
 
 <div class="body">
     <img class="card-counter exam_lookup_card"
          src="#{resource['images/form-image-banner.png']}" alt="e-xam"/>
 
-    <c:forEach var="question" items="#{passerExamenMB.examen.questions}"
-               varStatus="loop">
-        <div class="body__question">
+         <div class="body__question">
             <div class="body__question__header">
-                <span style="font-weight: 800; font-size: 2rem">#{question.titre}</span>
-                <span style="font-weight: 500; font-size: 2rem">#{question.points}
-                    Points</span>
+                <span style="font-weight: 800; font-size: 2rem"></span>
             </div>
-            <c:choose>
-                <c:when test="#{question.typeQuestion eq 'choixUnique'}">
-                    <h:form>
-                        <p:selectOneRadio id="console"
-                                          value="#{passerExamenMB.reponseQuestions.get(loop.index).choix[0]}"
-                                          layout="responsive" columns="1">
-                            <c:forEach var="choix" items="#{question.choix}" varStatus="loop">
-                                <f:selectItem itemLabel="#{choix.choixTexte}"
-                                              itemValue="#{choix.choixTexte}"/>
-                            </c:forEach>
-                            <p:ajax event="change"/>
-
-                        </p:selectOneRadio>
-                    </h:form>
-                </c:when>
-                <c:when test="#{question.typeQuestion eq 'choixMultiple'}">
-                    <h:form>
-                        <p:selectManyCheckbox
-                                value="#{passerExamenMB.reponseQuestions.get(loop.index).choix}"
-                                layout="responsive" columns="1"
-                        >
-                            <f:selectItems value="#{question.choix}" var="choix" itemLabel="#{choix.choixTexte}"
-                                           itemValue="#{choix.choixTexte}"/>
-                            <p:ajax event="change"/>
-                        </p:selectManyCheckbox>
-                    </h:form>
-                </c:when>
-                <c:when test="#{question.vraiOuFaux}">
-                    <h:form>
-                        <p:selectOneRadio
-                                value="#{passerExamenMB.reponseQuestions.get(loop.index).vraiOuFaux}"
-                                layout="responsive" columns="2">
-                            <f:selectItem itemLabel="Vrai"
-                                          itemValue="true"/>
-                            <f:selectItem itemLabel="Faux"
-                                          itemValue="false"/>
-                            <p:ajax event="change"/>
-
-                        </p:selectOneRadio>
-                    </h:form>
-                </c:when>
-                <c:when test="#{question.typeQuestion eq 'reponseLibre'}">
-                    <h:form styleClass="reponseLibre">
-                        <p:inputTextarea
-                                value="#{passerExamenMB.reponseQuestions.get(loop.index).reponse}"
-                                autoResize="true" rows="5" cols="130" placeholder="Votre reponse">
-                            <f:ajax event="change"/>
-                        </p:inputTextarea>
-                    </h:form>
-                </c:when>
-            </c:choose>
-
+            <span>Votre resultat:</span>            
+            <span>#{passerExamenMB.calculateScore}</span>            
         </div>
-    </c:forEach>
-
 </div>
-
 </body>
 </html>
