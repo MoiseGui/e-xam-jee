@@ -47,9 +47,11 @@
             <p:panel styleClass="box-primary card">
                 <div id="main-buttons" class="hidden-sm hidden-xs">
                     <p:commandButton value="Enregistrer" action="#{examenFormMB.save}"
+                                     disabled="#{examenListMB.hasExamPassed(examenFormMB.examen)}"
                                      update="@form" icon="fa fa-check" styleClass="btn-success"/>
                     <p:spacer width="5" rendered="#{examenFormMB.isNew()}"/>
                     <p:commandButton value="Tout effacer"
+                                     disabled="#{examenListMB.hasExamPassed(examenFormMB.examen)}"
                                      action="#{examenFormMB.clear}" process="@this"
                                      icon="fa fa-refresh" styleClass="btn-warning" update="@form"
                                      rendered="#{examenFormMB.isNew()}" resetValues="true"/>
@@ -64,6 +66,14 @@
                                    icon="ui-icon-danger"/>
                     </p:commandButton>
                     <p:spacer width="5"/>
+                    <p:commandButton styleClass="btn-warning" value="Notifier les examinés" update="@(.ui-dialog)"
+                                     icon="fa fa-comment" rendered="#{examenFormMB.canChat()}"
+                                     oncomplete="PF('chatDialog').show()" />
+                    <p:spacer width="5"/>
+                    <p:commandButton styleClass="btn-warning" value="Voir les résultats" update="@(.ui-dialog)"
+                                     icon="fa fa-list" rendered="#{examenListMB.hasExamPassed(examenFormMB.examen)}"
+                                     oncomplete="PF('resultDialog').show()" />
+                    <p:spacer width="5"/>
                     <p:commandButton value="Retour" immediate="true"
                                      action="examen-list?faces-redirect=true" process="@this"
                                      icon="fa fa-reply"/>
@@ -72,9 +82,11 @@
                 </div>
 
                 <p:splitButton value="Enregistrer" action="#{examenFormMB.save}"
+                               disabled="#{examenListMB.hasExamPassed(examenFormMB.examen)}"
                                update="@form" icon="fa fa-check"
                                styleClass="hidden-md hidden-lg btn-primary">
                     <p:menuitem value="Tout effacer" action="#{examenFormMB.clear}"
+                                disabled="#{examenListMB.hasExamPassed(examenFormMB.examen)}"
                                 process="@this" update="@form" rendered="#{examenFormMB.isNew()}"
                                 resetValues="true" icon="fa fa-refresh"/>
                     <p:menuitem value="Supprimer" action="#{examenFormMB.remove}"
@@ -113,7 +125,7 @@
                         </div>
                         <div class="ui-sm-12 ui-g-11">
                             <p:inputText type="text" id="inptLibelle"
-                                         value="#{examenFormMB.examen.libelle}" required="true"/>
+                                         value="#{examenFormMB.examen.libelle}" disabled="#{examenListMB.hasExamPassed(examenFormMB.examen)}" required="true"/>
                             <span class="help-block"> <p:message for="inptLibelle"/>
 							</span>
                         </div>
@@ -124,6 +136,7 @@
                         </div>
                         <div class="ui-sm-12 ui-g-11">
                             <p:datePicker id="dateDebutPicker" showTime="true"
+                                          disabled="#{examenListMB.hasExamPassed(examenFormMB.examen)}"
                                           value="#{examenFormMB.examen.dateDebut}"/>
                             <span class="help-block"> <p:message for="dateDebutPicker"/>
 							</span>
@@ -135,6 +148,7 @@
                         </div>
                         <div class="ui-sm-12 ui-g-11">
                             <p:datePicker id="dateFinPicker" showTime="true"
+                                          disabled="#{examenListMB.hasExamPassed(examenFormMB.examen)}"
                                           value="#{examenFormMB.examen.dateFin}"/>
                             <span class="help-block"> <p:message for="dateFinPicker"/>
 							</span>
@@ -146,9 +160,11 @@
                               styleClass="hidden-sm hidden-md hidden-lg">
                     <hr/>
                     <p:splitButton value="Enregistrer" action="#{examenFormMB.save}"
+                                   disabled="#{examenListMB.hasExamPassed(examenFormMB.examen)}"
                                    update="@form" icon="fa fa-check"
                                    styleClass="hidden-md hidden-lg btn-primary">
                         <p:menuitem value="Tout effacer" action="#{examenFormMB.clear}"
+                                    disabled="#{examenListMB.hasExamPassed(examenFormMB.examen)}"
                                     process="@this" update="@form" rendered="#{examenFormMB.isNew()}"
                                     resetValues="true" icon="fa fa-refresh"/>
                         <p:menuitem value="Supprimer" action="#{examenFormMB.remove}"
@@ -415,7 +431,7 @@
             <div style="display: flex; justify-content: flex-end">
                 <p:commandButton value="Ajouter une question" update="@(.ui-dialog)" styleClass="btn-info"
                                  style="margin-top: 10px"
-                                 disabled="#{!examenFormMB.addQuestion}"
+                                 disabled="#{!examenFormMB.addQuestion || examenListMB.hasExamPassed(examenFormMB.examen)}"
                                  oncomplete="PF('addQuestion').show()" action="#{examenFormMB.emptyQuestionAddForm}"
                                  icon="fa fa-plus"/>
             </div>
@@ -438,9 +454,11 @@
                 </p:column>
                 <p:column headerText="Action">
                     <p:commandButton value="Modifier" icon="fa fa-edit "
+                                     disabled="#{examenListMB.hasExamPassed(examenFormMB.examen)}"
                                      action="#{examenFormMB.fillFormToEdit(question)}"
                                      update="@all:questionForm"/>
                     <p:commandButton value="Supprimer" icon="fa fa-trash"
+                                     disabled="#{examenListMB.hasExamPassed(examenFormMB.examen)}"
                                      action="#{examenFormMB.removeQuestion(question)}"
                                      update="@all:questionList"/>
                 </p:column>
@@ -449,6 +467,32 @@
                 </f:facet>
             </p:dataTable>
         </div>
+
+        <p:dialog header="Résultats de cet examen" widgetVar="resultDialog"
+                  width="400" responsive="true">
+
+            <p:dataTable var="etu" value="#{examenFormMB.examen.etudiantExamens}">
+                <f:facet name="header">
+                    Liste des notes
+                </f:facet>
+                <p:column>
+                    <f:facet name="header">
+                        Nom et Prénom
+                    </f:facet>
+                    #{etu.etudiant}
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        Note / 20
+                    </f:facet>
+                    #{etu.note}
+                </p:column>
+                <f:facet name="footer">
+                    Au total #{examenListMB.etudiantExamensToShow.size()} notes.
+                </f:facet>
+            </p:dataTable>
+
+        </p:dialog>
 
         <p:dialog header="Envoyer un message en direct" widgetVar="chatDialog"
                   width="400" responsive="true">

@@ -1,6 +1,7 @@
 package com.github.adminfaces.starter.bean.exman;
 
 import com.github.adminfaces.starter.infra.model.Filter;
+import com.github.adminfaces.starter.model.EtudiantExamen;
 import com.github.adminfaces.starter.model.Examen;
 import com.github.adminfaces.starter.service.ExamenService;
 import com.github.adminfaces.template.exception.BusinessException;
@@ -17,6 +18,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -103,6 +105,17 @@ public class ExamenListMB implements Serializable {
         selectedExamens.add(examenService.findByLibelle(libelle));
     }
 
+    public boolean hasExamPassed(Examen examen) {
+        System.out.println("examen.getDateDebut().before() gave " + examen);
+        if(examen != null) return examen.getDateFin().before(new Date());
+        return false;
+    }
+
+    public boolean isSelectedPassed() {
+        if(selectedExamens == null || selectedExamens.size() != 1) return false;
+        return hasExamPassed(selectedExamens.get(0));
+    }
+
 
     public void delete() {
         int numUsers = 0;
@@ -111,7 +124,7 @@ public class ExamenListMB implements Serializable {
             examenService.remove(selectedExamen);
         }
         selectedExamens.clear();
-        addDetailMessage(numUsers + " Examens supprimé correctement!");
+        addDetailMessage(numUsers + " Examens supprimés correctement!");
     }
 
     public long getExamenCount() {
@@ -197,4 +210,5 @@ public class ExamenListMB implements Serializable {
     public void setEmail(String email) {
         this.email = email;
     }
+
 }
