@@ -18,6 +18,7 @@ import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.function.Consumer;
 
 import static com.github.adminfaces.template.util.Assert.has;
 
@@ -84,9 +85,9 @@ public class PasserExamenMB implements Serializable {
     }
 
     public String timer() {
-        Date startTime = examen.getDateDebut();
+        Date currentTime = new Date();
         Date endTime = examen.getDateFin();
-        return String.valueOf(endTime.getTime() - startTime.getTime());
+        return String.valueOf(endTime.getTime() - currentTime.getTime());
     }
 
     public Double getTotalScore() {
