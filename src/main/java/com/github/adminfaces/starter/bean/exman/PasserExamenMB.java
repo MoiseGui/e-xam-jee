@@ -18,7 +18,6 @@ import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.function.Consumer;
 
 import static com.github.adminfaces.template.util.Assert.has;
 
@@ -66,7 +65,7 @@ public class PasserExamenMB implements Serializable {
     }
 
 
-    public void submitAnswers() {
+    public void submitAnswers() throws IOException {
         Double note = this.calculateScore();
         EtudiantExamen etudiantExamen = new EtudiantExamen();
         etudiantExamen.setEtudiant(logonMB.getCurrentUser().getPrenom() + " " + logonMB.getCurrentUser().getNom());
@@ -81,7 +80,8 @@ public class PasserExamenMB implements Serializable {
         examen.getEtudiantExamens().add(etudiantExamen);
         examen.setTotal(getTotalScore());
         examenService.update(examen);
-        examen.displayDetails();
+        Faces.redirect("examen-result.jsf");
+
     }
 
     public String timer() {

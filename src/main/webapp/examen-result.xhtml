@@ -3,9 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:pe="http://primefaces.org/ui/extensions">
+>
 
 <h:head>
     <title>E-XAM | La gestion des examens rendu facile.</title>
@@ -25,11 +23,6 @@
           href="#{resource['favicon/favicon-144x144.png']}" sizes="144x144"/>
     <meta name="theme-color" content="#444"/>
     <meta name="mobile-web-app-capable" content="yes"/>
-    <f:metadata>
-        <f:viewParam name="id" value="#{passerExamenMB.id}"/>
-        <!-- use view action if you are in a Java EE 7 server: <f:viewAction action="#{userFormMB.init()}"/>-->
-        <f:event type="preRenderView" listener="#{passerExamenMB.init}"/>
-    </f:metadata>
     <style type="text/css">
         body {
             background-color: #ECEEF8;
@@ -234,7 +227,7 @@
         </div>
         <div class="header__btn">
             <p:commandButton styleClass="btn-send" value="Retour"
-                             action="/index.jsf?faces-redirect=true" />
+                             action="/index.jsf?faces-redirect=true"/>
         </div>
     </div>
 </div>
@@ -243,13 +236,13 @@
     <img class="card-counter exam_lookup_card"
          src="#{resource['images/form-image-banner.png']}" alt="e-xam"/>
 
-         <div class="body__question">
-            <div class="body__question__header">
-                <span style="font-weight: 800; font-size: 2rem"></span>
-            </div>
-            <span>Votre resultat:</span>            
-            <span>#{passerExamenMB.calculateScore}</span>            
+    <div class="body__question">
+        <div class="body__question__header">
+            <span style="font-weight: 800; font-size: 2rem"></span>
         </div>
+        <span>Votre resultat:</span>
+        <span>#{passerExamenMB.calculateScore()}</span>
+    </div>
 </div>
 </body>
 </html>
