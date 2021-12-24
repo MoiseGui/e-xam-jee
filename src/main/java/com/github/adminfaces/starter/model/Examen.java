@@ -21,17 +21,29 @@ public class Examen extends PersistentEntity implements Comparable<Examen> {
     private List<Question> questions;
     @Embedded
     private List<EtudiantExamen> etudiantExamens;
+    private Double total;
+
+    public Double getTotal() {
+        return total;
+    }
+
+    public void setTotal(Double total) {
+        this.total = total;
+    }
 
     private String owner;
 
     public List<Question> getQuestions() {
-        if(questions == null){
+        if (questions == null) {
             questions = new ArrayList<>();
         }
         return questions;
     }
 
     public List<EtudiantExamen> getEtudiantExamens() {
+        if (etudiantExamens == null) {
+            etudiantExamens = new ArrayList<>();
+        }
         return etudiantExamens;
     }
 
@@ -78,5 +90,33 @@ public class Examen extends PersistentEntity implements Comparable<Examen> {
     @Override
     public int compareTo(Examen o) {
         return this.getDateDebut().compareTo(o.getDateDebut());
+    }
+
+    public void displayDetails() {
+        System.out.println("Examen{" +
+                "libelle='" + libelle + '\'' +
+                ", dateDebut=" + dateDebut +
+                ", dateFin=" + dateFin +
+                ", owner='" + owner + '\'' +
+                '}');
+        this.getQuestions().forEach(q -> {
+
+            System.out.println("Question : " + q.getTitre());
+            System.out.println("Le nombre de ponts " + q.getPoints());
+            System.out.println("Type de reponse " + q.getTypeQuestion());
+
+            q.getReponses().forEach(r -> {
+                System.out.println("l'etudiant concené " + r.getEtudiant());
+                System.out.println("la reponse if choix libre" + r.getReponse());
+                System.out.println("la reponse if choix libre" + r.getChoix().length);
+            });
+
+
+        });
+        this.getEtudiantExamens().forEach(e -> {
+            System.out.println("La note de l'etudiant " + e.getEtudiant());
+
+        });
+
     }
 }

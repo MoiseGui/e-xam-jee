@@ -4,6 +4,7 @@ import org.mongodb.morphia.annotations.Embedded;
 
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -12,9 +13,9 @@ public class ReponsesQuestion {
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateEnvoi;
     private String reponse;
-    private boolean vraiOuFaux;
+    private Boolean vraiOuFaux;
     @Embedded
-    private List<Choix> choix;
+    private String[] choix;
 
     public String getEtudiant() {
         return etudiant;
@@ -37,22 +38,35 @@ public class ReponsesQuestion {
     }
 
     public void setReponse(String reponse) {
+        System.out.println("the set response method");
+        System.out.println(reponse);
         this.reponse = reponse;
     }
 
-    public boolean isVraiOuFaux() {
+    public Boolean getVraiOuFaux() {
         return vraiOuFaux;
     }
 
-    public void setVraiOuFaux(boolean vraiOuFaux) {
+    public void setVraiOuFaux(Boolean vraiOuFaux) {
         this.vraiOuFaux = vraiOuFaux;
     }
 
-    public List<Choix> getChoix() {
+    public String[] getChoix() {
         return choix;
     }
 
-    public void setChoix(List<Choix> choix) {
+    public void setChoix(String[] choix) {
         this.choix = choix;
+    }
+
+    @Override
+    public String toString() {
+        return "ReponsesQuestion{" +
+                "etudiant='" + etudiant + '\'' +
+                ", dateEnvoi=" + dateEnvoi +
+                ", reponse='" + reponse + '\'' +
+                ", vraiOuFaux=" + vraiOuFaux +
+                ", choix=" + choix +
+                '}';
     }
 }
