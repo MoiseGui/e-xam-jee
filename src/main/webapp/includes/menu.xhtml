@@ -32,6 +32,14 @@
             </p:link>
         </li>
         </p:column>
+        <p:column rendered="#{logonMB.currentUser.isEtudiant()}">
+            <li>
+                <p:link outcome="/examen-passed-list">
+                    <i class="fa fa-table"></i>
+                    <span>Examens passés</span>
+                </p:link>
+            </li>
+            </p:column>
     </ul>
 
 </ui:composition>

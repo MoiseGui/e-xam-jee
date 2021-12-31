@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
-                xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
-                xmlns:p="http://primefaces.org/ui" xmlns:adm="http://github.com/adminfaces"
-                template="#{layoutMB.template}">
+    xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui" xmlns:adm="http://github.com/adminfaces" template="#{layoutMB.template}">
 
     <ui:define name="metadata">
-        <ui:param name="title"
-                  value="Liste des examens"/> <!-- Automatic create breadCrumb and page title when param 'title' is provided. -->
+        <ui:param name="title" value="Liste des examens" />
+        <!-- Automatic create breadCrumb and page title when param 'title' is provided. -->
 
         <style type="text/css">
             .ui-datatable-header {
@@ -25,115 +24,105 @@
 
     <ui:define name="body">
         <h:form>
-            <p:focus context="@form"/>
+            <p:focus context="@form" />
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <div id="main-buttons" class="hidden-sm hidden-xs">
-                        <p:commandButton action="/examen-form?faces-redirect=true" icon="fa fa-plus"
-                                         value="Nouveau" styleClass="btn-primary"/>
-                        <p:spacer width="5"/>
+                        <p:commandButton action="/examen-form?faces-redirect=true" icon="fa fa-plus" value="Nouveau"
+                            styleClass="btn-primary" />
+                        <p:spacer width="5" />
                         <p:commandButton value="Supprimer" icon="fa fa-trash" styleClass="btn-danger"
-                                         action="#{examenListMB.delete}"
-                                         disabled="#{empty examenListMB.selectedExamens or examenListMB.selectedExamens.size() == 0}"
-                                         process="@this" update="@form"
-                        >
-                            <p:confirm header="Confirmation" message="Êtes vous sure ?" icon="ui-icon-danger"/>
+                            action="#{examenListMB.delete}"
+                            disabled="#{empty examenListMB.selectedExamens or examenListMB.selectedExamens.size() == 0}"
+                            process="@this" update="@form">
+                            <p:confirm header="Confirmation" message="Êtes vous sure ?" icon="ui-icon-danger" />
                         </p:commandButton>
-                        <p:spacer width="5"/>
+                        <p:spacer width="5" />
                         <p:commandButton value="Voir les détails" update="@(.ui-dialog)" styleClass="btn-info"
-                                         disabled="#{empty examenListMB.selectedExamens or examenListMB.selectedExamens.size() == 0}"
-                                         oncomplete="PF('selectedExamens').show()" icon="fa fa-search"/>
-                        <p:spacer width="5"/>
+                            disabled="#{empty examenListMB.selectedExamens or examenListMB.selectedExamens.size() == 0}"
+                            oncomplete="PF('selectedExamens').show()" icon="fa fa-search" />
+                        <p:spacer width="5" />
                         <p:commandButton styleClass="btn-warning" value="Voir les résultats" update="@(.ui-dialog)"
-                                         icon="fa fa-list" disabled="#{!examenListMB.isSelectedPassed()}"
-                                         oncomplete="PF('resultDialog').show()" />
+                            icon="fa fa-list" disabled="#{!examenListMB.isSelectedPassed()}"
+                            oncomplete="PF('resultDialog').show()" />
                     </div>
 
-                    <p:splitButton value="Nouveau" action="/examen-form?faces-redirect=true"
-                                   icon="fa fa-plus"
-                                   styleClass="hidden-md hidden-lg btn-primary">
-                        <p:menuitem value="Supprimer" action="#{examenListMB.delete}"
-                                    process="@this" update="@form"
-                                    disabled="#{empty examenListMB.selectedExamens or examenListMB.selectedExamens.size() == 0}"
-                                    icon="fa fa-trash">
-                            <p:confirm header="Confirmation" message="Êtes vous sure ?" icon="ui-icon-danger"/>
+                    <p:splitButton value="Nouveau" action="/examen-form?faces-redirect=true" icon="fa fa-plus"
+                        styleClass="hidden-md hidden-lg btn-primary">
+                        <p:menuitem value="Supprimer" action="#{examenListMB.delete}" process="@this" update="@form"
+                            disabled="#{empty examenListMB.selectedExamens or examenListMB.selectedExamens.size() == 0}"
+                            icon="fa fa-trash">
+                            <p:confirm header="Confirmation" message="Êtes vous sure ?" icon="ui-icon-danger" />
                         </p:menuitem>
                         <p:menuitem value="View selected" update="@(.ui-dialog)"
-                                    oncomplete="PF('selectedExamens').show()"
-                                    disabled="#{empty examenListMB.selectedExamens or examenListMB.selectedExamens.size() == 0}"
-                                    icon="fa fa-search"
-                        />
+                            oncomplete="PF('selectedExamens').show()"
+                            disabled="#{empty examenListMB.selectedExamens or examenListMB.selectedExamens.size() == 0}"
+                            icon="fa fa-search" />
                     </p:splitButton>
 
-                    <p:separator/>
+                    <p:separator />
 
                     <p:dataTable widgetVar="examensTable" var="c" value="#{examenListMB.examens}" rows="5"
-                                 rowKey="#{c.id}" lazy="true" paginator="true"
-                                 filteredValue="#{examenListMB.filteredValue}"
-                                 paginatorPosition="bottom" selection="#{examenListMB.selectedExamens}"
-                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {JumpToPageDropdown}"
-                                 currentPageReportTemplate="[ de {startRecord} à {endRecord}, total:  {totalRecords} ]"
-                                 rowsPerPageTemplate="5,10,15,20,30"
-                    >
+                        rowKey="#{c.id}" lazy="true" paginator="true" filteredValue="#{examenListMB.filteredValue}"
+                        paginatorPosition="bottom" selection="#{examenListMB.selectedExamens}"
+                        paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {JumpToPageDropdown}"
+                        currentPageReportTemplate="[ de {startRecord} à {endRecord}, total:  {totalRecords} ]"
+                        rowsPerPageTemplate="5,10,15,20,30">
 
-                        <p:ajax event="rowSelectCheckbox" update="@(.ui-button, .ui-confirm-dialog)"/>
-                        <p:ajax event="rowUnselectCheckbox" update="@(.ui-button, .ui-confirm-dialog)"/>
-                        <p:ajax event="rowSelect" update="@(.ui-button, .ui-confirm-dialog)"/>
-                        <p:ajax event="rowUnselect" update="@(.ui-button, .ui-confirm-dialog)"/>
-                        <p:ajax event="toggleSelect" update="@(.ui-button, .ui-confirm-dialog)"/>
+                        <p:ajax event="rowSelectCheckbox" update="@(.ui-button, .ui-confirm-dialog)" />
+                        <p:ajax event="rowUnselectCheckbox" update="@(.ui-button, .ui-confirm-dialog)" />
+                        <p:ajax event="rowSelect" update="@(.ui-button, .ui-confirm-dialog)" />
+                        <p:ajax event="rowUnselect" update="@(.ui-button, .ui-confirm-dialog)" />
+                        <p:ajax event="toggleSelect" update="@(.ui-button, .ui-confirm-dialog)" />
 
                         <f:facet name="header">
-                            Trouver un examen: <p:inputText
-                                type="text" id="inptId" placeholder="Libelle"
-                                value="#{examenListMB.libelle}" style="margin-left: 10px"/>
-                            <p:spacer height="5"/>
-                            <p:commandButton id="brFind"
-                                             value="Recherche"
-                                             action="#{examenListMB.findExamenByLibelle(examenListMB.libelle)}"
-                                             process="@form"
-                                             update="@form"
-                                             styleClass="btn-flat bg-black btn-states"
-                                             partialSubmit="true"/>
+                            Trouver un examen:
+                            <p:inputText type="text" id="inptId" placeholder="Libelle" value="#{examenListMB.libelle}"
+                                style="margin-left: 10px" />
+                            <p:spacer height="5" />
+                            <p:commandButton id="brFind" value="Recherche"
+                                action="#{examenListMB.findExamenByLibelle(examenListMB.libelle)}" process="@form"
+                                update="@form" styleClass="btn-flat bg-black btn-states" partialSubmit="true" />
                         </f:facet>
 
-                        <p:column selectionMode="multiple" width="5%" styleClass="align-center"/>
+                        <p:column selectionMode="multiple" width="5%" styleClass="align-center" />
                         <p:column headerText="Libelle" filterBy="#{c.libelle}" sortBy="#{c.libelle}"
-                                  filterMatchMode="contains" rendered="#{examenListMB.hasExamPassed(c)}">
+                            filterMatchMode="contains" rendered="#{examenListMB.hasExamPassed(c)}">
                             <f:facet name="filter">
                                 <p:autoComplete value="#{examenListMB.filter.entity.libelle}" forceSelection="true"
-                                                minQueryLength="2" queryDelay="500" dropdown="true"
-                                                completeMethod="#{examenListMB.completeNom}" maxResults="10">
+                                    minQueryLength="2" queryDelay="500" dropdown="true"
+                                    completeMethod="#{examenListMB.completeNom}" maxResults="10">
                                     <p:ajax event="itemSelect" process="@this" update="@none"
-                                            oncomplete="PF('examensTable').filter()"/>
+                                        oncomplete="PF('examensTable').filter()" />
                                 </p:autoComplete>
                             </f:facet>
                             #{c.libelle}
                         </p:column>
                         <p:column headerText="Libelle" filterBy="#{c.libelle}" sortBy="#{c.libelle}"
-                                  filterMatchMode="contains" rendered="#{!examenListMB.hasExamPassed(c)}">
+                            filterMatchMode="contains" rendered="#{!examenListMB.hasExamPassed(c)}">
                             <f:facet name="filter">
                                 <p:autoComplete value="#{examenListMB.filter.entity.libelle}" forceSelection="true"
-                                                minQueryLength="2" queryDelay="500" dropdown="true"
-                                                completeMethod="#{examenListMB.completeNom}" maxResults="10">
+                                    minQueryLength="2" queryDelay="500" dropdown="true"
+                                    completeMethod="#{examenListMB.completeNom}" maxResults="10">
                                     <p:ajax event="itemSelect" process="@this" update="@none"
-                                            oncomplete="PF('examensTable').filter()"/>
+                                        oncomplete="PF('examensTable').filter()" />
                                 </p:autoComplete>
                             </f:facet>
                             <p:link value="#{c.libelle}" outcome="/examen-form">
-                                <f:param name="id" value="#{c.id}"/>
+                                <f:param name="id" value="#{c.id}" />
                             </p:link>
                         </p:column>
                         <p:column headerText="Date Début" sortBy="#{c.dateDebut}" filterBy="#{c.dateDebut}">
                             <f:facet name="filter">
                                 <p:datePicker id="basic1" value="#{examenListMB.filter.entity.dateDebut}"
-                                              disabled="true"/>
+                                    disabled="true" />
                             </f:facet>
                             #{examenListMB.formatDate(c.dateDebut)}
                         </p:column>
                         <p:column headerText="Date Fin" sortBy="#{c.dateFin}" filterBy="#{c.dateFin}">
                             <f:facet name="filter">
                                 <p:datePicker id="basic2" value="#{examenListMB.filter.entity.dateDebut}"
-                                              disabled="true"/>
+                                    disabled="true" />
                             </f:facet>
                             #{examenListMB.formatDate(c.dateFin)}
                         </p:column>
@@ -143,34 +132,43 @@
             </div>
             <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" styleClass="box-danger box-solid">
                 <p:commandButton value="Oui" type="button" styleClass="btn-material btn-primary ui-confirmdialog-yes"
-                                 icon="fa fa-check"/>
+                    icon="fa fa-check" />
                 <p:commandButton value="Non" type="button" styleClass="btn-material btn-danger ui-confirmdialog-no"
-                                 icon="fa fa-close"/>
+                    icon="fa fa-close" />
             </p:confirmDialog>
         </h:form>
 
 
-        <p:dialog header="Détails de l'examen" widgetVar="selectedExamens" height="250"
-                  width="400" responsive="true">
-            <p:dataList id="selectedExamensList" value="#{examenListMB.selectedExamens}" var="examen"
-                        type="definition">
-                <div style="border: 1px solid;padding: 10px;border-radius: 10px;box-shadow: 1px 1px 7px 1px #2F86A6;margin-bottom: 20px"> <span style="color: #007FBF">ID:</span>  #{examen.id}</div>
-                <div style="border: 1px solid;padding: 10px;border-radius: 10px;box-shadow: 1px 1px 7px 1px #2F86A6;margin-bottom: 20px">-
-                    <span style="color: #007FBF"> Libelle:</span> #{examen.libelle}</div>
-                <div style="border: 1px solid;padding: 10px;border-radius: 10px;box-shadow: 1px 1px 7px 1px #2F86A6;margin-bottom: 20px">-
-                    <span style="color: #007FBF">Date début:</span> #{examenListMB.formatDate(examen.dateDebut)}</div>
-                <div style="border: 1px solid;padding: 10px;border-radius: 10px;box-shadow: 1px 1px 7px 1px #2F86A6;margin-bottom: 20px">-
-                    <span style="color: #007FBF"> Date fin:</span> #{examenListMB.formatDate(examen.dateFin)}</div>
+        <p:dialog header="Détails de l'examen" widgetVar="selectedExamens" height="250" width="400" responsive="true">
+            <p:dataList id="selectedExamensList" value="#{examenListMB.selectedExamens}" var="examen" type="definition">
+                <div
+                    style="border: 1px solid;padding: 10px;border-radius: 10px;box-shadow: 1px 1px 7px 1px #2F86A6;margin-bottom: 20px">
+                    <span style="color: #007FBF">ID:</span> #{examen.id}
+                </div>
+                <div
+                    style="border: 1px solid;padding: 10px;border-radius: 10px;box-shadow: 1px 1px 7px 1px #2F86A6;margin-bottom: 20px">
+                    -
+                    <span style="color: #007FBF"> Libelle:</span> #{examen.libelle}
+                </div>
+                <div
+                    style="border: 1px solid;padding: 10px;border-radius: 10px;box-shadow: 1px 1px 7px 1px #2F86A6;margin-bottom: 20px">
+                    -
+                    <span style="color: #007FBF">Date début:</span> #{examenListMB.formatDate(examen.dateDebut)}
+                </div>
+                <div
+                    style="border: 1px solid;padding: 10px;border-radius: 10px;box-shadow: 1px 1px 7px 1px #2F86A6;margin-bottom: 20px">
+                    -
+                    <span style="color: #007FBF"> Date fin:</span> #{examenListMB.formatDate(examen.dateFin)}
+                </div>
 
             </p:dataList>
         </p:dialog>
 
-        <p:dialog header="Résultats de cet examen" widgetVar="resultDialog"
-                  width="400" responsive="true">
+        <p:dialog header="Résultats de cet examen" widgetVar="resultDialog" width="400" responsive="true">
 
             <p:dataTable var="etu"
-                         rendered="#{examenListMB.selectedExamens != null and examenListMB.selectedExamens.size() > 0}"
-                         value="#{examenListMB.selectedExamens.get(0).etudiantExamens}">
+                rendered="#{examenListMB.selectedExamens != null and examenListMB.selectedExamens.size() > 0}"
+                value="#{examenListMB.selectedExamens.get(0).etudiantExamens}">
                 <f:facet name="header">
                     Liste des notes
                 </f:facet>
@@ -182,9 +180,17 @@
                 </p:column>
                 <p:column>
                     <f:facet name="header">
-                        Note / #{examenListMB.selectedExamens.get(0).total}
+                        Note / #{examenListMB.selectedExamens.get(0).total()}
                     </f:facet>
                     #{etu.note}
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        Corriger
+                    </f:facet>
+                    <p:commandButton value="Modifier" icon="fa fa-edit "
+                        action="#{examenCorrectionMB.corriger}">
+                    </p:commandButton>
                 </p:column>
                 <f:facet name="footer">
                     Au total #{examenListMB.selectedExamens.get(0).etudiantExamens.size()} notes.

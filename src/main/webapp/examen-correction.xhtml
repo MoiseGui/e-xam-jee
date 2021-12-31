@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui"
+    xmlns:c="http://xmlns.jcp.org/jsp/jstl/core" xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:pe="http://primefaces.org/ui/extensions">
 
 <h:head>
     <title>E-XAM | La gestion des examens rendu facile.</title>
@@ -192,33 +194,39 @@
         }
     </style>
 </h:head>
-
 <body>
     <div class="header">
         <div class="header__elements">
-            <div class="header__title">Resultat</div>
-            <div class="header__examenTitle">
+            <div class="header__title">
                 #{passerExamenMB.examen.libelle}
             </div>
+            <div class="header__timer">
+            </div>
             <div class="header__btn">
-                <h:form>
-                    <p:commandButton styleClass="btn-send" value="Retour" action="/index?faces-redirect=true" />
-                </h:form>
+                <p:commandButton styleClass="btn-success" value="Modifier la note" update="@(.ui-dialog)" 
+                            oncomplete="PF('noteDialog').show()" />
             </div>
         </div>
     </div>
+    <div class="title">
+        <h2 class="align-center">
+            Examen: <span class="text-aqua"> <i> </i>
+            </span>
+        </h2>
+    </div>
+
 
     <div class="body">
         <img class="card-counter exam_lookup_card" src="#{resource['images/form-image-banner.png']}" alt="e-xam" />
 
-        <div class="body__question">
-            <div class="body__question__header">
-                <span style="font-weight: 800; font-size: 2rem"></span>
-            </div>
-            <span>Votre resultat:</span>
-            <span>#{passerExamenMB.calculateScore()}</span>
-        </div>
     </div>
+
+    <p:dialog header="Résultats de cet examen" widgetVar="noteDialog" width="400" responsive="true">
+        <p:inputText type="number" id="note"
+                                         value="#{passerExamenMB.examen.libelle}"/>
+                            
+    </p:dialog>
+
 </body>
 
 </html>

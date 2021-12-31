@@ -12,6 +12,7 @@ import org.mongodb.morphia.query.UpdateOperations;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
+import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -23,7 +24,7 @@ import java.util.stream.Collectors;
 
 import static com.github.adminfaces.template.util.Assert.has;
 
-@Stateless
+@SessionScoped
 public class ExamenService implements Serializable {
     @Inject
     private ExamenDao examenDao;
@@ -34,8 +35,18 @@ public class ExamenService implements Serializable {
 
     @PostConstruct
     public void init() {
-        if(logonMB.getCurrentUser().isProfesseur()){
+        this.initExamenList();
+    }
+
+    public void initExamenList() {
+        if (logonMB.getCurrentUser().isProfesseur()) {
+            System.out.println("professeur logged in");
             this.examens = examenDao.findAll(logonMB.getCurrentUser().getId());
+            return;
+        }
+        if (logonMB.getCurrentUser().isEtudiant()) {
+            System.out.println("admin logged in");
+            this.examens = examenDao.findAllExamensEtudiant(logonMB.getCurrentUser().getPrenom()+" "+logonMB.getCurrentUser().getNom());
             return;
         }
         this.examens = examenDao.findAll();
@@ -43,7 +54,7 @@ public class ExamenService implements Serializable {
 
     public List<String> getByLibelle(String query) {
         return examens.stream().filter(c -> c.getLibelle()
-                        .toLowerCase().contains(query.toLowerCase()))
+                .toLowerCase().contains(query.toLowerCase()))
                 .map(Examen::getLibelle)
                 .collect(Collectors.toList());
     }
@@ -72,44 +83,45 @@ public class ExamenService implements Serializable {
     }
 
     public long count() {
-        if(logonMB.getCurrentUser().isProfesseur()){
+        if (logonMB.getCurrentUser().isProfesseur()) {
             return examenDao.getCount(logonMB.getCurrentUser().getId());
         }
         return examenDao.getCount();
     }
 
     public long getPassedExamCountForEtudiant(String idEtudiant) {
-        return this.examens.stream().filter(examen -> examen.getEtudiantExamens().stream().anyMatch(etudiantExamen -> etudiantExamen.getEtudiant().equals(idEtudiant))).count();
+        return this.examens.stream().filter(examen -> examen.getEtudiantExamens().stream()
+                .anyMatch(etudiantExamen -> etudiantExamen.getEtudiant().equals(idEtudiant))).count();
     }
 
     public long countCurrentGoingOnExams() {
-    	long count = 0;
+        long count = 0;
         Date now = new Date();
         for (Examen examen : examens) {
-            if(examen.getDateDebut().before(now) && examen.getDateFin().after(now)) {
-                count ++;
+            if (examen.getDateDebut().before(now) && examen.getDateFin().after(now)) {
+                count++;
             }
         }
         return count;
     }
 
-    public long countFinishedExams(){
+    public long countFinishedExams() {
         long count = 0;
         Date now = new Date();
         for (Examen examen : examens) {
-            if(examen.getDateFin().before(now)) {
-                count ++;
+            if (examen.getDateFin().before(now)) {
+                count++;
             }
         }
         return count;
     }
 
-    public long countCommingExams(){
+    public long countCommingExams() {
         long count = 0;
         Date now = new Date();
         for (Examen examen : examens) {
-            if(examen.getDateDebut().after(now)) {
-                count ++;
+            if (examen.getDateDebut().after(now)) {
+                count++;
             }
         }
         return count;
@@ -127,14 +139,13 @@ public class ExamenService implements Serializable {
     public List<Examen> paginate(Filter<Examen> filter) {
         List<Examen> pagedExamens = new ArrayList<>();
         if (has(filter.getSortOrder()) && !SortOrder.UNSORTED.equals(filter.getSortOrder())) {
-            pagedExamens = examens.stream().
-                    sorted((c1, c2) -> {
-                        if (filter.getSortOrder().isAscending()) {
-                            return c1.compareTo(c2);
-                        } else {
-                            return c2.compareTo(c1);
-                        }
-                    })
+            pagedExamens = examens.stream().sorted((c1, c2) -> {
+                if (filter.getSortOrder().isAscending()) {
+                    return c1.compareTo(c2);
+                } else {
+                    return c2.compareTo(c1);
+                }
+            })
                     .collect(Collectors.toList());
         }
 
@@ -147,7 +158,7 @@ public class ExamenService implements Serializable {
         List<Predicate<Examen>> predicates = configFilter(filter);
 
         List<Examen> pagedList = examens.stream().filter(predicates
-                        .stream().reduce(Predicate::or).orElse(t -> true))
+                .stream().reduce(Predicate::or).orElse(t -> true))
                 .collect(Collectors.toList());
 
         if (page < pagedList.size()) {
@@ -155,15 +166,14 @@ public class ExamenService implements Serializable {
         }
 
         if (has(filter.getSortField())) {
-            pagedList = pagedList.stream().
-                    sorted((c1, c2) -> {
-                        boolean asc = SortOrder.ASCENDING.equals(filter.getSortOrder());
-                        if (asc) {
-                            return c1.getId().compareTo(c2.getId());
-                        } else {
-                            return c2.getId().compareTo(c1.getId());
-                        }
-                    })
+            pagedList = pagedList.stream().sorted((c1, c2) -> {
+                boolean asc = SortOrder.ASCENDING.equals(filter.getSortOrder());
+                if (asc) {
+                    return c1.getId().compareTo(c2.getId());
+                } else {
+                    return c2.getId().compareTo(c1.getId());
+                }
+            })
                     .collect(Collectors.toList());
         }
         return pagedList;
@@ -202,13 +212,13 @@ public class ExamenService implements Serializable {
         if (examen.getLibelle() == null && "".equals(examen.getLibelle().trim())) {
             be.addException(new BusinessException("Vous devez saisir un email"));
         }
-        if(examen.getDateDebut() == null) {
+        if (examen.getDateDebut() == null) {
             be.addException(new BusinessException("Vous devez saisir une date de début"));
         }
-        if(examen.getDateFin() == null) {
+        if (examen.getDateFin() == null) {
             be.addException(new BusinessException("Vous devez saisir une date de fin"));
         }
-        if(examen.getQuestions() == null || examen.getQuestions().isEmpty()) {
+        if (examen.getQuestions() == null || examen.getQuestions().isEmpty()) {
             be.addException(new BusinessException("Vous devez ajouter au moins une question à cet examen"));
         }
         if (has(be.getExceptionList())) {

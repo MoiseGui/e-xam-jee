@@ -29,10 +29,13 @@ import javax.naming.NamingException;
  *
  * This is just a login example.
  *
- * AdminSession uses isLoggedIn to determine if user must be redirect to login page or not.
- * By default AdminSession isLoggedIn always resolves to true so it will not try to redirect user.
+ * AdminSession uses isLoggedIn to determine if user must be redirect to login
+ * page or not.
+ * By default AdminSession isLoggedIn always resolves to true so it will not try
+ * to redirect user.
  *
- * If you already have your authorization mechanism which controls when user must be redirect to initial page or logon
+ * If you already have your authorization mechanism which controls when user
+ * must be redirect to initial page or logon
  * you can skip this class.
  */
 @Named
@@ -53,11 +56,10 @@ public class LogonMB extends AdminSession implements Serializable {
     @Inject
     ExamenService examenService;
 
-
     public void login() throws IOException {
         currentUser = userService.login(email, password);
-        if(currentUser != null){
-            if(currentUser.getRole().equals(Role.etu)){
+        if (currentUser != null) {
+            if (currentUser.getRole().equals(Role.etu)) {
                 try {
                     Subscriber.subscribe("myTopic");
                     System.out.println("subscribed to the topic");
@@ -66,18 +68,19 @@ public class LogonMB extends AdminSession implements Serializable {
                 }
             }
 
-            addDetailMessage("Vous êtes connecté en tant que <b>" + currentUser.getPrenom() + " " + currentUser.getNom() + "</b>");
+            addDetailMessage("Vous êtes connecté en tant que <b>" + currentUser.getPrenom() + " " + currentUser.getNom()
+                    + "</b>");
             Faces.getExternalContext().getFlash().setKeepMessages(true);
             Faces.redirect(adminConfig.getIndexPage());
-        }
-        else {
+        } else {
             Faces.getExternalContext().getFlash().setKeepMessages(true);
-            FacesMessage facesMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Login ou Mot de passe incorrect", "Login ou Mot de passe incorrect");
+            FacesMessage facesMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Login ou Mot de passe incorrect",
+                    "Login ou Mot de passe incorrect");
             FacesContext.getCurrentInstance().addMessage(null, facesMessage);
         }
     }
 
-    public void showMessage(String message){
+    public void showMessage(String message) {
         System.out.println("Trying to show recieved message");
         Faces.getExternalContext().getFlash().setKeepMessages(true);
         FacesMessage facesMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, "Message du", message);
@@ -85,7 +88,7 @@ public class LogonMB extends AdminSession implements Serializable {
         System.out.println("Recieved message is shown");
     }
 
-    public boolean loginFailed(){
+    public boolean loginFailed() {
         return currentUser == null;
     }
 

@@ -6,13 +6,18 @@ import com.github.adminfaces.starter.model.Examen;
 import com.github.adminfaces.starter.service.ExamenService;
 import com.github.adminfaces.template.exception.BusinessException;
 import org.omnifaces.cdi.ViewScoped;
+import org.omnifaces.util.Faces;
 import org.primefaces.model.FilterMeta;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
 
 import javax.annotation.PostConstruct;
+import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+
+import java.io.IOException;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -24,7 +29,6 @@ import java.util.List;
 import java.util.Map;
 
 import static com.github.adminfaces.starter.util.Utils.addDetailMessage;
-
 
 @Named
 @ViewScoped
@@ -49,13 +53,15 @@ public class ExamenListMB implements Serializable {
         examens = new LazyDataModel<Examen>() {
             @Override
             public List<Examen> load(int first, int pageSize,
-                                     String sortField, SortOrder sortOrder,
-                                     Map<String, FilterMeta> filters) {
+                    String sortField, SortOrder sortOrder,
+                    Map<String, FilterMeta> filters) {
                 com.github.adminfaces.starter.infra.model.SortOrder order = null;
                 if (sortOrder != null) {
-                    order = sortOrder.equals(SortOrder.ASCENDING) ? com.github.adminfaces.starter.infra.model.SortOrder.ASCENDING
-                            : sortOrder.equals(SortOrder.DESCENDING) ? com.github.adminfaces.starter.infra.model.SortOrder.DESCENDING
-                            : com.github.adminfaces.starter.infra.model.SortOrder.UNSORTED;
+                    order = sortOrder.equals(SortOrder.ASCENDING)
+                            ? com.github.adminfaces.starter.infra.model.SortOrder.ASCENDING
+                            : sortOrder.equals(SortOrder.DESCENDING)
+                                    ? com.github.adminfaces.starter.infra.model.SortOrder.DESCENDING
+                                    : com.github.adminfaces.starter.infra.model.SortOrder.UNSORTED;
                 }
                 filter.setFirst(first).setPageSize(pageSize)
                         .setSortField(sortField).setSortOrder(order)
@@ -107,15 +113,16 @@ public class ExamenListMB implements Serializable {
 
     public boolean hasExamPassed(Examen examen) {
         System.out.println("examen.getDateDebut().before() gave " + examen);
-        if(examen != null) return examen.getDateFin().before(new Date());
+        if (examen != null)
+            return examen.getDateFin().before(new Date());
         return false;
     }
 
     public boolean isSelectedPassed() {
-        if(selectedExamens == null || selectedExamens.size() != 1) return false;
+        if (selectedExamens == null || selectedExamens.size() != 1)
+            return false;
         return hasExamPassed(selectedExamens.get(0));
     }
-
 
     public void delete() {
         int numUsers = 0;
@@ -131,15 +138,15 @@ public class ExamenListMB implements Serializable {
         return examenService.count();
     }
 
-    public long getCurrentGoingOnExams(){
+    public long getCurrentGoingOnExams() {
         return examenService.countCurrentGoingOnExams();
     }
 
-    public long countFinishedExams(){
+    public long countFinishedExams() {
         return examenService.countFinishedExams();
     }
 
-    public long countComingExams(){
+    public long countComingExams() {
         return examenService.countCommingExams();
     }
 
@@ -187,14 +194,15 @@ public class ExamenListMB implements Serializable {
         this.examenService = examenService;
     }
 
-    public String formatDate(Date date){
-        if(date != null){
+    public String formatDate(Date date) {
+        if (date != null) {
             DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
             return dateFormat.format(date);
         }
         return "Date inexistante";
 
     }
+
     public String getId() {
         return id;
     }
