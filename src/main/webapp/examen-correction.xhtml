@@ -277,7 +277,7 @@
                 <c:when test="#{question.typeQuestion eq 'reponseLibre'}">
                     <h:form styleClass="reponseLibre">
                         <p:inputTextarea disabled="true"
-                                         value="#{examenCprrectionMB.reponsesQuestions.get(loop.index).reponse}"
+                                         value="#{examenCorrectionMB.reponsesQuestions.get(loop.index).reponse}"
                                          autoResize="true" rows="5" cols="130"
                                          placeholder="Votre reponse">
                             <f:ajax event="change"/>
@@ -294,8 +294,13 @@
 <p:dialog header="Note" widgetVar="noteDialog" width="400"
           responsive="true">
     <h:form>
-        <p:inputText type="number" id="note"
-                     value="#{examenCorrectionMB.note}" style="margin-right:2em"/>
+        <p:inputNumber id="note"
+                       maxValue="#{examenCorrectionMB.examen.total}"
+                       minValue="0"
+                       decimalPlaces="2"
+                       value="#{examenCorrectionMB.note}" style="margin-right:2em">
+            <p:ajax event="change"/>
+        </p:inputNumber>
         <p:commandButton value="Modifier" icon="fa fa-edit "
                          action="#{examenCorrectionMB.editNote}">
         </p:commandButton>
