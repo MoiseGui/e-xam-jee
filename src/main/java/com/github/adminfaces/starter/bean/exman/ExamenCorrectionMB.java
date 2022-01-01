@@ -2,7 +2,10 @@ package com.github.adminfaces.starter.bean.exman;
 
 import com.github.adminfaces.starter.model.Examen;
 import com.github.adminfaces.starter.model.ReponsesQuestion;
+import com.github.adminfaces.starter.model.User;
 import com.github.adminfaces.starter.service.ExamenService;
+import com.github.adminfaces.starter.service.UserService;
+import com.github.adminfaces.starter.service.jms.Producer;
 import org.omnifaces.util.Faces;
 
 import javax.enterprise.context.SessionScoped;
@@ -26,6 +29,8 @@ public class ExamenCorrectionMB implements Serializable {
 
     @Inject
     ExamenService examenService;
+    @Inject
+    UserService userService;
 
     public void init() throws IOException {
 
@@ -59,9 +64,12 @@ public class ExamenCorrectionMB implements Serializable {
 
     public void editNote() {
         if (examen.getEtudiantExamens().stream().filter(e -> e.getEtudiant().equals(etudiantNom)).findFirst().isPresent()) {
-            System.out.println("etudiant existe");
             examen.getEtudiantExamens().stream().filter(e -> e.getEtudiant().equals(etudiantNom)).findFirst().get().setNote(note);
             examenService.update(examen);
+            String nom = etudiantNom.split(" ")[1];
+            User user = userService.findUserByNom(nom);
+            Producer.sendMessage("myQueue", "Votre nouvelle note = " + note + ":" + user.getEmail());
+
         }
 
 
