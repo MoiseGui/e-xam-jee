@@ -166,7 +166,7 @@
 
         <p:dialog header="Résultats de cet examen" widgetVar="resultDialog" width="400" responsive="true">
 
-            <p:dataTable var="etu"
+            <p:dataTable var="etu" 
                 rendered="#{examenListMB.selectedExamens != null and examenListMB.selectedExamens.size() > 0}"
                 value="#{examenListMB.selectedExamens.get(0).etudiantExamens}">
                 <f:facet name="header">
@@ -189,7 +189,7 @@
                         Corriger
                     </f:facet>
                     <p:commandButton value="Modifier" icon="fa fa-edit "
-                        action="#{examenCorrectionMB.corriger}">
+                        action="#{examenCorrectionMB.corriger(examenListMB.selectedExamens.get(0).libelle,etu.etudiant)}">
                     </p:commandButton>
                 </p:column>
                 <f:facet name="footer">

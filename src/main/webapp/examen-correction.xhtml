@@ -1,231 +1,307 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui"
-    xmlns:c="http://xmlns.jcp.org/jsp/jstl/core" xmlns:f="http://java.sun.com/jsf/core"
-    xmlns:pe="http://primefaces.org/ui/extensions">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:pe="http://primefaces.org/ui/extensions">
 
 <h:head>
-    <title>E-XAM | La gestion des examens rendu facile.</title>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-    <link rel="shortcut icon" type="image/x-icon" href="#{resource['favicon/favicon.ico']}" />
-    <link rel="shortcut icon" type="image/x-icon" href="#{resource['favicon/favicon-16x16.png']}" sizes="16x16" />
-    <link rel="shortcut icon" type="image/x-icon" href="#{resource['favicon/favicon-32x32.png']}" sizes="32x32" />
-    <link rel="shortcut icon" type="image/x-icon" href="#{resource['favicon/favicon-96x96.png']}" sizes="96x96" />
-    <link rel="shortcut icon" type="image/x-icon" href="#{resource['favicon/favicon-144x144.png']}" sizes="144x144" />
-    <meta name="theme-color" content="#444" />
-    <meta name="mobile-web-app-capable" content="yes" />
-    <style type="text/css">
-        body {
-            background-color: #ECEEF8;
-        }
+	<title>E-XAM | La gestion des examens rendu facile.</title>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport"
+		content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+	<link rel="shortcut icon" type="image/x-icon"
+		href="#{resource['favicon/favicon.ico']}" />
+	<link rel="shortcut icon" type="image/x-icon"
+		href="#{resource['favicon/favicon-16x16.png']}" sizes="16x16" />
+	<link rel="shortcut icon" type="image/x-icon"
+		href="#{resource['favicon/favicon-32x32.png']}" sizes="32x32" />
+	<link rel="shortcut icon" type="image/x-icon"
+		href="#{resource['favicon/favicon-96x96.png']}" sizes="96x96" />
+	<link rel="shortcut icon" type="image/x-icon"
+		href="#{resource['favicon/favicon-144x144.png']}" sizes="144x144" />
+	<meta name="theme-color" content="#444" />
+	<meta name="mobile-web-app-capable" content="yes" />
+	<f:metadata>
+		<f:viewParam name="id" value="#{examenCorrectionMB.examenId}" />
+		<f:viewParam name="etudiant" value="#{examenCorrectionMB.etudiant}" />
+		<!-- use view action if you are in a Java EE 7 server: <f:viewAction action="#{userFormMB.init()}"/>-->
+		<f:event type="preRenderView" listener="#{examenCorrectionMB.init}" />
+	</f:metadata>
+	<style type="text/css">
+body {
+	background-color: #ECEEF8;
+}
 
-        .body__question__header {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
-        }
+.body__question__header {
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 20px;
+}
 
-        .btn-send {
-            padding: 4px 10px !important;
-            background-color: #577BC1 !important;
-            border: 0 !important;
-            color: white !important;
-            border-radius: 6px !important;
-            width: 12vw !important;
-            color: white !important;
-        }
+.btn-send {
+	padding: 4px 10px !important;
+	background-color: #577BC1 !important;
+	border: 0 !important;
+	color: white !important;
+	border-radius: 6px !important;
+	width: 12vw !important;
+	color: white !important;
+}
 
-        .btn-send:hover {
-            box-shadow: 0px 0px 7px 0px #94B3FD !important;
-        }
+.btn-send:hover {
+	box-shadow: 0px 0px 7px 0px #94B3FD !important;
+}
 
-        .btn-send:active {
-            transform: translateY(-2px);
-        }
+.btn-send:active {
+	transform: translateY(-2px);
+}
 
-        .body {
-            margin-top: 8vh;
-        }
+.body {
+	margin-top: 8vh;
+}
 
-        .header {
-            width: 100vw;
-            margin: 0;
-            height: 13vh;
-            border-bottom: 2px solid #F5F5F5;
-            background-color: white;
-            font-size: 2rem;
-            position: fixed;
-            top: 0;
-            font-weight: 500;
-        }
+.header {
+	width: 100vw;
+	margin: 0;
+	height: 13vh;
+	border-bottom: 2px solid #F5F5F5;
+	background-color: white;
+	font-size: 2rem;
+	position: fixed;
+	top: 0;
+	font-weight: 500;
+}
 
-        .header__elements {
-            display: flex;
-            justify-content: space-between !important;
-            padding: 5vh 5vw;
-        }
+.header__elements {
+	display: flex;
+	justify-content: space-between !important;
+	padding: 5vh 5vw;
+}
 
-        .body__question {
-            border-radius: 5px;
-            min-height: 20vh;
-            margin-top: 3vh;
-            margin-left: auto;
-            margin-right: auto;
-            padding: 20px 20px;
-            width: 60%;
-            background-color: white;
-            box-shadow: 0 2px 1px -1px rgb(0 0 0/ 20%), 0 1px 1px 0 rgb(0 0 0/ 14%),
-                0 1px 3px 0 rgb(0 0 0/ 12%);
-            margin-left: auto;
-            width: 60%;
-        }
+.body__question {
+	border-radius: 5px;
+	min-height: 20vh;
+	margin-top: 3vh;
+	margin-left: auto;
+	margin-right: auto;
+	padding: 20px 20px;
+	width: 60%;
+	background-color: white;
+	box-shadow: 0 2px 1px -1px rgb(0 0 0/ 20%), 0 1px 1px 0 rgb(0 0 0/ 14%),
+		0 1px 3px 0 rgb(0 0 0/ 12%);
+	margin-left: auto;
+	width: 60%;
+}
 
-        .card-counter {
-            margin: 5px;
-            height: 100px !important;
-            border-radius: 5px;
-            transition: .3s linear all;
-        }
+.card-counter {
+	margin: 5px;
+	height: 100px !important;
+	border-radius: 5px;
+	transition: .3s linear all;
+}
 
-        .card-counter:hover {
-            box-shadow: 4px 4px 20px #94B3FD;
-            transition: .3s linear all;
-        }
+.card-counter:hover {
+	box-shadow: 4px 4px 20px #94B3FD;
+	transition: .3s linear all;
+}
 
-        .card-counter.primary {
-            background-color: #007bff;
-            color: #FFF;
-        }
+.card-counter.primary {
+	background-color: #007bff;
+	color: #FFF;
+}
 
-        .card-counter.danger {
-            background-color: #94B3FD;
-            color: #FFF;
-        }
+.card-counter.danger {
+	background-color: #94B3FD;
+	color: #FFF;
+}
 
-        .card-counter.success {
-            background-color: #66bb6a;
-            color: #FFF;
-        }
+.card-counter.success {
+	background-color: #66bb6a;
+	color: #FFF;
+}
 
-        .card-counter.info {
-            background-color: #26c6da;
-            color: #FFF;
-        }
+.card-counter.info {
+	background-color: #26c6da;
+	color: #FFF;
+}
 
-        .card-counter i {
-            font-size: 5em;
-            opacity: 0.2;
-        }
+.card-counter i {
+	font-size: 5em;
+	opacity: 0.2;
+}
 
-        .card-counter .count-numbers {
-            position: absolute;
-            right: 35px;
-            top: 20px;
-            font-size: 32px;
-            display: block;
-        }
+.card-counter .count-numbers {
+	position: absolute;
+	right: 35px;
+	top: 20px;
+	font-size: 32px;
+	display: block;
+}
 
-        .card-counter .count-name {
-            position: absolute;
-            right: 35px;
-            top: 65px;
-            font-style: italic;
-            text-transform: capitalize;
-            opacity: 0.5;
-            display: block;
-            font-size: 18px;
-        }
+.card-counter .count-name {
+	position: absolute;
+	right: 35px;
+	top: 65px;
+	font-style: italic;
+	text-transform: capitalize;
+	opacity: 0.5;
+	display: block;
+	font-size: 18px;
+}
 
-        .exam_lookup_card {
-            margin-left: auto;
-            margin-right: auto;
-            width: 60%;
-            min-height: 200px !important;
-            margin-top: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: space-evenly;
-            height: 10vh;
-        }
+.exam_lookup_card {
+	margin-left: auto;
+	margin-right: auto;
+	width: 60%;
+	min-height: 200px !important;
+	margin-top: 20px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: space-evenly;
+	height: 10vh;
+}
 
-        .exam_info {
-            font-size: 18px;
-        }
+.exam_info {
+	font-size: 18px;
+}
 
-        .exam_info_value {
-            font-size: 16px;
-            font-weight: bold;
-            color: #00C0EF;
-        }
+.exam_info_value {
+	font-size: 16px;
+	font-weight: bold;
+	color: #00C0EF;
+}
 
-        .exam_info_time {
-            display: flex;
-            justify-content: space-between;
-            width: 100%;
-        }
+.exam_info_time {
+	display: flex;
+	justify-content: space-between;
+	width: 100%;
+}
 
-        @media (max-width: 1045px) {
-            .exam_info_time {
-                flex-direction: column;
-            }
-        }
+@media ( max-width : 1045px) {
+	.exam_info_time {
+		flex-direction: column;
+	}
+}
 
-        @media (max-width: 880px) {
-            .exam_lookup_card {
-                width: 100%;
-            }
+@media ( max-width : 880px) {
+	.exam_lookup_card {
+		width: 100%;
+	}
+	.body__question {
+		width: 100%;
+	}
+	.hideOnMobile {
+		display: none !important;
+	}
+}
 
-            .body__question {
-                width: 100%;
-            }
-
-            .hideOnMobile {
-                display: none !important;
-            }
-        }
-
-        @media (min-width: 880px) {
-            .hideOnDesktop {
-                display: none !important;
-            }
-        }
-    </style>
+@media ( min-width : 880px) {
+	.hideOnDesktop {
+		display: none !important;
+	}
+}
+</style>
 </h:head>
 <body>
-    <div class="header">
-        <div class="header__elements">
-            <div class="header__title">
-                #{passerExamenMB.examen.libelle}
-            </div>
-            <div class="header__timer">
-            </div>
-            <div class="header__btn">
-                <p:commandButton styleClass="btn-success" value="Modifier la note" update="@(.ui-dialog)" 
-                            oncomplete="PF('noteDialog').show()" />
-            </div>
-        </div>
-    </div>
-    <div class="title">
-        <h2 class="align-center">
-            Examen: <span class="text-aqua"> <i> </i>
-            </span>
-        </h2>
-    </div>
+	<div class="header">
+		<div class="header__elements">
+			<div class="header__title">#{examenCorrectionMB.examen.libelle}</div>
+			<div class="header__timer"></div>
+			<div class="header__btn">
+				<p:commandButton styleClass="btn-success" value="Modifier la note"
+					update="@(.ui-dialog)" oncomplete="PF('noteDialog').show()" />
+			</div>
+		</div>
+	</div>
+	<div class="title">
+		<h2 class="align-center">
+			Examen: <span class="text-aqua"> <i> </i>
+			</span>
+		</h2>
+	</div>
 
 
-    <div class="body">
-        <img class="card-counter exam_lookup_card" src="#{resource['images/form-image-banner.png']}" alt="e-xam" />
+	<div class="body">
+		<img class="card-counter exam_lookup_card"
+			src="#{resource['images/form-image-banner.png']}" alt="e-xam" />
 
-    </div>
+		<c:forEach var="question"
+			items="#{examenCorrectionMB.examen.questions}" varStatus="loop">
+			<div class="body__question">
+				<div class="body__question__header">
+					<span style="font-weight: 800; font-size: 2rem">#{question.titre}</span>
+					<span style="font-weight: 500; font-size: 2rem">#{question.points}
+						Points</span>
+				</div>
+				<c:choose>
+					<c:when test="#{question.typeQuestion eq 'choixUnique'}">
+					hillawaaaat
+					#{examenCorrectionMB.reponsesQuestions.get(loop.index).choix[0]} ss
+					#{loop.index}
+						<h:form>
+							<p:selectOneRadio id="console" disabled="true" required="true"
+								value="#{examenCorrectionMB.reponsesQuestions.get(loop.index).choix}"
+								layout="responsive" columns="1">
+								<f:selectItems value="#{question.choix}" var="choix"
+									itemLabel="#{choix.choixTexte}" itemValue="#{choix.choixTexte}" />
+							</p:selectOneRadio>
+						</h:form>
+					</c:when>
+					<c:when test="#{question.typeQuestion eq 'choixMultiple'}">
+						<h:form>
+							<p:selectManyCheckbox disabled="true"
+								value="#{examenCorrectionMB.reponsesQuestions.get(loop.index).choix}"
+								layout="responsive" columns="1">
+								<f:selectItems value="#{question.choix}" var="choix"
+									itemLabel="#{choix.choixTexte}" itemValue="#{choix.choixTexte}" />
+								<p:ajax event="change" />
+							</p:selectManyCheckbox>
+						</h:form>
+					</c:when>
+					<c:when test="#{question.vraiOuFaux}">
+						<h:form>
+							<p:selectOneRadio disabled="true"
+								value="#{examenCorrectionMB.reponsesQuestions.get(loop.index).vraiOuFaux}"
+								layout="responsive" columns="2">
+								<f:selectItem itemLabel="Vrai" itemValue="true" />
+								<f:selectItem itemLabel="Faux" itemValue="false" />
+								<p:ajax event="change" />
 
-    <p:dialog header="Résultats de cet examen" widgetVar="noteDialog" width="400" responsive="true">
-        <p:inputText type="number" id="note"
-                                         value="#{passerExamenMB.examen.libelle}"/>
-                            
-    </p:dialog>
+							</p:selectOneRadio>
+						</h:form>
+					</c:when>
+					<c:when test="#{question.typeQuestion eq 'reponseLibre'}">
+						<h:form styleClass="reponseLibre">
+							<p:inputTextarea disabled="true"
+								value="#{examenCprrectionMB.reponsesQuestions.get(loop.index).reponse}"
+								autoResize="true" rows="5" cols="130"
+								placeholder="Votre reponse">
+								<f:ajax event="change" />
+							</p:inputTextarea>
+						</h:form>
+					</c:when>
+				</c:choose>
+
+			</div>
+		</c:forEach>
+
+	</div>
+
+	<p:dialog header="Note" widgetVar="noteDialog" width="400"
+		responsive="true">
+		<h:form>
+		<p:inputText type="number" id="note"
+			value="#{examenCorrectionMB.note}" style="margin-right:2em"/>
+		<p:commandButton value="Modifier" icon="fa fa-edit "
+			action="#{examenCorrectionMB.editNote}">
+		</p:commandButton>
+		</h:form>
+	</p:dialog>
 
 </body>
 
