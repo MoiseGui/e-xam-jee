@@ -71,7 +71,9 @@ public class Examen extends PersistentEntity implements Comparable<Examen> {
     }
 
     public Date getDateDebut() {
+    	if(dateDebut!=null)
         return dateDebut;
+    	return new Date();
     }
 
     public void setDateDebut(Date dateDebut) {
@@ -79,7 +81,9 @@ public class Examen extends PersistentEntity implements Comparable<Examen> {
     }
 
     public Date getDateFin() {
+    	if(dateFin != null)
         return dateFin;
+    	return new Date();
     }
 
     public void setDateFin(Date dateFin) {
