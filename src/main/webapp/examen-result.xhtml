@@ -4,16 +4,16 @@
 
 <h:head>
     <title>E-XAM | La gestion des examens rendu facile.</title>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-    <link rel="shortcut icon" type="image/x-icon" href="#{resource['favicon/favicon.ico']}" />
-    <link rel="shortcut icon" type="image/x-icon" href="#{resource['favicon/favicon-16x16.png']}" sizes="16x16" />
-    <link rel="shortcut icon" type="image/x-icon" href="#{resource['favicon/favicon-32x32.png']}" sizes="32x32" />
-    <link rel="shortcut icon" type="image/x-icon" href="#{resource['favicon/favicon-96x96.png']}" sizes="96x96" />
-    <link rel="shortcut icon" type="image/x-icon" href="#{resource['favicon/favicon-144x144.png']}" sizes="144x144" />
-    <meta name="theme-color" content="#444" />
-    <meta name="mobile-web-app-capable" content="yes" />
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+    <link rel="shortcut icon" type="image/x-icon" href="#{resource['favicon/favicon.ico']}"/>
+    <link rel="shortcut icon" type="image/x-icon" href="#{resource['favicon/favicon-16x16.png']}" sizes="16x16"/>
+    <link rel="shortcut icon" type="image/x-icon" href="#{resource['favicon/favicon-32x32.png']}" sizes="32x32"/>
+    <link rel="shortcut icon" type="image/x-icon" href="#{resource['favicon/favicon-96x96.png']}" sizes="96x96"/>
+    <link rel="shortcut icon" type="image/x-icon" href="#{resource['favicon/favicon-144x144.png']}" sizes="144x144"/>
+    <meta name="theme-color" content="#444"/>
+    <meta name="mobile-web-app-capable" content="yes"/>
     <style type="text/css">
         body {
             background-color: #ECEEF8;
@@ -83,7 +83,7 @@
             width: 60%;
             background-color: white;
             box-shadow: 0 2px 1px -1px rgb(0 0 0/ 20%), 0 1px 1px 0 rgb(0 0 0/ 14%),
-                0 1px 3px 0 rgb(0 0 0/ 12%);
+            0 1px 3px 0 rgb(0 0 0/ 12%);
             margin-left: auto;
             width: 60%;
         }
@@ -202,31 +202,31 @@
 </h:head>
 
 <body>
-    <div class="header">
-        <div class="header__elements">
-            <div class="header__title">Resultat</div>
-            <div class="header__examenTitle">
-                #{passerExamenMB.examen.libelle}
-            </div>
-            <div class="header__btn">
-                <h:form>
-                    <p:commandButton styleClass="btn-send" value="Retour" action="/index?faces-redirect=true" />
-                </h:form>
-            </div>
+<div class="header">
+    <div class="header__elements">
+        <div class="header__title">Resultat</div>
+        <div class="header__examenTitle">
+            #{passerExamenMB.examen.libelle}
+        </div>
+        <div class="header__btn">
+            <h:form>
+                <p:commandButton styleClass="btn-send" value="Retour" action="/index?faces-redirect=true"/>
+            </h:form>
         </div>
     </div>
+</div>
 
-    <div class="body">
-        <img class="card-counter exam_lookup_card" src="#{resource['images/form-image-banner.png']}" alt="e-xam" />
+<div class="body">
+    <img class="card-counter exam_lookup_card" src="#{resource['images/form-image-banner.png']}" alt="e-xam"/>
 
-        <div class="body__question">
-            <div class="body__question__header">
-                <span style="font-weight: 800; font-size: 2rem"></span>
-            </div>
-            <span>Votre resultat:</span>
-            <span>#{passerExamenMB.calculateScore()}</span>
+    <div class="body__question">
+        <div class="body__question__header">
+            <span style="font-weight: 800; font-size: 2rem"></span>
         </div>
+        <span>Votre resultat:</span>
+        <span>#{passerExamenMB.calculateScore()}</span>
     </div>
+</div>
 </body>
 
 </html>
