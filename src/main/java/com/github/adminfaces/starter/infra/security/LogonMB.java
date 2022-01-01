@@ -4,7 +4,7 @@ import com.github.adminfaces.starter.model.Role;
 import com.github.adminfaces.starter.model.User;
 import com.github.adminfaces.starter.service.ExamenService;
 import com.github.adminfaces.starter.service.UserService;
-import com.github.adminfaces.starter.service.jms.Subscriber;
+import com.github.adminfaces.starter.service.jms.Consumer;
 import com.github.adminfaces.template.session.AdminSession;
 import org.omnifaces.util.Faces;
 
@@ -61,8 +61,8 @@ public class LogonMB extends AdminSession implements Serializable {
         if (currentUser != null) {
             if (currentUser.getRole().equals(Role.etu)) {
                 try {
-                    Subscriber.subscribe("myTopic");
-                    System.out.println("subscribed to the topic");
+                    Consumer.consume("myQueue");
+                    System.out.println("Ready to consume from myQueue");
                 } catch (JMSException | NamingException e) {
                     e.printStackTrace();
                 }

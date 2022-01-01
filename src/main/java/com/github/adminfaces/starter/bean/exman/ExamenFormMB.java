@@ -9,7 +9,7 @@ import com.github.adminfaces.starter.model.Choix;
 import com.github.adminfaces.starter.model.Examen;
 import com.github.adminfaces.starter.model.Question;
 import com.github.adminfaces.starter.service.ExamenService;
-import com.github.adminfaces.starter.service.jms.Publisher;
+import com.github.adminfaces.starter.service.jms.Producer;
 import org.omnifaces.cdi.ViewScoped;
 import org.omnifaces.util.Faces;
 import org.primefaces.PrimeFaces;
@@ -125,7 +125,7 @@ public class ExamenFormMB implements Serializable {
     }
 
     public void showMessage() {
-        Publisher.sendMessage("myTopic", "Voilà un message....");
+        Producer.sendMessage("myQueue", "Voilà un message Aniba....");
 //        Faces.getExternalContext().getFlash().setKeepMessages(true);
 //        FacesMessage facesMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, "Message du", "Ceci est un message d'information");
 //        PrimeFaces.current().dialog().showMessageDynamic(facesMessage);
