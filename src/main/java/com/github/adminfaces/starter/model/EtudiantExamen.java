@@ -23,7 +23,6 @@ public class EtudiantExamen {
     }
 
 
-
     public String getEtudiant() {
         return etudiant;
     }
