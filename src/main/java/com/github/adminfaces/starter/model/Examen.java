@@ -27,11 +27,11 @@ public class Examen extends PersistentEntity implements Comparable<Examen> {
         return total;
     }
 
-    public int total(){
-        if(total == null){
+    public int total() {
+        if (total == null) {
             total = 0d;
         }
-        return  total.intValue();
+        return total.intValue();
     }
 
     public void setTotal(Double total) {
