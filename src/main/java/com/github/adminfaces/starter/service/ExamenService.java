@@ -60,11 +60,7 @@ public class ExamenService implements Serializable {
     }
 
     public Examen findById(String id) {
-        Optional<Examen> foundExam = examens.stream()
-                .filter(examen -> examen.getId().equals(id))
-                .findFirst();
-        System.out.println("l'id de ");
-        return foundExam.orElseThrow(() -> new BusinessException("Examen non trouvé par id " + id));
+    	return examenDao.findById(id);
     }
 
     public Examen findByID(String id) {
