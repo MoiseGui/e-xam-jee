@@ -125,7 +125,7 @@ public class ExamenFormMB implements Serializable {
     }
 
     public void showMessage() {
-        Producer.sendMessage("myQueue", "Voilà un message Aniba....");
+        Producer.sendMessage("myQueue", "Voilà un message Aniba....:belkoweb9718@gmail.com");
 //        Faces.getExternalContext().getFlash().setKeepMessages(true);
 //        FacesMessage facesMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, "Message du", "Ceci est un message d'information");
 //        PrimeFaces.current().dialog().showMessageDynamic(facesMessage);
