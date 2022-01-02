@@ -179,6 +179,10 @@ public class UserService implements Serializable {
     public User findUserByEmail(String email){
         return userDao.findByEmail(email);
     }
+    
+    public User findUserByNom(String nom){
+        return userDao.findByNom(nom);
+    }
 
     public User login(String email, String password) {
         User loadedUser = findUserByEmail(email);

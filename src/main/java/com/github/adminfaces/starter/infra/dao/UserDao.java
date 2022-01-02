@@ -43,7 +43,10 @@ public class UserDao {
     public User findByEmail(String email){
         return datastore.find(User.class, "email", email).get();
     }
-
+    
+    public User findByNom(String nom){
+        return datastore.find(User.class, "nom", nom).get();
+    }
     public UpdateResults update(User entity, UpdateOperations<User> operations){
         return datastore.update(entity, operations);
     }
