@@ -27,8 +27,6 @@ public class SendEmail {
         
         properties.put("mail.smtp.starttls.enable", "true");
         properties.put("mail.smtp.ssl.trust", "smtp.gmail.com");
-       // properties.put("mail.smtp.user", "geek.webfreelance@gmail.com");
-       // properties.put("mail.smtp.password", "uduidmhvfxrknxtg");
         properties.put("mail.smtp.host", "smtp.gmail.com");
         properties.put("mail.smtp.port", "587");
         properties.put("mail.smtp.auth", "true");
@@ -39,7 +37,7 @@ public class SendEmail {
 
             protected PasswordAuthentication getPasswordAuthentication() {
 
-                return new PasswordAuthentication("geek.webfreelance@gmail.com", "uduidmhvfxrknxtg");
+                return new PasswordAuthentication("", "");
 
             }
 
