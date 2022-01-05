@@ -59,14 +59,6 @@ public class LogonMB extends AdminSession implements Serializable {
     public void login() throws IOException {
         currentUser = userService.login(email, password);
         if (currentUser != null) {
-            if (currentUser.getRole().equals(Role.etu)) {
-                try {
-                    Consumer.consume("myQueue");
-                    System.out.println("Ready to consume from myQueue");
-                } catch (JMSException | NamingException e) {
-                    e.printStackTrace();
-                }
-            }
 
             addDetailMessage("Vous êtes connecté en tant que <b>" + currentUser.getPrenom() + " " + currentUser.getNom()
                     + "</b>");

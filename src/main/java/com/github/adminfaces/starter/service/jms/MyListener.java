@@ -23,8 +23,12 @@ public class MyListener implements MessageListener, Serializable {
             TextMessage textMessage = (TextMessage) message;
             System.out.println("Message received: " + textMessage.getText());
 
-            //logonMB.isLoggedIn();
-           // logonMB.showMessage(textMessage.getText());
+            //Notification sending process here
+            
+            /**********************************/
+            
+            
+            
             
             //Email sending process here
           
