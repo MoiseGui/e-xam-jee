@@ -133,7 +133,7 @@ public class ExamenFormMB implements Serializable {
 
     public void showAddQuestionModal() {
         System.out.println("showAddQuestionModal : Opening the dialog");
-        Map<String, Object> options = new HashMap<>();
+        Map<String, Object> options l = new HashMap<>();
         options.put("resizable", false);
         PrimeFaces.current().dialog().openDynamic("dialogs/addQuestionDialog", options, null);
 
