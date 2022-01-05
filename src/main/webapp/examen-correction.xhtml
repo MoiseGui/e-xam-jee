@@ -291,7 +291,7 @@
 
 </div>
 
-<p:dialog header="Note" widgetVar="noteDialog" width="400"
+<p:dialog  header="Note" widgetVar="noteDialog" width="400"
           responsive="true">
     <h:form id="editNote">
         <p:inputNumber id="note"
@@ -302,7 +302,7 @@
             <p:ajax event="change"/>
         </p:inputNumber>
         <p:commandButton value="Modifier" icon="fa fa-edit "
-                         action="#{examenCorrectionMB.editNote}">
+                         action="#{examenCorrectionMB.editNote}" update="@(.ui-dialog)" oncomplete="PF('noteDialog').hide()">
         </p:commandButton>
     </h:form>
 </p:dialog>

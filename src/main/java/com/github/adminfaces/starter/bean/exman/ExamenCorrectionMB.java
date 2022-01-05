@@ -1,22 +1,24 @@
 package com.github.adminfaces.starter.bean.exman;
 
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import javax.enterprise.context.SessionScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import org.omnifaces.util.Faces;
+import org.primefaces.PrimeFaces;
+
 import com.github.adminfaces.starter.model.Examen;
 import com.github.adminfaces.starter.model.ReponsesQuestion;
 import com.github.adminfaces.starter.model.User;
 import com.github.adminfaces.starter.service.ExamenService;
 import com.github.adminfaces.starter.service.UserService;
 import com.github.adminfaces.starter.service.jms.Producer;
-import org.omnifaces.util.Faces;
-import org.primefaces.PrimeFaces;
-
-import javax.enterprise.context.SessionScoped;
-import javax.inject.Inject;
-import javax.inject.Named;
-import java.io.IOException;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 @Named
 @SessionScoped
@@ -62,7 +64,7 @@ public class ExamenCorrectionMB implements Serializable {
 
 	}
 
-	public void editNote() {
+	public void editNote() throws IOException {
 
 		if (examen.getEtudiantExamens().stream().filter(e -> e.getEtudiant().equals(etudiantNom)).findFirst()
 				.isPresent()) {
@@ -72,6 +74,7 @@ public class ExamenCorrectionMB implements Serializable {
 			String nom = etudiantNom.split(" ")[1];
 			User user = userService.findUserByNom(nom);
 			Producer.sendMessage("myQueue", "Votre nouvelle note = " + note + ":" + user.getEmail());
+			Faces.redirect("examen-list.jsf");
 
 		}
 
