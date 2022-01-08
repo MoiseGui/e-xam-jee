@@ -231,6 +231,9 @@ public class ExamenFormMB implements Serializable {
     public void addQuestion() {
         PrimeFaces current = PrimeFaces.current();
         if (questionToAdd != null) {
+        	if (questionToAdd.getTypeQuestion().equals("vraiOuFaux")) {
+				questionToAdd.setVraiOuFaux(true);
+			}
             System.out.println("hello");
             long count = examen.getQuestions().stream().filter(q -> q.getTitre().equals(questionToAdd.getTitre())).count();
             getQuestionsToAdd().forEach(q -> {
@@ -277,8 +280,8 @@ public class ExamenFormMB implements Serializable {
         if (questionToAdd.getTypeQuestion().equals("choixUnique")) {
             long correctChoices = questionToAdd.getChoix().stream().filter(choix -> choix.getBonneReponse().equals("true")).count();
             System.out.println("the number of correct choices is " + correctChoices);
-            if (correctChoices > 0) {
-                String msg = "Vous ne pouvez pas avoir plus d'une bonne réponse pour une question de type vrai ou faux";
+            if (correctChoices > 0 && choiceToAdd.getBonneReponse().equals("true")) {
+                String msg = "Vous ne pouvez pas avoir plus d'une bonne réponse pour une question de type choix unique";
                 FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, msg, null);
                 FacesContext.getCurrentInstance().addMessage(null, message);
                 System.out.println("*********************************");
