@@ -14,7 +14,7 @@ public class Consumer implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public static void consume(String queueName) throws JMSException, NamingException {
+	public static void consumeFrom(String queueName) throws JMSException, NamingException {
     	Queue queue = ConnectionDriver.getQueue(queueName);
     	QueueReceiver queueReceiver = ConnectionDriver.getSession().createReceiver(queue);  ;
 

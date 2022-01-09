@@ -16,31 +16,22 @@ public class Producer {
         System.out.println("Sending message: " + message);
 
         try {
-        	QueueConnection connection = ConnectionDriver.getConnection();
-        	QueueSession session = ConnectionDriver.getSession();
-        	Queue queue = ConnectionDriver.getQueue(queueName);
-            
-            QueueSender sender = session.createSender(queue);  
-            
+            QueueConnection connection = ConnectionDriver.getConnection();
+            QueueSession session = ConnectionDriver.getSession();
+            Queue queue = ConnectionDriver.getQueue(queueName);
+
+            QueueSender sender = session.createSender(queue);
+
             TextMessage textMessage = session.createTextMessage(message);
 
             sender.send(textMessage);
 
 //            connection.close();
 
-              System.out.println("Message sent successfully");
-              
-            
-                 try {
-                    Consumer.consume("myQueue");
-                    System.out.println("Ready to consume from myQueue");
-                } catch (JMSException | NamingException e) {
-                    e.printStackTrace();
-                }
-            
-            
-        }
-        catch (Exception e){
+            System.out.println("Message sent successfully");
+
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
