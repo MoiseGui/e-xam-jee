@@ -165,7 +165,7 @@ public class PasserExamenMB implements Serializable {
             if (question.getTypeQuestion().equals(TypeQuestion.CHOIX_MULTIPLE)) {
                 boolean reponseCorrecte = true;
                 for (int i = 0; i < question.getChoix().size(); i++) {
-                    if (Arrays.asList(reponseQuestion.getChoix()).contains(question.getChoix().get(i).getChoixTexte()) && question.getChoix().get(i).getBonneReponse().equals("faux")) {
+                    if (Arrays.asList(reponseQuestion.getChoix()).contains(question.getChoix().get(i).getChoixTexte()) && question.getChoix().get(i).getBonneReponse().equals("false")) {
                         reponseCorrecte = false;
                     }
                 }
@@ -175,7 +175,7 @@ public class PasserExamenMB implements Serializable {
             } else if (question.getTypeQuestion().equals(TypeQuestion.CHOIX_UNIQUE)) {
                 boolean reponseCorrecte = true;
                 for (int i = 0; i < question.getChoix().size(); i++) {
-                    if (reponseQuestion.getChoix()[0].equals(question.getChoix().get(i).getChoixTexte()) && question.getChoix().get(0).getBonneReponse().equals("faux")) {
+                    if (reponseQuestion.getChoix()[0].equals(question.getChoix().get(i).getChoixTexte()) && question.getChoix().get(i).getBonneReponse().equals("false")) {
                         reponseCorrecte = false;
                     }
                 }

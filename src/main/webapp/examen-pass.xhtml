@@ -288,7 +288,7 @@
                         </p:selectManyCheckbox>
                     </h:form>
                 </c:when>
-                <c:when test="#{question.vraiOuFaux}">
+                <c:when test="#{question.typeQuestion eq 'vraiOuFaux'}">
                     <h:form>
                         <p:selectOneRadio
                                 value="#{passerExamenMB.reponseQuestions.get(loop.index).vraiOuFaux}"
