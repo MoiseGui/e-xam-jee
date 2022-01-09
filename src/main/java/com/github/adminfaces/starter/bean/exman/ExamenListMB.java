@@ -75,6 +75,11 @@ public class ExamenListMB implements Serializable {
         };
     }
 
+    public void refresh(){
+        examenService.init();
+        initDataModel();
+    }
+
     public List<String> completeNom(String query) {
         return examenService.getByLibelle(query);
     }

@@ -38,6 +38,7 @@ public class PasserExamenMB implements Serializable {
     String answer = "";
     @Inject
     UserService userService;
+    @Inject ExamenListMB examenListMB;
 
     List<ReponsesQuestion> reponseQuestions = new ArrayList();
 
@@ -80,6 +81,7 @@ public class PasserExamenMB implements Serializable {
         examen.getEtudiantExamens().add(etudiantExamen);
         examen.setTotal(getTotalScore());
         examenService.update(examen);
+        examenListMB.refresh();
         Faces.redirect("examen-result.jsf");
 
     }
