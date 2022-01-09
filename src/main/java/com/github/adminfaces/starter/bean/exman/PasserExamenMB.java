@@ -69,7 +69,7 @@ public class PasserExamenMB implements Serializable {
     public void submitAnswers() throws IOException {
         Double note = this.calculateScore();
         EtudiantExamen etudiantExamen = new EtudiantExamen();
-        etudiantExamen.setEtudiant(logonMB.getCurrentUser().getPrenom()+" "+logonMB.getCurrentUser().getNom());
+        etudiantExamen.setEtudiant(logonMB.getCurrentUser().getPrenom() + " " + logonMB.getCurrentUser().getNom());
         etudiantExamen.setDateDebut(examen.getDateDebut());
         etudiantExamen.setDateFin(new Date());
         etudiantExamen.setNote(note);
@@ -87,9 +87,9 @@ public class PasserExamenMB implements Serializable {
     }
 
     public String timer() {
-        Date currentTime = new Date();
+        Date startTime = examen.getDateDebut();
         Date endTime = examen.getDateFin();
-        return String.valueOf(endTime.getTime() - currentTime.getTime());
+        return String.valueOf(endTime.getTime() - startTime.getTime());
     }
 
     public Double getTotalScore() {
@@ -101,7 +101,7 @@ public class PasserExamenMB implements Serializable {
             examen.getQuestions().forEach(question -> {
                 ReponsesQuestion reponseQuestion = new ReponsesQuestion();
                 reponseQuestion.setVraiOuFaux(null);
-                reponseQuestion.setEtudiant(logonMB.getCurrentUser().getPrenom()+" "+logonMB.getCurrentUser().getNom());
+                reponseQuestion.setEtudiant(logonMB.getCurrentUser().getPrenom() + " " + logonMB.getCurrentUser().getNom());
                 reponseQuestion.setChoix(new String[question.getChoix().size()]);
                 System.out.println("reponseQuestion.getChoix().length = " + reponseQuestion.getChoix().length);
                 reponseQuestions.add(reponseQuestion);
