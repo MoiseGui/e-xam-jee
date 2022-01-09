@@ -5,11 +5,13 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import com.github.adminfaces.starter.model.EtudiantExamen;
 import org.omnifaces.util.Faces;
 import org.primefaces.PrimeFaces;
 
@@ -39,28 +41,34 @@ public class ExamenCorrectionMB implements Serializable {
 
 	}
 
-	public void corriger(String examenId, String etudiant) throws IOException {
-		System.out.println("examenId= " + examenId);
+	public void corriger(String examenLibelle, String etudiant) throws IOException {
+		System.out.println("examenId= " + examenLibelle);
 		System.out.println("etudiant= " + etudiant);
 		etudiantNom = etudiant;
 		System.out.println("etudiant class = " + this.etudiant);
-		examen = examenService.findByLibelle(examenId);
-		note = examen.getEtudiantExamens().stream().filter(e -> e.getEtudiant().equals(etudiant)).findFirst().get()
-				.getNote();
+		examen = examenService.findByLibelleDao(examenLibelle);
+		Optional<EtudiantExamen> found = examen.getEtudiantExamens().stream().filter(e -> e.getEtudiant().equals(etudiant)).findFirst();
 
-		for (int i = 0; i < examen.getQuestions().size(); i++) {
-			ReponsesQuestion reponsesQuestion = examen.getQuestions().get(i).getReponses().stream()
-					.filter(q -> q.getEtudiant().equals(etudiant)).findFirst().get();
-			System.out.println("iiiiiiiiiiiiiiiiiiiiiiiii " + reponsesQuestion.getEtudiant());
-			reponsesQuestions.add(reponsesQuestion);
+		if(!found.isPresent()) {
+			return;
 		}
-		reponsesQuestions.forEach(reponse -> {
+		else {
+			note = found.get().getNote();
 
-			System.out.println("reponse question = " + reponse.toString());
-			System.out.println("Les choix");
-			Arrays.stream(reponse.getChoix()).forEach(choix -> System.out.print("Choix text" + choix));
-		});
-		Faces.redirect("examen-correction.jsf?id=" + examenId + "?etudiant=" + etudiant);
+			for (int i = 0; i < examen.getQuestions().size(); i++) {
+				ReponsesQuestion reponsesQuestion = examen.getQuestions().get(i).getReponses().stream()
+						.filter(q -> q.getEtudiant().equals(etudiant)).findFirst().get();
+				System.out.println("iiiiiiiiiiiiiiiiiiiiiiiii " + reponsesQuestion.getEtudiant());
+				reponsesQuestions.add(reponsesQuestion);
+			}
+			reponsesQuestions.forEach(reponse -> {
+
+				System.out.println("reponse question = " + reponse.toString());
+				System.out.println("Les choix");
+				Arrays.stream(reponse.getChoix()).forEach(choix -> System.out.print("Choix text" + choix));
+			});
+			Faces.redirect("examen-correction.jsf?id=" + examenLibelle + "?etudiant=" + etudiant);
+		}
 
 	}
 
