@@ -109,7 +109,7 @@
 							styleClass="align-center" />
 						<p:column headerText="Libelle" filterBy="#{c.libelle}"
 							sortBy="#{c.libelle}" filterMatchMode="contains"
-							rendered="#{examenListMB.hasExamPassed(c)}">
+							rendered="#{examenListMB.hasExamPassed(c) or logonMB.currentUser.isEtudiant()}">
 							<f:facet name="filter">
 								<p:autoComplete value="#{examenListMB.filter.entity.libelle}"
 									forceSelection="true" minQueryLength="2" queryDelay="500"
