@@ -203,7 +203,10 @@ public class PasserExamenMB implements Serializable {
     }
 
     public boolean canPasssExam() {
-        return examen.getDateDebut().before(new Date()) && examen.getDateFin().after(new Date());
+        if(examen.getDateDebut().before(new Date()) && examen.getDateFin().after(new Date())){
+            if(examen.getEtudiantExamens().stream().noneMatch(e -> e.getEtudiant().equals(logonMB.getCurrentUser().getPrenom()+" "+logonMB.getCurrentUser().getNom()))) return true;
+        }
+        return false;
     }
 
     public String getId() {
