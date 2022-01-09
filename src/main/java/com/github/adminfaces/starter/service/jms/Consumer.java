@@ -16,7 +16,7 @@ public class Consumer implements Serializable {
 
 	public static void consumeFrom(String queueName) throws JMSException, NamingException {
     	Queue queue = ConnectionDriver.getQueue(queueName);
-    	QueueReceiver queueReceiver = ConnectionDriver.getSession().createReceiver(queue);  ;
+    	QueueReceiver queueReceiver = ConnectionDriver.getSession().createReceiver(queue);
 
     	queueReceiver.setMessageListener(new MyListener());
         System.out.println("Message Listener is set");
