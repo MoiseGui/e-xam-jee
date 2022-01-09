@@ -11,6 +11,8 @@ import org.bson.types.ObjectId;
 import org.omnifaces.util.Faces;
 
 import javax.enterprise.context.SessionScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.IOException;
@@ -87,9 +89,11 @@ public class PasserExamenMB implements Serializable {
     }
 
     public String timer() {
-        Date startTime = examen.getDateDebut();
+        Date now = new Date();
         Date endTime = examen.getDateFin();
-        return String.valueOf(endTime.getTime() - startTime.getTime());
+        long diff = endTime.getTime() - now.getTime();
+        return String.valueOf(diff / 1000);
+//        return endTime.getTime() - now.getTime();
     }
 
     public Double getTotalScore() {
@@ -194,8 +198,14 @@ public class PasserExamenMB implements Serializable {
         return (double) note;
     }
 
-    public void onTimeout() {
+    public void onTimeout() throws IOException {
         // action to be done after the expiration of ...
+        Faces.getExternalContext().getFlash().setKeepMessages(true);
+        FacesMessage facesMessage = new FacesMessage(FacesMessage.SEVERITY_WARN, "Examen terminé",
+                "Vous avez été déconnecté du test");
+        FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+
+        submitAnswers();
     }
 
     public List<Question> getOrderedQuestions() {

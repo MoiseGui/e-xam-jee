@@ -24,6 +24,9 @@ public class Examen extends PersistentEntity implements Comparable<Examen> {
 	private Double total;
 
 	public Double getTotal() {
+		if (total == null) {
+			total = 0d;
+		}
 		return total;
 	}
 
