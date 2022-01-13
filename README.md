@@ -9,7 +9,7 @@
 ## Functionalities
 
 * Users management
-* Exam management
+* Exams management
 * Passing Exams
 * Auto correct
 * Exam results
