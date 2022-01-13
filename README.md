@@ -1,19 +1,18 @@
-# e-xam: online exam management system
+# e-xam: online exam management system FSTG
 
-## Fet Started
+## Actors
 
-run the commands below :
+* Admins
+* Professors
+* Students
 
-```
-docker build -t e-xam:1.0 .
-docker run -it -p 8080:8080 e-xam:1.0
-```
+## Functionalities
 
-The application is available at http://localhost:8080/admin-starter
+* Users management
+* Exam management
+* Passing Exams
+* Auto correct
+* Exam results
+* Exam marks editing when necessary
 
-if container is still running, you can stop it with the command below:
 
-```
-docker container ls
-docker container kill <$id>
-```
