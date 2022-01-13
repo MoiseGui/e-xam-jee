@@ -52,6 +52,8 @@ public class PasserExamenMB implements Serializable {
 //        if(examen == null) {
         if (has(id)) {
             examen = examenService.findByID(id);
+            // order questions by property ordre
+            examen.getQuestions().sort(Comparator.comparing(Question::getOrdre));
             hydrateReponseQuestion();
         } else
             Faces.redirect(adminConfig.getIndexPage());
@@ -181,7 +183,7 @@ public class PasserExamenMB implements Serializable {
             } else if (question.getTypeQuestion().equals(TypeQuestion.CHOIX_UNIQUE)) {
                 boolean reponseCorrecte = true;
                 for (int i = 0; i < question.getChoix().size(); i++) {
-                    if (reponseQuestion.getChoix()[0].equals(question.getChoix().get(i).getChoixTexte()) && question.getChoix().get(i).getBonneReponse().equals("false")) {
+                    if (reponseQuestion.getChoix()[0] == null || reponseQuestion.getChoix()[0].equals(question.getChoix().get(i).getChoixTexte()) && question.getChoix().get(i).getBonneReponse().equals("false")) {
                         reponseCorrecte = false;
                     }
                 }

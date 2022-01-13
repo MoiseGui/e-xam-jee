@@ -14,8 +14,6 @@ import com.github.adminfaces.starter.model.Notification;
 import com.github.adminfaces.starter.service.NotificationService;
 import com.github.adminfaces.starter.service.email.SendEmail;
 
-@Named
-@SessionScoped
 public class MyListener implements MessageListener, Serializable {
 	// @Inject
 	// LogonMB logonMB;
@@ -34,15 +32,6 @@ public class MyListener implements MessageListener, Serializable {
 			// Notification sending process here
 			System.out.println("saving the notification");
 			/**********************************/
-			/*
-			 * Notification notification = new Notification(); notification.setEmail(email);
-			 * notification.setMessage(notificationMessage); notification.setStatus(true);
-			 */
-			// notificationService.create(notification);
-			System.out.println("notification saved successfuly");
-			// Email sending process here
-
-			// The send function take 3 parameters
 
 			// Email message to be sent
 			// msg = content[0]
